@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import IdeaCard from "@/components/IdeaCard";
 import ScrollToTop from "@/components/ScrollToTop";
 import Marquee from "@/components/Marquee";
@@ -24,7 +25,10 @@ const t = {
     h1c: "واقعی",
     sub: "ماهیر با ترکیب استراتژی، هویت برند و هوش مصنوعی، مسیر رشد کسب‌وکار شما را هموار می‌کند.",
     cta1: "خدمات ما",
-    cta2: "مشاوره رایگان",
+    cta2: "مشاوره هوشمند",
+    consultTitle: "مشاوره", consultBrand: "اختصاصی",
+    consultDesc: "با پاسخ به ۳ سوال کوتاه، یک راهکار رشد کاملاً شخصی‌سازی‌شده برای کسب‌وکارت دریافت کن.",
+    consultBtn: "شروع مشاوره رایگان ←",
     servTitle: "خدمات", servBrand: "ماهیر",
     servSub: "راه‌حل‌های جامع برای هر مرحله از مسیر رشد",
     services: [
@@ -60,7 +64,10 @@ const t = {
     h1c: "Real Growth",
     sub: "Mahir combines strategy, brand identity, and AI to pave the way for your business growth.",
     cta1: "Our Services",
-    cta2: "Free Consultation",
+    cta2: "AI Consultation",
+    consultTitle: "Personalized", consultBrand: "Consultation",
+    consultDesc: "Answer 3 quick questions and receive a fully personalized growth strategy for your business.",
+    consultBtn: "Start Free Consultation →",
     servTitle: "Our", servBrand: "Services",
     servSub: "Comprehensive solutions for every stage of your growth journey",
     services: [
@@ -190,11 +197,11 @@ function Hero() {
             hover:bg-amber-300 hover:scale-105 transition-all text-sm shadow-[0_0_30px_rgba(251,191,36,0.3)]">
           {tx.cta1}
         </a>
-        <a href="mailto:hello@mahir.ir"
+        <Link href="/consult"
           className="px-8 py-3.5 rounded-xl border border-white/15 text-white/70
             hover:border-amber-400/50 hover:text-amber-400 transition-all text-sm">
           {tx.cta2}
-        </a>
+        </Link>
       </div>
 
       {/* AI Card */}
@@ -266,6 +273,47 @@ function Services() {
   );
 }
 
+// ── Consult CTA ───────────────────────────────────────────
+function ConsultCTA() {
+  const { lang } = useLang();
+  const tx = t[lang];
+  return (
+    <section className="py-24 px-4 max-w-4xl mx-auto w-full">
+      <div className="relative rounded-3xl overflow-hidden">
+        {/* glow bg */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/15 via-amber-400/5 to-indigo-600/10" />
+        <div className="absolute inset-0 border border-amber-400/20 rounded-3xl" />
+        {/* blob */}
+        <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-amber-400/10 blur-[80px]" />
+
+        <div className="relative p-10 md:p-16 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full bg-amber-400/10
+            border border-amber-400/25 px-4 py-1.5 mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className="text-xs text-amber-300 tracking-wider">AI Powered</span>
+          </div>
+
+          <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-4">
+            {tx.consultTitle}{" "}
+            <span className="text-shimmer">{tx.consultBrand}</span>
+          </h2>
+          <p className="text-white/50 max-w-md mx-auto text-sm leading-relaxed mb-8">
+            {tx.consultDesc}
+          </p>
+
+          <Link href="/consult"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl
+              bg-amber-400 text-gray-900 font-bold text-sm
+              hover:bg-amber-300 hover:scale-105 transition-all
+              shadow-[0_0_40px_rgba(251,191,36,0.35)]">
+            {tx.consultBtn}
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ── About ─────────────────────────────────────────────────
 function About() {
   const { lang } = useLang();
@@ -316,6 +364,7 @@ function PageContent() {
       <Hero />
       <Stats />
       <Services />
+      <ConsultCTA />
       <About />
       <Footer />
       <ScrollToTop />

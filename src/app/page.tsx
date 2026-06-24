@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import IdeaCard from "@/components/IdeaCard";
 import ScrollToTop from "@/components/ScrollToTop";
 import Marquee from "@/components/Marquee";
@@ -17,7 +18,7 @@ const t = {
       { label: "درباره ما",   href: "#about" },
       { label: "تماس",       href: "#contact" },
     ],
-    cta: "مشاوره رایگان",
+    consultBtn: "مشاوره رایگان",
     badge: "شریک هوشمند رشد کسب‌وکار شما",
     h1a: "از ایده",
     h1b: "تا رشد",
@@ -25,16 +26,13 @@ const t = {
     sub: "ماهیر با ترکیب استراتژی، هویت برند و هوش مصنوعی، مسیر رشد کسب‌وکار شما را هموار می‌کند.",
     cta1: "خدمات ما",
     cta2: "مشاوره هوشمند",
-    consultTitle: "مشاوره", consultBrand: "اختصاصی",
-    consultDesc: "با پاسخ به ۳ سوال کوتاه، یک راهکار رشد کاملاً شخصی‌سازی‌شده برای کسب‌وکارت دریافت کن.",
-    consultBtn: "شروع مشاوره رایگان ←",
     servTitle: "خدمات", servBrand: "ماهیر",
     servSub: "راه‌حل‌های جامع برای هر مرحله از مسیر رشد",
     services: [
-      { icon: "🎯", title: "استراتژی رشد",           desc: "تحلیل بازار، شناخت رقبا و طراحی نقشه‌راه رشد متناسب با کسب‌وکار شما." },
-      { icon: "✦",  title: "هویت برند",              desc: "خلق هویت بصری و کلامی منسجم که در ذهن مخاطبان ماندگار می‌شود." },
-      { icon: "📱", title: "بازاریابی دیجیتال",      desc: "کمپین‌های هدفمند در شبکه‌های اجتماعی، SEO و تبلیغات آنلاین." },
-      { icon: "🤖", title: "هوش مصنوعی",            desc: "پیاده‌سازی ابزارهای AI برای خودکارسازی فرآیندها و شخصی‌سازی تجربه مشتری." },
+      { icon: "🎯", title: "استراتژی رشد",      desc: "تحلیل بازار، شناخت رقبا و طراحی نقشه‌راه رشد متناسب با کسب‌وکار شما." },
+      { icon: "✦",  title: "هویت برند",          desc: "خلق هویت بصری و کلامی منسجم که در ذهن مخاطبان ماندگار می‌شود." },
+      { icon: "📱", title: "بازاریابی دیجیتال", desc: "کمپین‌های هدفمند در شبکه‌های اجتماعی، SEO و تبلیغات آنلاین." },
+      { icon: "🤖", title: "هوش مصنوعی",       desc: "پیاده‌سازی ابزارهای AI برای خودکارسازی فرآیندها و شخصی‌سازی تجربه مشتری." },
     ],
     stats: [
       { target: 50,  suffix: "+",  label: "کسب‌وکار موفق" },
@@ -42,6 +40,9 @@ const t = {
       { target: 3,   suffix: "",   label: "سال تجربه" },
       { target: 120, suffix: "+",  label: "پروژه تحویل‌شده" },
     ],
+    consultTitle: "مشاوره", consultBrand: "اختصاصی",
+    consultDesc: "با پاسخ به ۳ سوال کوتاه، یک راهکار رشد کاملاً شخصی‌سازی‌شده دریافت کن.",
+    consultCta: "شروع مشاوره رایگان ←",
     aboutTitle: "چرا", aboutBrand: "ماهیر؟",
     aboutDesc: "ماهیر با تیمی از متخصصان استراتژی، طراحی و فناوری، به کسب‌وکارهای ایرانی کمک می‌کند تا با هویتی قوی و استراتژی هوشمند، در بازار رقابتی امروز متمایز شوند.",
     footerIg: "اینستاگرام", footerLi: "لینکدین",
@@ -56,7 +57,7 @@ const t = {
       { label: "About",     href: "#about" },
       { label: "Contact",   href: "#contact" },
     ],
-    cta: "Free Consultation",
+    consultBtn: "Free Consultation",
     badge: "Your Smart Business Growth Partner",
     h1a: "From",
     h1b: "Idea to",
@@ -64,9 +65,6 @@ const t = {
     sub: "Mahir combines strategy, brand identity, and AI to pave the way for your business growth.",
     cta1: "Our Services",
     cta2: "AI Consultation",
-    consultTitle: "Personalized", consultBrand: "Consultation",
-    consultDesc: "Answer 3 quick questions and receive a fully personalized growth strategy for your business.",
-    consultBtn: "Start Free Consultation →",
     servTitle: "Our", servBrand: "Services",
     servSub: "Comprehensive solutions for every stage of your growth journey",
     services: [
@@ -81,6 +79,9 @@ const t = {
       { target: 3,   suffix: "",   label: "Years Experience" },
       { target: 120, suffix: "+",  label: "Projects Delivered" },
     ],
+    consultTitle: "Personalized", consultBrand: "Consultation",
+    consultDesc: "Answer 3 quick questions and receive a fully personalized growth strategy.",
+    consultCta: "Start Free Consultation →",
     aboutTitle: "Why", aboutBrand: "Mahir?",
     aboutDesc: "Mahir's team of strategy, design, and tech experts helps businesses stand out in today's competitive market with a strong identity and smart strategy.",
     footerIg: "Instagram", footerLi: "LinkedIn",
@@ -93,38 +94,55 @@ function go(href: string) {
   document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
 }
 
+// ── Dark/Light toggle ─────────────────────────────────────
+function ThemeToggle() {
+  const [dark, setDark] = useState(true);
+  useEffect(() => {
+    document.body.classList.toggle("light", !dark);
+  }, [dark]);
+  return (
+    <button onClick={() => setDark(d => !d)}
+      className="w-9 h-9 rounded-lg border border-white/15 flex items-center justify-center
+        text-white/50 hover:border-amber-400/50 hover:text-amber-400 transition-all text-base">
+      {dark ? "🌙" : "☀️"}
+    </button>
+  );
+}
+
 // ── Navbar ────────────────────────────────────────────────
 function Navbar() {
   const { lang, toggle } = useLang();
   const tx = t[lang];
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between
-      px-6 md:px-14 py-4 bg-[#07071a]/75 backdrop-blur-xl border-b border-white/5
-      animate-slide-down">
-      <span className="text-xl font-extrabold text-amber-400 tracking-widest">{tx.brand}</span>
-      <ul className="hidden md:flex gap-10 text-sm text-white/60">
-        {tx.nav.map((item) => (
-          <li key={item.label}>
-            <a href={item.href} onClick={(e) => { e.preventDefault(); go(item.href); }}
-              className="hover:text-amber-400 transition-colors relative group">
-              {item.label}
-              <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-amber-400
-                group-hover:w-full transition-all duration-300" />
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="flex items-center gap-3">
-        <button onClick={toggle}
-          className="text-xs font-bold px-3 py-1.5 rounded-lg border border-white/15
-            text-white/50 hover:border-amber-400/60 hover:text-amber-400 transition-all">
-          {tx.langBtn}
-        </button>
-        <a href="mailto:hello@mahir.ir"
-          className="text-sm font-bold px-5 py-2 rounded-xl bg-amber-400 text-gray-900
-            hover:bg-amber-300 hover:scale-105 transition-all">
-          {tx.cta}
-        </a>
+    <nav className="fixed top-0 inset-x-0 z-50 anim-slide-down"
+      style={{ background: "rgba(5,5,15,0.75)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-4">
+        <span className="text-xl font-extrabold text-amber-400 tracking-widest">{tx.brand}</span>
+        <ul className="hidden md:flex gap-10 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+          {tx.nav.map((item) => (
+            <li key={item.label}>
+              <a href={item.href} onClick={(e) => { e.preventDefault(); go(item.href); }}
+                className="hover:text-amber-400 transition-colors relative group">
+                {item.label}
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-amber-400
+                  group-hover:w-full transition-all duration-300" />
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button onClick={toggle}
+            className="text-xs font-bold px-3 py-2 rounded-lg border border-white/15
+              text-white/50 hover:border-amber-400/50 hover:text-amber-400 transition-all">
+            {tx.langBtn}
+          </button>
+          <Link href="/consult"
+            className="text-sm font-bold px-5 py-2 rounded-xl bg-amber-400 text-gray-900
+              hover:bg-amber-300 hover:scale-105 transition-all">
+            {tx.consultBtn}
+          </Link>
+        </div>
       </div>
     </nav>
   );
@@ -135,90 +153,90 @@ function Hero() {
   const { lang } = useLang();
   const tx = t[lang];
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center
-      overflow-hidden pt-24 pb-0 px-4 text-center">
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center
+      overflow-hidden pt-20 pb-0 text-center grid-bg">
 
-      {/* animated blobs */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="animate-blob delay-100 absolute -top-32 -right-32 w-[600px] h-[600px]
-          rounded-full bg-amber-500/10 blur-[140px]" />
-        <div className="animate-blob delay-500 absolute -bottom-32 -left-32 w-[500px] h-[500px]
-          rounded-full bg-indigo-600/10 blur-[140px]" />
-        <div className="animate-blob delay-300 absolute top-1/3 left-1/4 w-[400px] h-[400px]
-          rounded-full bg-purple-700/8 blur-[120px]" />
+      {/* blobs */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="anim-blob d1 absolute -top-40 -right-40 w-[700px] h-[700px]
+          rounded-full blur-[160px]" style={{ background: "rgba(251,191,36,0.08)" }} />
+        <div className="anim-blob d5 absolute -bottom-40 -left-40 w-[600px] h-[600px]
+          rounded-full blur-[160px]" style={{ background: "rgba(99,102,241,0.08)" }} />
+        <div className="anim-blob d3 absolute top-1/2 left-1/3 w-[500px] h-[500px]
+          rounded-full blur-[140px]" style={{ background: "rgba(139,92,246,0.06)" }} />
       </div>
 
-      {/* floating dots */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        {Array.from({ length: 16 }).map((_, i) => (
-          <span key={i} className="absolute rounded-full bg-amber-400/20 animate-blob"
+      {/* particles */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <span key={i} className="absolute rounded-full anim-blob"
             style={{
-              width: `${3 + (i % 3) * 2}px`,
-              height: `${3 + (i % 3) * 2}px`,
-              top: `${8 + (i * 5.7) % 82}%`,
-              left: `${4 + (i * 6.3) % 92}%`,
-              animationDelay: `${i * 0.5}s`,
+              width: `${2 + (i % 4)}px`, height: `${2 + (i % 4)}px`,
+              top: `${5 + (i * 4.7) % 88}%`, left: `${3 + (i * 5.1) % 94}%`,
+              background: "rgba(251,191,36,0.25)",
+              animationDelay: `${i * 0.4}s`,
               animationDuration: `${5 + (i % 5) * 1.5}s`,
-            }}
-          />
+            }} />
         ))}
       </div>
 
-      {/* badge */}
-      <div className="animate-fade-up delay-100 mb-8 inline-flex items-center gap-2
-        rounded-full bg-amber-400/8 border border-amber-400/25 px-5 py-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-        <span className="text-xs font-medium text-amber-300 tracking-wider">{tx.badge}</span>
-      </div>
+      {/* content */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col items-center">
 
-      {/* big headline */}
-      <div className="animate-fade-up delay-200 mb-6">
-        <p className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-none tracking-tight text-white">
-          {tx.h1a}
+        {/* badge */}
+        <div className="anim-fade-up d1 mb-8 inline-flex items-center gap-2 rounded-full px-5 py-2"
+          style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.25)" }}>
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+          <span className="text-xs font-medium text-amber-300 tracking-widest">{tx.badge}</span>
+        </div>
+
+        {/* headline — very large */}
+        <div className="anim-fade-up d2 mb-6 w-full">
+          <h1 className="font-extrabold leading-none tracking-tight"
+            style={{ fontSize: "clamp(3.5rem, 12vw, 9rem)", lineHeight: 1.05 }}>
+            <span style={{ color: "white", display: "block" }}>{tx.h1a}</span>
+            <span style={{ color: "white", display: "block" }}>{tx.h1b}</span>
+            <span className="text-shimmer" style={{ display: "block" }}>{tx.h1c}</span>
+          </h1>
+        </div>
+
+        <p className="anim-fade-up d3 max-w-xl text-base md:text-lg leading-relaxed mb-10"
+          style={{ color: "rgba(255,255,255,0.5)" }}>
+          {tx.sub}
         </p>
-        <p className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-none tracking-tight text-white">
-          {tx.h1b}
-        </p>
-        <p className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-none tracking-tight text-shimmer mt-1">
-          {tx.h1c}
-        </p>
+
+        {/* CTA */}
+        <div className="anim-fade-up d4 flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <a href="#services" onClick={(e) => { e.preventDefault(); go("#services"); }}
+            className="px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
+            style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 40px rgba(251,191,36,0.3)" }}>
+            {tx.cta1}
+          </a>
+          <Link href="/consult"
+            className="px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
+            style={{ border: "1px solid rgba(251,191,36,0.4)", color: "#fbbf24" }}>
+            {tx.cta2}
+          </Link>
+        </div>
+
+        {/* AI card */}
+        <div className="anim-scale-in d5 anim-float w-full max-w-lg mx-auto">
+          <IdeaCard lang={lang} />
+        </div>
+
+        {/* scroll */}
+        <div className="anim-fade-in d9 mt-10 mb-0 flex flex-col items-center gap-1"
+          style={{ color: "rgba(255,255,255,0.2)" }}>
+          <span style={{ fontSize: "10px", letterSpacing: "0.3em" }}>SCROLL</span>
+          <svg className="animate-bounce w-4 h-4" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </div>
 
-      <p className="animate-fade-up delay-300 text-white/50 text-base md:text-lg max-w-lg
-        mb-10 leading-relaxed mx-auto">
-        {tx.sub}
-      </p>
-
-      {/* CTA buttons */}
-      <div className="animate-fade-up delay-400 flex flex-col sm:flex-row gap-4 justify-center mb-14">
-        <a href="#services" onClick={(e) => { e.preventDefault(); go("#services"); }}
-          className="px-8 py-3.5 rounded-xl bg-amber-400 text-gray-900 font-bold
-            hover:bg-amber-300 hover:scale-105 transition-all text-sm shadow-[0_0_30px_rgba(251,191,36,0.3)]">
-          {tx.cta1}
-        </a>
-        <Link href="/consult"
-          className="px-8 py-3.5 rounded-xl border border-white/15 text-white/70
-            hover:border-amber-400/50 hover:text-amber-400 transition-all text-sm">
-          {tx.cta2}
-        </Link>
-      </div>
-
-      {/* AI Card */}
-      <div className="animate-scale-in delay-500 w-full max-w-xl mx-auto animate-float">
-        <IdeaCard lang={lang} />
-      </div>
-
-      {/* scroll hint */}
-      <div className="animate-fade-in delay-900 mt-12 mb-0 flex flex-col items-center gap-1 text-white/25">
-        <span className="text-[10px] tracking-[0.3em] uppercase">scroll</span>
-        <svg className="animate-bounce w-4 h-4" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
-      </div>
-
-      {/* marquee strip */}
-      <div className="absolute bottom-0 left-0 right-0">
+      {/* marquee at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 z-10">
         <Marquee />
       </div>
     </section>
@@ -230,13 +248,12 @@ function Stats() {
   const { lang } = useLang();
   const tx = t[lang];
   return (
-    <section className="py-20 px-4 max-w-5xl mx-auto w-full">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <section className="py-20 px-6 w-full max-w-6xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {tx.stats.map((s) => (
-          <div key={s.label}
-            className="card-glow rounded-2xl p-6 text-center">
+          <div key={s.label} className="card-glow rounded-2xl p-7 text-center">
             <Counter target={s.target} suffix={s.suffix} />
-            <p className="text-white/50 text-xs mt-2">{s.label}</p>
+            <p className="text-xs mt-2" style={{ color: "rgba(255,255,255,0.45)" }}>{s.label}</p>
           </div>
         ))}
       </div>
@@ -249,22 +266,21 @@ function Services() {
   const { lang } = useLang();
   const tx = t[lang];
   return (
-    <section id="services" className="py-24 px-4 md:px-12 max-w-6xl mx-auto w-full">
-      <div className="text-center mb-14">
-        <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-3">
+    <section id="services" className="py-24 px-6 w-full max-w-6xl mx-auto">
+      <div className="text-center mb-16">
+        <h2 className="font-extrabold mb-3" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
           {tx.servTitle} <span className="text-shimmer">{tx.servBrand}</span>
         </h2>
-        <p className="text-white/40 max-w-sm mx-auto text-sm">{tx.servSub}</p>
+        <p className="max-w-sm mx-auto text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>{tx.servSub}</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {tx.services.map((s, i) => (
-          <div key={s.title} className="card-glow rounded-2xl p-7 text-center"
-            style={{ animationDelay: `${i * 0.08}s` }}>
-            <div className="text-4xl mb-5 transition-transform duration-300 group-hover:scale-110">
+        {tx.services.map((s) => (
+          <div key={s.title} className="card-glow rounded-2xl p-8 text-center group">
+            <div className="text-4xl mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
               {s.icon}
             </div>
-            <h3 className="font-bold text-white mb-2">{s.title}</h3>
-            <p className="text-white/45 text-sm leading-relaxed">{s.desc}</p>
+            <h3 className="font-bold mb-2 text-white">{s.title}</h3>
+            <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>{s.desc}</p>
           </div>
         ))}
       </div>
@@ -277,35 +293,28 @@ function ConsultCTA() {
   const { lang } = useLang();
   const tx = t[lang];
   return (
-    <section className="py-24 px-4 max-w-4xl mx-auto w-full">
-      <div className="relative rounded-3xl overflow-hidden">
-        {/* glow bg */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/15 via-amber-400/5 to-indigo-600/10" />
-        <div className="absolute inset-0 border border-amber-400/20 rounded-3xl" />
-        {/* blob */}
-        <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-amber-400/10 blur-[80px]" />
-
-        <div className="relative p-10 md:p-16 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-amber-400/10
-            border border-amber-400/25 px-4 py-1.5 mb-6">
+    <section className="py-20 px-6 w-full max-w-5xl mx-auto">
+      <div className="relative rounded-3xl overflow-hidden text-center p-12 md:p-20"
+        style={{ background: "linear-gradient(135deg,rgba(251,191,36,0.1),rgba(99,102,241,0.08))", border: "1px solid rgba(251,191,36,0.2)" }}>
+        <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-[100px]"
+          style={{ background: "rgba(251,191,36,0.1)" }} />
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6"
+            style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.25)" }}>
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-xs text-amber-300 tracking-wider">AI Powered</span>
+            <span className="text-xs text-amber-300 tracking-widest">AI Powered</span>
           </div>
-
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-4">
-            {tx.consultTitle}{" "}
-            <span className="text-shimmer">{tx.consultBrand}</span>
+          <h2 className="font-extrabold text-white mb-4" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
+            {tx.consultTitle} <span className="text-shimmer">{tx.consultBrand}</span>
           </h2>
-          <p className="text-white/50 max-w-md mx-auto text-sm leading-relaxed mb-8">
+          <p className="max-w-md mx-auto text-sm leading-relaxed mb-8" style={{ color: "rgba(255,255,255,0.5)" }}>
             {tx.consultDesc}
           </p>
-
           <Link href="/consult"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl
-              bg-amber-400 text-gray-900 font-bold text-sm
-              hover:bg-amber-300 hover:scale-105 transition-all
-              shadow-[0_0_40px_rgba(251,191,36,0.35)]">
-            {tx.consultBtn}
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-sm
+              transition-all hover:scale-105"
+            style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 50px rgba(251,191,36,0.35)" }}>
+            {tx.consultCta}
           </Link>
         </div>
       </div>
@@ -318,12 +327,12 @@ function About() {
   const { lang } = useLang();
   const tx = t[lang];
   return (
-    <section id="about" className="py-24 px-4 md:px-12 max-w-4xl mx-auto w-full">
-      <div className="card-glow animate-glow rounded-3xl p-10 md:p-16 text-center">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-5">
+    <section id="about" className="py-24 px-6 w-full max-w-4xl mx-auto">
+      <div className="card-glow rounded-3xl p-12 md:p-16 text-center">
+        <h2 className="font-extrabold text-white mb-5" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
           {tx.aboutTitle} <span className="text-shimmer">{tx.aboutBrand}</span>
         </h2>
-        <p className="text-white/55 leading-relaxed text-base max-w-2xl mx-auto">
+        <p className="leading-relaxed text-base max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
           {tx.aboutDesc}
         </p>
       </div>
@@ -336,15 +345,13 @@ function Footer() {
   const { lang } = useLang();
   const tx = t[lang];
   return (
-    <footer id="contact"
-      className="border-t border-white/5 py-10 px-6 md:px-14 max-w-6xl mx-auto w-full">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4
-        text-sm text-white/35">
+    <footer id="contact" className="py-10 px-6 w-full max-w-6xl mx-auto"
+      style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm"
+        style={{ color: "rgba(255,255,255,0.35)" }}>
         <span className="font-extrabold text-amber-400 text-lg tracking-widest">{tx.brand}</span>
         <div className="flex gap-6">
-          <a href="mailto:hello@mahir.ir" className="hover:text-amber-400 transition-colors">
-            hello@mahir.ir
-          </a>
+          <a href="mailto:hello@mahir.ir" className="hover:text-amber-400 transition-colors">hello@mahir.ir</a>
           <a href="#" className="hover:text-amber-400 transition-colors">{tx.footerIg}</a>
           <a href="#" className="hover:text-amber-400 transition-colors">{tx.footerLi}</a>
         </div>
@@ -354,10 +361,10 @@ function Footer() {
   );
 }
 
-// ── Page ──────────────────────────────────────────────────
+// ── Root ──────────────────────────────────────────────────
 function PageContent() {
   return (
-    <div className="min-h-screen bg-[#07071a] flex flex-col items-center">
+    <div className="min-h-screen flex flex-col items-center" style={{ background: "var(--bg)" }}>
       <Navbar />
       <Hero />
       <Stats />

@@ -1,116 +1,112 @@
 @import "tailwindcss";
 
 :root {
-  --background: #07071a;
-  --foreground: #f0f0f0;
+  --bg: #05050f;
+  --fg: #f0f0f5;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
 }
 
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--fg);
   font-family: "Vazirmatn", "Tahoma", "Segoe UI", sans-serif;
+  transition: background 0.4s, color 0.4s;
 }
 
-::-webkit-scrollbar { width: 6px; }
+body.light {
+  --bg: #f8f7f2;
+  --fg: #0f0f1a;
+  background: #f8f7f2;
+  color: #0f0f1a;
+}
+
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(251,191,36,.35); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(251,191,36,.4); border-radius: 3px; }
 
 /* ── Keyframes ── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(40px); }
+  from { opacity: 0; transform: translateY(36px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+@keyframes fadeIn  { from { opacity:0 } to { opacity:1 } }
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.88); }
-  to   { opacity: 1; transform: scale(1); }
+  from { opacity:0; transform:scale(0.9); }
+  to   { opacity:1; transform:scale(1); }
 }
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity:0; transform:translateY(-20px); }
+  to   { opacity:1; transform:translateY(0); }
 }
-@keyframes blobPulse {
-  0%,100% { transform: scale(1)   translate(0,0); }
-  33%      { transform: scale(1.1) translate(24px,-24px); }
-  66%      { transform: scale(0.94) translate(-18px,18px); }
+@keyframes blob {
+  0%,100% { transform:scale(1) translate(0,0); }
+  33%      { transform:scale(1.12) translate(28px,-28px); }
+  66%      { transform:scale(.93) translate(-20px,20px); }
 }
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 @keyframes shimmer {
-  from { background-position: -200% center; }
-  to   { background-position:  200% center; }
+  from { background-position:-200% center; }
+  to   { background-position: 200% center; }
 }
 @keyframes float {
-  0%,100% { transform: translateY(0px); }
-  50%      { transform: translateY(-12px); }
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-10px); }
 }
-@keyframes glowPulse {
-  0%,100% { box-shadow: 0 0 20px rgba(251,191,36,0.15); }
-  50%      { box-shadow: 0 0 40px rgba(251,191,36,0.35); }
+@keyframes gridMove {
+  from { background-position: 0 0; }
+  to   { background-position: 60px 60px; }
 }
+@keyframes spin { to { transform:rotate(360deg); } }
 
-/* ── Utility classes ── */
-.animate-fade-up    { animation: fadeUp    0.8s cubic-bezier(.22,.68,0,1.2) both; }
-.animate-fade-in    { animation: fadeIn    0.6s ease both; }
-.animate-scale-in   { animation: scaleIn   0.8s cubic-bezier(.22,.68,0,1.2) both; }
-.animate-slide-down { animation: slideDown 0.5s ease both; }
-.animate-blob       { animation: blobPulse 9s ease-in-out infinite; }
-.animate-marquee    { animation: marquee   28s linear infinite; }
-.animate-float      { animation: float     4s ease-in-out infinite; }
-.animate-glow       { animation: glowPulse 3s ease-in-out infinite; }
+/* ── Utilities ── */
+.anim-fade-up    { animation: fadeUp    0.8s cubic-bezier(.22,.68,0,1.2) both; }
+.anim-fade-in    { animation: fadeIn    0.6s ease both; }
+.anim-scale-in   { animation: scaleIn   0.8s cubic-bezier(.22,.68,0,1.2) both; }
+.anim-slide-down { animation: slideDown 0.5s ease both; }
+.anim-blob       { animation: blob      9s ease-in-out infinite; }
+.anim-marquee    { animation: marquee   26s linear infinite; }
+.anim-float      { animation: float     4s ease-in-out infinite; }
 
-.delay-100 { animation-delay: .10s; }
-.delay-200 { animation-delay: .20s; }
-.delay-300 { animation-delay: .30s; }
-.delay-400 { animation-delay: .40s; }
-.delay-500 { animation-delay: .50s; }
-.delay-600 { animation-delay: .60s; }
-.delay-700 { animation-delay: .70s; }
-.delay-800 { animation-delay: .80s; }
-.delay-900 { animation-delay: .90s; }
+.d1 { animation-delay:.1s } .d2 { animation-delay:.2s } .d3 { animation-delay:.3s }
+.d4 { animation-delay:.4s } .d5 { animation-delay:.5s } .d6 { animation-delay:.6s }
+.d7 { animation-delay:.7s } .d8 { animation-delay:.8s } .d9 { animation-delay:.9s }
 
-/* gradient shimmer text */
 .text-shimmer {
-  background: linear-gradient(90deg, #fbbf24, #fff8e7, #f59e0b, #fbbf24);
+  background: linear-gradient(90deg,#fbbf24,#fde68a,#f59e0b,#fbbf24);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 4s linear infinite;
+  animation: shimmer 3.5s linear infinite;
 }
 
-/* gradient border card */
+/* animated grid bg */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(251,191,36,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(251,191,36,.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 8s linear infinite;
+}
+
+/* card glow */
 .card-glow {
-  position: relative;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  transition: border-color .3s, transform .3s;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  transition: border-color .3s, transform .3s, box-shadow .3s;
 }
-.card-glow::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(251,191,36,0), rgba(251,191,36,0.6), rgba(251,191,36,0));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity .4s;
+body.light .card-glow {
+  background: rgba(0,0,0,.03);
+  border-color: rgba(0,0,0,.08);
 }
-.card-glow:hover::before { opacity: 1; }
-.card-glow:hover { transform: translateY(-6px); border-color: rgba(251,191,36,0.3); }
+.card-glow:hover {
+  transform: translateY(-6px);
+  border-color: rgba(251,191,36,.4);
+  box-shadow: 0 0 30px rgba(251,191,36,.12);
+}

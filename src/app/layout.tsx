@@ -7,7 +7,7 @@ import "@fontsource/vazirmatn/800.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ماهیر | مشاور رشد کسب‌وکار",
+  title: "ماهیر | Mahir — مشاور رشد کسب‌وکار",
   description:
     "ماهیر — شریک هوشمند رشد کسب‌وکار شما. استراتژی، هویت برند و بازاریابی دیجیتال.",
 };
@@ -16,7 +16,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fa" dir="rtl">
+    <html>
       <body className="antialiased min-h-full">{children}</body>
     </html>
   );

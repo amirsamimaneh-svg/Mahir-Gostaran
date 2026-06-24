@@ -154,7 +154,7 @@ function Hero() {
   const tx = t[lang];
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center
-      overflow-hidden pt-20 pb-0 text-center grid-bg">
+      overflow-hidden pt-20 pb-0 text-center">
 
       {/* blobs */}
       <div className="pointer-events-none absolute inset-0">
@@ -190,13 +190,12 @@ function Hero() {
           <span className="text-xs font-medium text-amber-300 tracking-widest">{tx.badge}</span>
         </div>
 
-        {/* headline — very large */}
+        {/* headline */}
         <div className="anim-fade-up d2 mb-6 w-full">
-          <h1 className="font-extrabold leading-none tracking-tight"
-            style={{ fontSize: "clamp(3.5rem, 12vw, 9rem)", lineHeight: 1.05 }}>
-            <span style={{ color: "white", display: "block" }}>{tx.h1a}</span>
-            <span style={{ color: "white", display: "block" }}>{tx.h1b}</span>
-            <span className="text-shimmer" style={{ display: "block" }}>{tx.h1c}</span>
+          <h1 className="font-extrabold tracking-tight"
+            style={{ fontSize: "clamp(2.2rem, 6vw, 5rem)", lineHeight: 1.15 }}>
+            <span style={{ color: "var(--fg)" }}>{tx.h1a} {tx.h1b} </span>
+            <span className="text-shimmer">{tx.h1c}</span>
           </h1>
         </div>
 
@@ -364,7 +363,7 @@ function Footer() {
 // ── Root ──────────────────────────────────────────────────
 function PageContent() {
   return (
-    <div className="min-h-screen flex flex-col items-center" style={{ background: "var(--bg)" }}>
+    <div className="min-h-screen flex flex-col items-center grid-bg" style={{ background: "var(--bg)" }}>
       <Navbar />
       <Hero />
       <Stats />

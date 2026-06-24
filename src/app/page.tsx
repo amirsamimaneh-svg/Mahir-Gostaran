@@ -5,7 +5,6 @@ import IdeaCard from "@/components/IdeaCard";
 import ScrollToTop from "@/components/ScrollToTop";
 import Marquee from "@/components/Marquee";
 import Counter from "@/components/Counter";
-import CustomCursor from "@/components/CustomCursor";
 import { LangProvider, useLang } from "@/context/LangContext";
 
 // ── translations ─────────────────────────────────────────
@@ -359,7 +358,6 @@ function Footer() {
 function PageContent() {
   return (
     <div className="min-h-screen bg-[#07071a] flex flex-col items-center">
-      <CustomCursor />
       <Navbar />
       <Hero />
       <Stats />

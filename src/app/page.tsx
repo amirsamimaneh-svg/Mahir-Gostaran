@@ -165,7 +165,7 @@ function Hero() {
   const tx = t[lang];
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center
-      overflow-hidden pt-20 pb-0 text-center">
+      overflow-hidden pt-20 pb-16 text-center">
       {/* blobs */}
       <div className="pointer-events-none absolute inset-0">
         <div className="anim-blob d1 absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full blur-[160px]"
@@ -188,42 +188,42 @@ function Hero() {
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col items-center">
         {/* badge */}
-        <div className="anim-fade-up d1 mb-8 inline-flex items-center gap-2 rounded-full px-5 py-2"
+        <div className="anim-fade-up d1 mb-4 inline-flex items-center gap-2 rounded-full px-5 py-2"
           style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.25)" }}>
           <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
           <span className="text-xs font-medium text-amber-300 tracking-widest">{tx.badge}</span>
         </div>
 
         {/* headline */}
-        <h1 className="anim-fade-up d2 font-extrabold tracking-tight mb-6"
-          style={{ fontSize: "clamp(2.2rem,6vw,5rem)", lineHeight: 1.15 }}>
+        <h1 className="anim-fade-up d2 font-extrabold tracking-tight mb-3"
+          style={{ fontSize: "clamp(1.9rem,5vw,4rem)", lineHeight: 1.15 }}>
           <span className="c-fg">{tx.h1} </span>
           <span className="text-shimmer">{tx.h1b}</span>
         </h1>
 
-        <p className="anim-fade-up d3 c-fg2 text-base md:text-lg max-w-xl mb-10 leading-relaxed">{tx.sub}</p>
+        <p className="anim-fade-up d3 c-fg2 text-sm md:text-base max-w-xl mb-6 leading-relaxed">{tx.sub}</p>
 
         {/* CTAs */}
-        <div className="anim-fade-up d4 flex flex-col sm:flex-row gap-4 justify-center mb-16">
+        <div className="anim-fade-up d4 flex flex-col sm:flex-row gap-3 justify-center mb-8">
           <a href="#services" onClick={e => { e.preventDefault(); go("#services"); }}
-            className="px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
+            className="px-7 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
             style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 40px rgba(251,191,36,0.3)" }}>
             {tx.cta1}
           </a>
           <Link href="/consult"
-            className="px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105 bg-card"
+            className="px-7 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105 bg-card"
             style={{ color: "#fbbf24", border: "1px solid rgba(251,191,36,0.3)" }}>
             {tx.cta2}
           </Link>
         </div>
 
         {/* AI card */}
-        <div className="anim-scale-in d5 anim-float w-full max-w-lg mx-auto">
+        <div className="anim-scale-in d5 w-full max-w-lg mx-auto">
           <IdeaCard lang={lang} />
         </div>
 
         {/* scroll hint */}
-        <div className="anim-fade-in d9 mt-10 flex flex-col items-center gap-1 c-fg3">
+        <div className="anim-fade-in d9 mt-6 flex flex-col items-center gap-1 c-fg3">
           <span style={{ fontSize: "10px", letterSpacing: "0.3em" }}>SCROLL</span>
           <svg className="animate-bounce w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />

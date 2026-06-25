@@ -46,6 +46,7 @@ export default function ConsultPage() {
   const [error, setError] = useState("");
   const [image, setImage] = useState<{ base64: string; mime: string; preview: string } | null>(null);
   const [listening, setListening] = useState(false);
+  const [interimText, setInterimText] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -78,20 +79,31 @@ export default function ConsultPage() {
     if (listening) {
       recognitionRef.current?.stop();
       setListening(false);
+      setInterimText("");
       return;
     }
 
     const rec = new SR();
     rec.lang = lang === "fa" ? "fa-IR" : "en-US";
-    rec.continuous = false;
-    rec.interimResults = false;
+    rec.continuous = true;
+    rec.interimResults = true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rec.onresult = (e: any) => {
-      setInput(e.results[0][0].transcript);
-      setListening(false);
+      let interim = "";
+      let final = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) final += e.results[i][0].transcript;
+        else interim += e.results[i][0].transcript;
+      }
+      if (final) {
+        setInput(prev => (prev ? prev + " " : "") + final.trim());
+        setInterimText("");
+      } else {
+        setInterimText(interim);
+      }
     };
-    rec.onerror = () => setListening(false);
-    rec.onend = () => setListening(false);
+    rec.onerror = () => { setListening(false); setInterimText(""); };
+    rec.onend = () => { setListening(false); setInterimText(""); };
     rec.start();
     recognitionRef.current = rec;
     setListening(true);
@@ -231,6 +243,29 @@ export default function ConsultPage() {
               {isRtl ? cur.q_fa : cur.q_en}
             </h2>
 
+            {/* voice button — prominent */}
+            <button onClick={toggleVoice}
+              className="w-full flex items-center justify-center gap-2 rounded-xl py-3 mb-3 text-sm font-bold transition-all hover:scale-105 active:scale-95"
+              style={{
+                background: listening ? "rgba(251,191,36,0.18)" : "rgba(251,191,36,0.08)",
+                border: listening ? "1.5px solid #fbbf24" : "1.5px solid rgba(251,191,36,0.35)",
+                color: listening ? "#fbbf24" : "rgba(251,191,36,0.8)",
+                boxShadow: listening ? "0 0 20px rgba(251,191,36,0.2)" : "none",
+              }}>
+              <span className={listening ? "animate-pulse" : ""} style={{ fontSize: "1.2rem" }}>🎤</span>
+              {listening
+                ? (isRtl ? "در حال ضبط… (کلیک برای توقف)" : "Recording… (click to stop)")
+                : (isRtl ? "ضبط صدا — بگو جواب رو" : "Record Voice — speak your answer")}
+            </button>
+
+            {/* interim live text */}
+            {(listening && interimText) && (
+              <div className="rounded-xl px-4 py-2 mb-3 text-sm italic" dir={isRtl ? "rtl" : "ltr"}
+                style={{ background: "rgba(251,191,36,0.06)", border: "1px dashed rgba(251,191,36,0.3)", color: "rgba(251,191,36,0.7)" }}>
+                {interimText}
+              </div>
+            )}
+
             {/* input row */}
             <div className="flex gap-2 mb-3">
               <input
@@ -244,24 +279,7 @@ export default function ConsultPage() {
                 className="flex-1 rounded-xl px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-400/50"
                 style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", color: "var(--fg)" }}
               />
-
-              {/* voice button */}
-              <button onClick={toggleVoice}
-                className="w-11 h-11 flex-shrink-0 rounded-xl flex items-center justify-center text-lg transition-all hover:scale-110 active:scale-95"
-                style={{
-                  background: listening ? "rgba(251,191,36,0.25)" : "rgba(255,255,255,0.07)",
-                  border: listening ? "1px solid #fbbf24" : "1px solid rgba(255,255,255,0.12)",
-                }}
-                title={isRtl ? "ورودی صوتی" : "Voice input"}>
-                {listening ? "⏹" : "🎤"}
-              </button>
             </div>
-
-            {listening && (
-              <p className="text-xs text-amber-400 text-center mb-3 animate-pulse">
-                {isRtl ? "در حال گوش دادن…" : "Listening…"}
-              </p>
-            )}
 
             {/* image upload — only step 0 */}
             {cur.showImage && (

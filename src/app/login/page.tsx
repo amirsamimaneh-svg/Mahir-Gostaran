@@ -1,0 +1,159 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+type Step = "form" | "success";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [mode, setMode] = useState<"login" | "register">("login");
+  const [step, setStep] = useState<Step>("form");
+  const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  async function submit() {
+    setError("");
+    if (!phone || !password) { setError("لطفاً همه فیلدها را پر کنید."); return; }
+    if (mode === "register") {
+      if (!name.trim()) { setError("لطفاً نام خود را وارد کنید."); return; }
+      if (password !== confirm) { setError("رمز عبور و تکرار آن یکسان نیستند."); return; }
+    }
+
+    setLoading(true);
+    const url = mode === "login" ? "/api/auth/login" : "/api/auth/register";
+    const body = mode === "login" ? { phone, password } : { phone, name: name.trim(), password };
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    setLoading(false);
+
+    if (data.error) { setError(data.error); return; }
+
+    if (mode === "register") {
+      setUserName(name.trim());
+      setStep("success");
+    } else {
+      router.push("/consult");
+    }
+  }
+
+  if (step === "success") return (
+    <div dir="rtl" className="min-h-screen flex items-center justify-center px-4" style={{ background: "#05050f" }}>
+      <div className="pointer-events-none fixed inset-0">
+        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px]" style={{ background: "rgba(251,191,36,0.08)" }} />
+      </div>
+      <div className="relative w-full max-w-sm text-center">
+        <div className="text-6xl mb-5 animate-bounce">🎉</div>
+        <div className="rounded-2xl p-8" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(251,191,36,0.2)" }}>
+          <h2 className="text-xl font-extrabold text-amber-400 mb-2">ثبت‌نام موفق!</h2>
+          <p className="text-base font-bold mb-1" style={{ color: "#f0f0f5" }}>
+            خوش آمدی، {userName} 👋
+          </p>
+          <p className="text-sm mb-6" style={{ color: "rgba(240,240,245,0.5)" }}>
+            حساب شما با موفقیت ساخته شد و آماده دریافت مشاوره هستید.
+          </p>
+          <div className="text-xs py-2 px-4 rounded-xl mb-6 font-mono" dir="ltr"
+            style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.2)", color: "#fbbf24" }}>
+            {phone}
+          </div>
+          <button onClick={() => router.push("/consult")}
+            className="w-full py-3.5 rounded-xl font-bold text-sm transition-all hover:scale-105"
+            style={{ background: "#fbbf24", color: "#111" }}>
+            شروع مشاوره رایگان ←
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div dir="rtl" className="min-h-screen flex items-center justify-center px-4" style={{ background: "#05050f" }}>
+      <div className="pointer-events-none fixed inset-0">
+        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[120px]" style={{ background: "rgba(251,191,36,0.06)" }} />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-[120px]" style={{ background: "rgba(99,102,241,0.06)" }} />
+      </div>
+
+      <div className="relative w-full max-w-sm">
+        <div className="text-center mb-8">
+          <Link href="/" className="text-3xl font-extrabold text-amber-400 tracking-widest">ماهیر</Link>
+          <p className="text-xs mt-2" style={{ color: "rgba(240,240,245,0.4)" }}>مشاور هوشمند رشد کسب‌وکار</p>
+        </div>
+
+        <div className="rounded-2xl p-8" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          <div className="flex rounded-xl overflow-hidden mb-7" style={{ background: "rgba(255,255,255,0.05)" }}>
+            {(["login", "register"] as const).map(m => (
+              <button key={m} onClick={() => { setMode(m); setError(""); }}
+                className="flex-1 py-2.5 text-sm font-bold transition-all"
+                style={{ background: mode === m ? "#fbbf24" : "transparent", color: mode === m ? "#111" : "rgba(240,240,245,0.45)" }}>
+                {m === "login" ? "ورود" : "ثبت‌نام"}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex flex-col gap-4">
+            {mode === "register" && (
+              <div>
+                <label className="text-xs font-medium mb-1.5 block" style={{ color: "rgba(240,240,245,0.5)" }}>نام شما</label>
+                <input type="text" value={name} onChange={e => setName(e.target.value)}
+                  placeholder="مثلاً: علی محمدی"
+                  className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }} />
+              </div>
+            )}
+
+            <div>
+              <label className="text-xs font-medium mb-1.5 block" style={{ color: "rgba(240,240,245,0.5)" }}>شماره موبایل</label>
+              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)}
+                placeholder="09123456789" dir="ltr"
+                className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }} />
+            </div>
+
+            <div>
+              <label className="text-xs font-medium mb-1.5 block" style={{ color: "rgba(240,240,245,0.5)" }}>رمز عبور</label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                placeholder="حداقل ۶ کاراکتر" dir="ltr"
+                onKeyDown={e => e.key === "Enter" && !confirm && submit()}
+                className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }} />
+            </div>
+
+            {mode === "register" && (
+              <div>
+                <label className="text-xs font-medium mb-1.5 block" style={{ color: "rgba(240,240,245,0.5)" }}>تکرار رمز عبور</label>
+                <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)}
+                  placeholder="تکرار رمز" dir="ltr"
+                  onKeyDown={e => e.key === "Enter" && submit()}
+                  className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }} />
+              </div>
+            )}
+
+            {error && (
+              <p className="text-xs text-center py-2 rounded-lg"
+                style={{ background: "rgba(239,68,68,0.1)", color: "#f87171", border: "1px solid rgba(239,68,68,0.2)" }}>
+                {error}
+              </p>
+            )}
+
+            <button onClick={submit} disabled={loading}
+              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 disabled:opacity-50 mt-1"
+              style={{ background: "#fbbf24", color: "#111" }}>
+              {loading ? "در حال پردازش…" : mode === "login" ? "ورود به حساب" : "ثبت‌نام رایگان"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

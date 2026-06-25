@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const STEPS = [
   {
@@ -37,8 +38,11 @@ const STEPS = [
 ];
 
 export default function ConsultPage() {
+  const router = useRouter();
   const [lang, setLang] = useState<"fa" | "en">("fa");
   const [step, setStep] = useState(-1);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [userName, setUserName] = useState("");
   const [answers, setAnswers] = useState(["", "", ""]);
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
@@ -46,6 +50,7 @@ export default function ConsultPage() {
   const [error, setError] = useState("");
   const [image, setImage] = useState<{ base64: string; mime: string; preview: string } | null>(null);
   const [listening, setListening] = useState(false);
+  const [interimText, setInterimText] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -56,6 +61,13 @@ export default function ConsultPage() {
   const isRtl = lang === "fa";
 
   useEffect(() => {
+    fetch("/api/auth/me").then(r => r.json()).then(d => {
+      if (!d.user) router.replace("/login");
+      else { setAuthChecked(true); setUserName(d.user.name || ""); }
+    });
+  }, [router]);
+
+  useEffect(() => {
     if (step >= 0 && step < STEPS.length) {
       setTimeout(() => inputRef.current?.focus(), 300);
     }
@@ -64,6 +76,12 @@ export default function ConsultPage() {
   useEffect(() => {
     if (result) resultRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [result]);
+
+  if (!authChecked) return (
+    <div style={{ background: "#05050f", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div className="w-8 h-8 rounded-full border-2 border-amber-400 border-t-transparent animate-spin" />
+    </div>
+  );
 
   // voice input
   function toggleVoice() {
@@ -78,20 +96,31 @@ export default function ConsultPage() {
     if (listening) {
       recognitionRef.current?.stop();
       setListening(false);
+      setInterimText("");
       return;
     }
 
     const rec = new SR();
     rec.lang = lang === "fa" ? "fa-IR" : "en-US";
-    rec.continuous = false;
-    rec.interimResults = false;
+    rec.continuous = true;
+    rec.interimResults = true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rec.onresult = (e: any) => {
-      setInput(e.results[0][0].transcript);
-      setListening(false);
+      let interim = "";
+      let final = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) final += e.results[i][0].transcript;
+        else interim += e.results[i][0].transcript;
+      }
+      if (final) {
+        setInput(prev => (prev ? prev + " " : "") + final.trim());
+        setInterimText("");
+      } else {
+        setInterimText(interim);
+      }
     };
-    rec.onerror = () => setListening(false);
-    rec.onend = () => setListening(false);
+    rec.onerror = () => { setListening(false); setInterimText(""); };
+    rec.onend = () => { setListening(false); setInterimText(""); };
     rec.start();
     recognitionRef.current = rec;
     setListening(true);
@@ -156,7 +185,7 @@ export default function ConsultPage() {
 
   // ── Landing ──────────────────────────────────────────────
   if (step === -1) return (
-    <Page lang={lang} setLang={setLang} isRtl={isRtl}>
+    <Page lang={lang} setLang={setLang} isRtl={isRtl} userName={userName}>
       <div className="flex flex-col items-center text-center max-w-lg mx-auto px-4 py-12 anim-fade-up">
         <div className="w-20 h-20 rounded-2xl mb-6 flex items-center justify-center text-4xl anim-float"
           style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.3)" }}>
@@ -208,7 +237,7 @@ export default function ConsultPage() {
   if (step < STEPS.length) {
     const cur = STEPS[step];
     return (
-      <Page lang={lang} setLang={setLang} isRtl={isRtl}>
+      <Page lang={lang} setLang={setLang} isRtl={isRtl} userName={userName}>
         <div className="w-full max-w-lg mx-auto px-4 py-8 flex flex-col items-center">
 
           {/* progress */}
@@ -231,6 +260,29 @@ export default function ConsultPage() {
               {isRtl ? cur.q_fa : cur.q_en}
             </h2>
 
+            {/* voice button — prominent */}
+            <button onClick={toggleVoice}
+              className="w-full flex items-center justify-center gap-2 rounded-xl py-3 mb-3 text-sm font-bold transition-all hover:scale-105 active:scale-95"
+              style={{
+                background: listening ? "rgba(251,191,36,0.18)" : "rgba(251,191,36,0.08)",
+                border: listening ? "1.5px solid #fbbf24" : "1.5px solid rgba(251,191,36,0.35)",
+                color: listening ? "#fbbf24" : "rgba(251,191,36,0.8)",
+                boxShadow: listening ? "0 0 20px rgba(251,191,36,0.2)" : "none",
+              }}>
+              <span className={listening ? "animate-pulse" : ""} style={{ fontSize: "1.2rem" }}>🎤</span>
+              {listening
+                ? (isRtl ? "در حال ضبط… (کلیک برای توقف)" : "Recording… (click to stop)")
+                : (isRtl ? "ضبط صدا — بگو جواب رو" : "Record Voice — speak your answer")}
+            </button>
+
+            {/* interim live text */}
+            {(listening && interimText) && (
+              <div className="rounded-xl px-4 py-2 mb-3 text-sm italic" dir={isRtl ? "rtl" : "ltr"}
+                style={{ background: "rgba(251,191,36,0.06)", border: "1px dashed rgba(251,191,36,0.3)", color: "rgba(251,191,36,0.7)" }}>
+                {interimText}
+              </div>
+            )}
+
             {/* input row */}
             <div className="flex gap-2 mb-3">
               <input
@@ -244,24 +296,7 @@ export default function ConsultPage() {
                 className="flex-1 rounded-xl px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-400/50"
                 style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", color: "var(--fg)" }}
               />
-
-              {/* voice button */}
-              <button onClick={toggleVoice}
-                className="w-11 h-11 flex-shrink-0 rounded-xl flex items-center justify-center text-lg transition-all hover:scale-110 active:scale-95"
-                style={{
-                  background: listening ? "rgba(251,191,36,0.25)" : "rgba(255,255,255,0.07)",
-                  border: listening ? "1px solid #fbbf24" : "1px solid rgba(255,255,255,0.12)",
-                }}
-                title={isRtl ? "ورودی صوتی" : "Voice input"}>
-                {listening ? "⏹" : "🎤"}
-              </button>
             </div>
-
-            {listening && (
-              <p className="text-xs text-amber-400 text-center mb-3 animate-pulse">
-                {isRtl ? "در حال گوش دادن…" : "Listening…"}
-              </p>
-            )}
 
             {/* image upload — only step 0 */}
             {cur.showImage && (
@@ -321,7 +356,7 @@ export default function ConsultPage() {
 
   // ── Result ────────────────────────────────────────────────
   return (
-    <Page lang={lang} setLang={setLang} isRtl={isRtl}>
+    <Page lang={lang} setLang={setLang} isRtl={isRtl} userName={userName}>
       <div className="w-full max-w-lg mx-auto px-4 py-8 flex flex-col items-center">
         {loading ? (
           <div className="flex flex-col items-center gap-5 py-20">
@@ -396,11 +431,12 @@ export default function ConsultPage() {
 }
 
 // ── Layout ────────────────────────────────────────────────
-function Page({ children, lang, setLang, isRtl }: {
+function Page({ children, lang, setLang, isRtl, userName }: {
   children: React.ReactNode;
   lang: "fa" | "en";
   setLang: (l: "fa" | "en") => void;
   isRtl: boolean;
+  userName?: string;
 }) {
   return (
     <div className="min-h-screen grid-bg" dir={isRtl ? "rtl" : "ltr"}
@@ -418,9 +454,15 @@ function Page({ children, lang, setLang, isRtl }: {
           {isRtl ? "ماهیر" : "Mahir"}
         </Link>
         <div className="flex items-center gap-2">
-          <span className="text-xs hidden sm:block" style={{ color: "var(--fg3)" }}>
-            {isRtl ? "مشاوره هوشمند" : "AI Consultation"}
-          </span>
+          {userName && (
+            <Link href="/profile"
+              className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-amber-400"
+              style={{ border: "1px solid rgba(251,191,36,0.25)", color: "#fbbf24", background: "rgba(251,191,36,0.07)" }}>
+              <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
+                style={{ background: "rgba(251,191,36,0.2)" }}>{userName.charAt(0)}</span>
+              {userName}
+            </Link>
+          )}
           <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
             style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>

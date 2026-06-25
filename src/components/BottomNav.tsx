@@ -33,12 +33,16 @@ export default function BottomNav({ lang = "fa" }: { lang?: "fa" | "en" }) {
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 inset-x-0 z-50"
+      className="md:hidden fixed z-50"
       style={{
-        background: "rgba(5,5,20,0.85)",
-        backdropFilter: "blur(20px)",
-        borderTop: "1px solid rgba(251,191,36,0.12)",
-        boxShadow: "0 -4px 30px rgba(0,0,0,0.4)",
+        bottom: "5px",
+        left: "12px",
+        right: "12px",
+        background: "rgba(5,5,20,0.55)",
+        backdropFilter: "blur(24px)",
+        border: "1px solid rgba(251,191,36,0.12)",
+        borderRadius: "20px",
+        boxShadow: "0 4px 32px rgba(0,0,0,0.35)",
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >

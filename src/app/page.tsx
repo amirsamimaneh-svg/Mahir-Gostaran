@@ -6,6 +6,7 @@ import IdeaCard from "@/components/IdeaCard";
 import ScrollToTop from "@/components/ScrollToTop";
 import Marquee from "@/components/Marquee";
 import Counter from "@/components/Counter";
+import WelcomeBar from "@/components/WelcomeBar";
 import { LangProvider, useLang } from "@/context/LangContext";
 
 const t = {
@@ -90,13 +91,9 @@ function go(href: string) {
 }
 
 // ── Theme toggle ──────────────────────────────────────────
-function ThemeToggle() {
-  const [dark, setDark] = useState(true);
-  useEffect(() => {
-    document.body.classList.toggle("light", !dark);
-  }, [dark]);
+function ThemeToggle({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
   return (
-    <button onClick={() => setDark(d => !d)}
+    <button onClick={() => setDark(!dark)}
       className="w-9 h-9 rounded-lg flex items-center justify-center text-base transition-all hover:scale-110 bg-card"
       title={dark ? "حالت روشن" : "حالت تاریک"}>
       {dark ? "🌙" : "☀️"}
@@ -105,7 +102,7 @@ function ThemeToggle() {
 }
 
 // ── Navbar ────────────────────────────────────────────────
-function Navbar() {
+function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
   const { lang, toggle } = useLang();
   const tx = t[lang];
   return (
@@ -125,7 +122,7 @@ function Navbar() {
           ))}
         </ul>
         <div className="flex items-center gap-2">
-          <ThemeToggle />
+          <ThemeToggle dark={dark} setDark={setDark} />
           <button onClick={toggle}
             className="text-xs font-bold px-3 py-2 rounded-lg bg-card c-fg3 hover:text-amber-400 transition-all">
             {tx.langBtn}
@@ -335,9 +332,21 @@ function Footer() {
 
 // ── Root ──────────────────────────────────────────────────
 function PageContent() {
+  const [dark, setDark] = useState(true);
+  const { setLang } = useLang();
+
+  useEffect(() => {
+    document.body.classList.toggle("light", !dark);
+  }, [dark]);
+
+  function handlePrefs(prefs: { theme: "dark" | "light"; lang: "fa" | "en" }) {
+    setDark(prefs.theme === "dark");
+    setLang(prefs.lang);
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center grid-bg" style={{ background: "var(--bg)" }}>
-      <Navbar />
+      <Navbar dark={dark} setDark={setDark} />
       <Hero />
       <Stats />
       <Services />
@@ -345,6 +354,7 @@ function PageContent() {
       <About />
       <Footer />
       <ScrollToTop />
+      <WelcomeBar onApply={handlePrefs} />
     </div>
   );
 }

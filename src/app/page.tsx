@@ -1,150 +1,230 @@
-import IdeaCard from "@/components/IdeaCard";
+"use client";
 
-// ————————————————————————————————
-// Nav
-// ————————————————————————————————
-function Navbar() {
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import IdeaCard from "@/components/IdeaCard";
+import ScrollToTop from "@/components/ScrollToTop";
+import Marquee from "@/components/Marquee";
+import Counter from "@/components/Counter";
+import { LangProvider, useLang } from "@/context/LangContext";
+
+const t = {
+  fa: {
+    brand: "ماهیر",
+    nav: [
+      { label: "خدمات",      href: "#services" },
+      { label: "نمونه‌کارها", href: "#portfolio" },
+      { label: "درباره ما",   href: "#about" },
+      { label: "تماس",       href: "#contact" },
+    ],
+    consultBtn: "مشاوره رایگان",
+    badge: "شریک هوشمند رشد کسب‌وکار شما",
+    h1: "از ایده تا",
+    h1b: "رشد واقعی",
+    sub: "ماهیر با ترکیب استراتژی، هویت برند و هوش مصنوعی، مسیر رشد کسب‌وکار شما را هموار می‌کند.",
+    cta1: "خدمات ما", cta2: "مشاوره هوشمند",
+    servTitle: "خدمات", servBrand: "ماهیر",
+    servSub: "راه‌حل‌های جامع برای هر مرحله از مسیر رشد",
+    services: [
+      { icon: "🎯", title: "استراتژی رشد",      desc: "تحلیل بازار، شناخت رقبا و طراحی نقشه‌راه رشد متناسب با کسب‌وکار شما." },
+      { icon: "✦",  title: "هویت برند",          desc: "خلق هویت بصری و کلامی منسجم که در ذهن مخاطبان ماندگار می‌شود." },
+      { icon: "📱", title: "بازاریابی دیجیتال", desc: "کمپین‌های هدفمند در شبکه‌های اجتماعی، SEO و تبلیغات آنلاین." },
+      { icon: "🤖", title: "هوش مصنوعی",       desc: "پیاده‌سازی ابزارهای AI برای خودکارسازی فرآیندها و شخصی‌سازی تجربه مشتری." },
+    ],
+    stats: [
+      { target: 50,  suffix: "+",  label: "کسب‌وکار موفق" },
+      { target: 80,  suffix: "%+", label: "رشد میانگین" },
+      { target: 3,   suffix: "",   label: "سال تجربه" },
+      { target: 120, suffix: "+",  label: "پروژه تحویل‌شده" },
+    ],
+    consultTitle: "مشاوره", consultBrand: "اختصاصی",
+    consultDesc: "با پاسخ به ۳ سوال کوتاه، یک راهکار رشد کاملاً شخصی‌سازی‌شده دریافت کن.",
+    consultCta: "شروع مشاوره رایگان ←",
+    aboutTitle: "چرا", aboutBrand: "ماهیر؟",
+    aboutDesc: "ماهیر با تیمی از متخصصان استراتژی، طراحی و فناوری، به کسب‌وکارهای ایرانی کمک می‌کند تا با هویتی قوی و استراتژی هوشمند، در بازار رقابتی امروز متمایز شوند.",
+    footerIg: "اینستاگرام", footerLi: "لینکدین",
+    footerR: "© ۱۴۰۴ ماهیر. تمامی حقوق محفوظ است.",
+    langBtn: "EN",
+  },
+  en: {
+    brand: "Mahir",
+    nav: [
+      { label: "Services",  href: "#services" },
+      { label: "Portfolio", href: "#portfolio" },
+      { label: "About",     href: "#about" },
+      { label: "Contact",   href: "#contact" },
+    ],
+    consultBtn: "Free Consultation",
+    badge: "Your Smart Business Growth Partner",
+    h1: "From Idea to",
+    h1b: "Real Growth",
+    sub: "Mahir combines strategy, brand identity, and AI to pave the way for your business growth.",
+    cta1: "Our Services", cta2: "AI Consultation",
+    servTitle: "Our", servBrand: "Services",
+    servSub: "Comprehensive solutions for every stage of your growth journey",
+    services: [
+      { icon: "🎯", title: "Growth Strategy",   desc: "Market analysis, competitor research, and a tailored growth roadmap." },
+      { icon: "✦",  title: "Brand Identity",    desc: "A cohesive visual and verbal identity that stays in your audience's memory." },
+      { icon: "📱", title: "Digital Marketing", desc: "Targeted campaigns on social media, SEO, and online ads with clear ROI." },
+      { icon: "🤖", title: "AI Solutions",      desc: "Implementing AI tools to automate processes and personalize experience." },
+    ],
+    stats: [
+      { target: 50,  suffix: "+",  label: "Businesses Served" },
+      { target: 80,  suffix: "%+", label: "Avg. Growth" },
+      { target: 3,   suffix: "",   label: "Years Experience" },
+      { target: 120, suffix: "+",  label: "Projects Delivered" },
+    ],
+    consultTitle: "Personalized", consultBrand: "Consultation",
+    consultDesc: "Answer 3 quick questions and receive a fully personalized growth strategy.",
+    consultCta: "Start Free Consultation →",
+    aboutTitle: "Why", aboutBrand: "Mahir?",
+    aboutDesc: "Mahir's team of strategy, design, and tech experts helps businesses stand out in today's competitive market with a strong identity and smart strategy.",
+    footerIg: "Instagram", footerLi: "LinkedIn",
+    footerR: "© 2025 Mahir. All rights reserved.",
+    langBtn: "فا",
+  },
+};
+
+function go(href: string) {
+  document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+}
+
+// ── Theme toggle ──────────────────────────────────────────
+function ThemeToggle({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
   return (
-    <nav
-      dir="rtl"
-      className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 py-4
-        bg-[#07071a]/80 backdrop-blur-md border-b border-white/5"
-    >
-      <span className="text-xl font-bold text-amber-400 tracking-wide">ماهیر</span>
-      <ul className="hidden md:flex gap-8 text-sm text-white/70">
-        {["خدمات", "نمونه‌کارها", "درباره ما", "تماس"].map((item) => (
-          <li key={item}>
-            <a href={`#${item}`} className="hover:text-amber-400 transition-colors">
-              {item}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <a
-        href="mailto:hello@mahir.ir"
-        className="text-sm font-semibold px-4 py-2 rounded-lg border border-amber-400/60
-          text-amber-400 hover:bg-amber-400 hover:text-gray-900 transition-all"
-      >
-        مشاوره رایگان
-      </a>
+    <button onClick={() => setDark(!dark)}
+      className="w-9 h-9 rounded-lg flex items-center justify-center text-base transition-all hover:scale-110 bg-card"
+      title={dark ? "حالت روشن" : "حالت تاریک"}>
+      {dark ? "🌙" : "☀️"}
+    </button>
+  );
+}
+
+// ── Navbar ────────────────────────────────────────────────
+function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
+  const { lang, toggle } = useLang();
+  const tx = t[lang];
+  return (
+    <nav className="fixed top-0 inset-x-0 z-50 anim-slide-down"
+      style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-4">
+        <span className="text-xl font-extrabold text-amber-400 tracking-widest">{tx.brand}</span>
+        <ul className="hidden md:flex gap-10 text-sm">
+          {tx.nav.map(item => (
+            <li key={item.label}>
+              <a href={item.href} onClick={e => { e.preventDefault(); go(item.href); }}
+                className="c-fg2 hover:text-amber-400 transition-colors relative group">
+                {item.label}
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-amber-400 group-hover:w-full transition-all duration-300" />
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div className="flex items-center gap-2">
+          <ThemeToggle dark={dark} setDark={setDark} />
+          <button onClick={toggle}
+            className="text-xs font-bold px-3 py-2 rounded-lg bg-card c-fg3 hover:text-amber-400 transition-all">
+            {tx.langBtn}
+          </button>
+          <Link href="/consult"
+            className="text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-105"
+            style={{ background: "#fbbf24", color: "#111" }}>
+            {tx.consultBtn}
+          </Link>
+        </div>
+      </div>
     </nav>
   );
 }
 
-// ————————————————————————————————
-// Hero
-// ————————————————————————————————
+// ── Hero ──────────────────────────────────────────────────
 function Hero() {
+  const { lang } = useLang();
+  const tx = t[lang];
   return (
-    <section
-      dir="rtl"
-      className="relative min-h-screen flex flex-col items-center justify-center
-        overflow-hidden pt-20 pb-16 px-4"
-    >
-      {/* Ambient background blobs */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        aria-hidden="true"
-      >
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full
-          bg-amber-500/10 blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] rounded-full
-          bg-indigo-600/10 blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-          w-[600px] h-[600px] rounded-full bg-purple-900/10 blur-[160px]" />
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center
+      overflow-hidden pt-20 pb-0 text-center">
+      {/* blobs */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="anim-blob d1 absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full blur-[160px]"
+          style={{ background: "rgba(251,191,36,0.08)" }} />
+        <div className="anim-blob d5 absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full blur-[160px]"
+          style={{ background: "rgba(99,102,241,0.08)" }} />
+        <div className="anim-blob d3 absolute top-1/2 left-1/3 w-[500px] h-[500px] rounded-full blur-[140px]"
+          style={{ background: "rgba(139,92,246,0.06)" }} />
+      </div>
+      {/* particles */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {Array.from({ length: 18 }).map((_, i) => (
+          <span key={i} className="absolute rounded-full anim-blob"
+            style={{ width: `${2+(i%4)}px`, height: `${2+(i%4)}px`,
+              top: `${5+(i*4.7)%88}%`, left: `${3+(i*5.1)%94}%`,
+              background: "rgba(251,191,36,0.2)",
+              animationDelay: `${i*0.4}s`, animationDuration: `${5+(i%5)*1.5}s` }} />
+        ))}
       </div>
 
-      {/* Badge */}
-      <span className="mb-6 inline-flex items-center gap-2 rounded-full
-        bg-amber-400/10 border border-amber-400/30 px-4 py-1.5
-        text-xs font-medium text-amber-300 tracking-wider">
-        ✦ شریک هوشمند رشد کسب‌وکار شما
-      </span>
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col items-center">
+        {/* badge */}
+        <div className="anim-fade-up d1 mb-8 inline-flex items-center gap-2 rounded-full px-5 py-2"
+          style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.25)" }}>
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+          <span className="text-xs font-medium text-amber-300 tracking-widest">{tx.badge}</span>
+        </div>
 
-      {/* Headline */}
-      <h1 className="text-center text-4xl md:text-6xl font-extrabold leading-tight
-        tracking-tight text-white max-w-3xl mb-4">
-        از ایده تا{" "}
-        <span className="text-amber-400">رشد واقعی</span>
-      </h1>
+        {/* headline */}
+        <h1 className="anim-fade-up d2 font-extrabold tracking-tight mb-6"
+          style={{ fontSize: "clamp(2.2rem,6vw,5rem)", lineHeight: 1.15 }}>
+          <span className="c-fg">{tx.h1} </span>
+          <span className="text-shimmer">{tx.h1b}</span>
+        </h1>
 
-      <p className="text-center text-white/60 text-base md:text-lg max-w-xl mb-10 leading-relaxed">
-        ماهیر با ترکیب استراتژی، هویت برند و هوش مصنوعی، مسیر رشد کسب‌وکار شما را
-        هموار می‌کند.
-      </p>
+        <p className="anim-fade-up d3 c-fg2 text-base md:text-lg max-w-xl mb-10 leading-relaxed">{tx.sub}</p>
 
-      {/* AI Idea Card */}
-      <IdeaCard />
+        {/* CTAs */}
+        <div className="anim-fade-up d4 flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <a href="#services" onClick={e => { e.preventDefault(); go("#services"); }}
+            className="px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
+            style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 40px rgba(251,191,36,0.3)" }}>
+            {tx.cta1}
+          </a>
+          <Link href="/consult"
+            className="px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105 bg-card"
+            style={{ color: "#fbbf24", border: "1px solid rgba(251,191,36,0.3)" }}>
+            {tx.cta2}
+          </Link>
+        </div>
 
-      {/* CTA buttons */}
-      <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-        <a
-          href="#services"
-          className="px-6 py-3 rounded-xl bg-amber-400 text-gray-900 font-bold
-            hover:bg-amber-300 transition-all text-sm text-center"
-        >
-          خدمات ما را ببینید
-        </a>
-        <a
-          href="mailto:hello@mahir.ir"
-          className="px-6 py-3 rounded-xl border border-white/20 text-white/80
-            hover:border-amber-400/50 hover:text-amber-400 transition-all text-sm text-center"
-        >
-          مشاوره رایگان بگیرید
-        </a>
+        {/* AI card */}
+        <div className="anim-scale-in d5 anim-float w-full max-w-lg mx-auto">
+          <IdeaCard lang={lang} />
+        </div>
+
+        {/* scroll hint */}
+        <div className="anim-fade-in d9 mt-10 flex flex-col items-center gap-1 c-fg3">
+          <span style={{ fontSize: "10px", letterSpacing: "0.3em" }}>SCROLL</span>
+          <svg className="animate-bounce w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 z-10"><Marquee /></div>
     </section>
   );
 }
 
-// ————————————————————————————————
-// Services Section
-// ————————————————————————————————
-const services = [
-  {
-    icon: "🎯",
-    title: "استراتژی رشد",
-    desc: "تحلیل بازار، شناخت رقبا و طراحی نقشه‌راه رشد متناسب با کسب‌وکار شما.",
-  },
-  {
-    icon: "✦",
-    title: "هویت برند",
-    desc: "خلق هویت بصری و کلامی منسجم که در ذهن مخاطبان ماندگار می‌شود.",
-  },
-  {
-    icon: "📱",
-    title: "بازاریابی دیجیتال",
-    desc: "کمپین‌های هدفمند در شبکه‌های اجتماعی، SEO و تبلیغات آنلاین با بازگشت سرمایه شفاف.",
-  },
-  {
-    icon: "🤖",
-    title: "راه‌حل‌های هوش مصنوعی",
-    desc: "پیاده‌سازی ابزارهای AI برای خودکارسازی فرآیندها و شخصی‌سازی تجربه مشتری.",
-  },
-];
-
-function Services() {
+// ── Stats ─────────────────────────────────────────────────
+function Stats() {
+  const { lang } = useLang();
+  const tx = t[lang];
   return (
-    <section id="services" dir="rtl" className="py-24 px-4 md:px-12 max-w-6xl mx-auto">
-      <div className="text-center mb-14">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-          خدمات <span className="text-amber-400">ماهیر</span>
-        </h2>
-        <p className="text-white/50 max-w-md mx-auto text-sm">
-          راه‌حل‌های جامع برای هر مرحله از مسیر رشد کسب‌وکار شما
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {services.map((s) => (
-          <div
-            key={s.title}
-            className="group p-6 rounded-2xl bg-white/5 border border-white/10
-              hover:border-amber-400/40 hover:bg-white/8 transition-all duration-300"
-          >
-            <div className="text-3xl mb-4">{s.icon}</div>
-            <h3 className="font-bold text-white mb-2 text-base">{s.title}</h3>
-            <p className="text-white/50 text-sm leading-relaxed">{s.desc}</p>
+    <section className="py-20 px-6 w-full max-w-6xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {tx.stats.map(s => (
+          <div key={s.label} className="card-glow rounded-2xl p-7 text-center">
+            <Counter target={s.target} suffix={s.suffix} />
+            <p className="text-xs mt-2 c-fg3">{s.label}</p>
           </div>
         ))}
       </div>
@@ -152,75 +232,135 @@ function Services() {
   );
 }
 
-// ————————————————————————————————
-// About Section
-// ————————————————————————————————
-function About() {
+// ── Services ──────────────────────────────────────────────
+function Services() {
+  const { lang } = useLang();
+  const tx = t[lang];
   return (
-    <section id="about" dir="rtl" className="py-24 px-4 md:px-12 max-w-4xl mx-auto">
-      <div className="rounded-3xl bg-white/5 border border-white/10 p-10 md:p-14 text-center">
-        <h2 className="text-3xl font-bold text-white mb-4">
-          چرا <span className="text-amber-400">ماهیر</span>؟
+    <section id="services" className="py-24 px-6 w-full max-w-6xl mx-auto">
+      <div className="text-center mb-16">
+        <h2 className="font-extrabold mb-3" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
+          <span className="c-fg">{tx.servTitle} </span>
+          <span className="text-shimmer">{tx.servBrand}</span>
         </h2>
-        <p className="text-white/60 leading-relaxed text-base max-w-2xl mx-auto">
-          ماهیر با تیمی از متخصصان استراتژی، طراحی و فناوری، به کسب‌وکارهای ایرانی کمک
-          می‌کند تا با هویتی قوی و استراتژی هوشمند، در بازار رقابتی امروز متمایز شوند.
-          ما به نتیجه اعتقاد داریم، نه فقط به فرآیند.
-        </p>
-        <div className="mt-10 grid grid-cols-3 gap-6">
-          {[
-            { num: "+۵۰", label: "کسب‌وکار موفق" },
-            { num: "+۸۰٪", label: "رشد میانگین" },
-            { num: "۳ سال", label: "تجربه" },
-          ].map((stat) => (
-            <div key={stat.label}>
-              <div className="text-2xl md:text-3xl font-extrabold text-amber-400">
-                {stat.num}
-              </div>
-              <div className="text-white/50 text-xs mt-1">{stat.label}</div>
+        <p className="max-w-sm mx-auto text-sm c-fg3">{tx.servSub}</p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {tx.services.map(s => (
+          <div key={s.title} className="card-glow rounded-2xl p-8 text-center group">
+            <div className="text-4xl mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+              {s.icon}
             </div>
-          ))}
+            <h3 className="font-bold mb-2 c-fg">{s.title}</h3>
+            <p className="text-sm leading-relaxed c-fg2">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── Consult CTA ───────────────────────────────────────────
+function ConsultCTA() {
+  const { lang } = useLang();
+  const tx = t[lang];
+  return (
+    <section className="py-20 px-6 w-full max-w-5xl mx-auto">
+      <div className="relative rounded-3xl overflow-hidden text-center p-12 md:p-20 card-glow">
+        <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-[100px]"
+          style={{ background: "rgba(251,191,36,0.1)" }} />
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6"
+            style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.25)" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className="text-xs text-amber-300 tracking-widest">AI Powered</span>
+          </div>
+          <h2 className="font-extrabold mb-4" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
+            <span className="c-fg">{tx.consultTitle} </span>
+            <span className="text-shimmer">{tx.consultBrand}</span>
+          </h2>
+          <p className="max-w-md mx-auto text-sm leading-relaxed mb-8 c-fg2">{tx.consultDesc}</p>
+          <Link href="/consult"
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-sm
+              transition-all hover:scale-105"
+            style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 50px rgba(251,191,36,0.35)" }}>
+            {tx.consultCta}
+          </Link>
         </div>
       </div>
     </section>
   );
 }
 
-// ————————————————————————————————
-// Footer
-// ————————————————————————————————
-function Footer() {
+// ── About ─────────────────────────────────────────────────
+function About() {
+  const { lang } = useLang();
+  const tx = t[lang];
   return (
-    <footer
-      dir="rtl"
-      className="border-t border-white/5 py-10 px-6 md:px-12 max-w-6xl mx-auto w-full"
-    >
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/40">
-        <span className="font-bold text-amber-400 text-base">ماهیر</span>
+    <section id="about" className="py-24 px-6 w-full max-w-4xl mx-auto">
+      <div className="card-glow rounded-3xl p-12 md:p-16 text-center">
+        <h2 className="font-extrabold mb-5" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
+          <span className="c-fg">{tx.aboutTitle} </span>
+          <span className="text-shimmer">{tx.aboutBrand}</span>
+        </h2>
+        <p className="leading-relaxed text-base max-w-2xl mx-auto c-fg2">{tx.aboutDesc}</p>
+      </div>
+    </section>
+  );
+}
+
+// ── Footer ────────────────────────────────────────────────
+function Footer() {
+  const { lang } = useLang();
+  const tx = t[lang];
+  return (
+    <footer id="contact" className="py-10 px-6 w-full max-w-6xl mx-auto"
+      style={{ borderTop: "1px solid var(--border)" }}>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm c-fg3">
+        <span className="font-extrabold text-amber-400 text-lg tracking-widest">{tx.brand}</span>
         <div className="flex gap-6">
-          <a href="mailto:hello@mahir.ir" className="hover:text-amber-400 transition-colors">
-            hello@mahir.ir
-          </a>
-          <a href="#" className="hover:text-amber-400 transition-colors">اینستاگرام</a>
-          <a href="#" className="hover:text-amber-400 transition-colors">لینکدین</a>
+          <a href="mailto:hello@mahir.ir" className="hover:text-amber-400 transition-colors">hello@mahir.ir</a>
+          <a href="#" className="hover:text-amber-400 transition-colors">{tx.footerIg}</a>
+          <a href="#" className="hover:text-amber-400 transition-colors">{tx.footerLi}</a>
         </div>
-        <span>© ۱۴۰۴ ماهیر. تمامی حقوق محفوظ است.</span>
+        <span>{tx.footerR}</span>
       </div>
     </footer>
   );
 }
 
-// ————————————————————————————————
-// Page
-// ————————————————————————————————
-export default function HomePage() {
+// ── Root ──────────────────────────────────────────────────
+function PageContent() {
+  const [dark, setDark] = useState(true);
+  const { setLang } = useLang();
+
+  useEffect(() => {
+    document.body.classList.toggle("light", !dark);
+  }, [dark]);
+
+  function handlePrefs(prefs: { theme: "dark" | "light"; lang: "fa" | "en" }) {
+    setDark(prefs.theme === "dark");
+    setLang(prefs.lang);
+  }
+
   return (
-    <div className="min-h-screen bg-[#07071a]">
-      <Navbar />
+    <div className="min-h-screen flex flex-col items-center grid-bg" style={{ background: "var(--bg)" }}>
+      <Navbar dark={dark} setDark={setDark} />
       <Hero />
+      <Stats />
       <Services />
+      <ConsultCTA />
       <About />
       <Footer />
+      <ScrollToTop />
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <LangProvider>
+      <PageContent />
+    </LangProvider>
   );
 }

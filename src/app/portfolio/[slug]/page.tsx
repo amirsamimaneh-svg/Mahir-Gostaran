@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { projects } from "@/data/projects";
@@ -10,6 +11,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
   const searchParams = useSearchParams();
   const initLang = (searchParams.get("lang") as "fa" | "en") ?? "fa";
   const [lang, setLang] = useState<"fa" | "en">(initLang);
+  const [lightbox, setLightbox] = useState<number | null>(null);
 
   const project = projects.find(p => p.slug === slug);
   const isRtl = lang === "fa";
@@ -88,6 +90,25 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
           ))}
         </div>
 
+        {/* Gallery */}
+        {project.images?.length > 0 && (
+          <div className="mb-10">
+            <h2 className="font-bold text-lg mb-4 text-amber-400">
+              {isRtl ? "تصاویر پروژه" : "Project Gallery"}
+            </h2>
+            <div className="grid grid-cols-3 gap-2">
+              {project.images.map((src, i) => (
+                <button key={i} onClick={() => setLightbox(i)}
+                  className="relative overflow-hidden rounded-xl aspect-video transition-all hover:scale-[1.03] hover:brightness-110"
+                  style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <Image src={src} alt={`${project.title_fa} - ${i + 1}`}
+                    fill className="object-cover" unoptimized />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Divider */}
         <div className="h-px mb-10" style={{ background: "rgba(255,255,255,0.08)" }} />
 
@@ -134,6 +155,40 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
         </div>
 
       </div>
+
+      {/* Lightbox */}
+      {lightbox !== null && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          style={{ background: "rgba(0,0,0,0.92)", backdropFilter: "blur(8px)" }}
+          onClick={() => setLightbox(null)}>
+          <button className="absolute top-5 right-5 w-10 h-10 rounded-full flex items-center justify-center text-xl"
+            style={{ background: "rgba(255,255,255,0.1)", color: "#f0f0f5" }}
+            onClick={() => setLightbox(null)}>✕</button>
+
+          {/* prev */}
+          {lightbox > 0 && (
+            <button className="absolute left-5 w-11 h-11 rounded-full flex items-center justify-center text-xl"
+              style={{ background: "rgba(255,255,255,0.1)", color: "#f0f0f5" }}
+              onClick={e => { e.stopPropagation(); setLightbox(lightbox - 1); }}>‹</button>
+          )}
+
+          <div className="relative w-full max-w-3xl rounded-2xl overflow-hidden" style={{ aspectRatio: "16/10" }}
+            onClick={e => e.stopPropagation()}>
+            <Image src={project.images[lightbox]} alt="" fill className="object-cover" unoptimized />
+          </div>
+
+          {/* next */}
+          {lightbox < project.images.length - 1 && (
+            <button className="absolute right-5 w-11 h-11 rounded-full flex items-center justify-center text-xl"
+              style={{ background: "rgba(255,255,255,0.1)", color: "#f0f0f5" }}
+              onClick={e => { e.stopPropagation(); setLightbox(lightbox + 1); }}>›</button>
+          )}
+
+          <p className="absolute bottom-6 text-xs" style={{ color: "rgba(240,240,245,0.4)" }}>
+            {lightbox + 1} / {project.images.length}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

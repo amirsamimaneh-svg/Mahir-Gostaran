@@ -2,38 +2,55 @@
 
 import { useState, useEffect, useRef } from "react";
 
+const CATEGORIES = {
+  fa: ["کافه / رستوران", "فروشگاه آنلاین", "آموزشگاه", "کلینیک / پزشکی", "استارتاپ", "خدمات", "دیگر…"],
+  en: ["Café / Restaurant", "Online Store", "Training Center", "Clinic / Medical", "Startup", "Services", "Other…"],
+};
+
 const labels = {
   fa: {
     title: "هوش رشد ماهیر",
-    placeholder: "مثلاً: کافه‌ی محلی، فروشگاه لباس آنلاین…",
-    btn: "تولید ایده",
-    thinking: "در حال فکر کردن…",
+    subtitle: "کسب‌وکارت را بنویس، ایده رشد بگیر",
+    placeholder: "مثلاً: کافه محلی، فروشگاه لباس آنلاین…",
+    categoryLabel: "یا از دسته‌بندی انتخاب کن:",
+    btn: "دریافت ایده رشد ✦",
+    thinking: "در حال تحلیل کسب‌وکار شما…",
+    errorTitle: "پیام ماهیر",
+    errorMsg: "در زودترین فرصت به شما پاسخ می‌دهیم.\nاگر می‌خواهید سریع‌تر با ما در ارتباط باشید، به آیدی تلگرام ما پیام بدید:",
+    tg: "@Mahirofficalll",
+    badge: "AI Powered",
   },
   en: {
     title: "Mahir Growth AI",
+    subtitle: "Enter your business and get a growth idea",
     placeholder: "e.g. Local café, online clothing store…",
-    btn: "Generate Idea",
-    thinking: "Thinking…",
+    categoryLabel: "Or pick a category:",
+    btn: "Get Growth Idea ✦",
+    thinking: "Analyzing your business…",
+    errorTitle: "Mahir Message",
+    errorMsg: "We'll get back to you as soon as possible.\nFor faster support, message us on Telegram:",
+    tg: "@Mahirofficalll",
+    badge: "AI Powered",
   },
 };
 
 export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
   const tx = labels[lang];
+  const cats = CATEGORIES[lang];
   const [business, setBusiness] = useState("");
   const [loading, setLoading] = useState(false);
   const [displayed, setDisplayed] = useState("");
   const [fullText, setFullText] = useState("");
-  const [error, setError] = useState("");
+  const [hasError, setHasError] = useState(false);
   const [cursorOn, setCursorOn] = useState(false);
   const typeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isRtl = lang === "fa";
 
-  // blinking cursor
   useEffect(() => {
     const id = setInterval(() => setCursorOn((v) => !v), 530);
     return () => clearInterval(id);
   }, []);
 
-  // typewriter
   useEffect(() => {
     if (!fullText) return;
     setDisplayed("");
@@ -41,17 +58,18 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
     function tick() {
       i++;
       setDisplayed(fullText.slice(0, i));
-      if (i < fullText.length) typeRef.current = setTimeout(tick, 28);
+      if (i < fullText.length) typeRef.current = setTimeout(tick, 22);
     }
-    typeRef.current = setTimeout(tick, 28);
+    typeRef.current = setTimeout(tick, 22);
     return () => { if (typeRef.current) clearTimeout(typeRef.current); };
   }, [fullText]);
 
-  async function handleSubmit() {
-    const trimmed = business.trim();
+  async function handleSubmit(biz?: string) {
+    const trimmed = (biz ?? business).trim();
     if (!trimmed || loading) return;
+    if (biz) setBusiness(biz);
     setLoading(true);
-    setError("");
+    setHasError(false);
     setFullText("");
     setDisplayed("");
     try {
@@ -61,96 +79,120 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
         body: JSON.stringify({ business: trimmed, lang }),
       });
       const data = await res.json();
-      if (!res.ok || data.error) setError(data.error ?? "خطا");
+      if (!res.ok || data.error) setHasError(true);
       else setFullText(data.idea ?? "");
     } catch {
-      setError(
-        lang === "fa"
-          ? "اتصال به سرور برقرار نشد."
-          : "Could not connect to server."
-      );
+      setHasError(true);
     } finally {
       setLoading(false);
     }
   }
 
-  function renderIdea() {
-    if (!displayed) return null;
-    const lines = displayed.split("\n");
-    return (
-      <div className={lang === "fa" ? "text-right" : "text-left"}>
-        {lines.map((line, idx) =>
-          idx === 0 ? (
-            <p key={idx} className="font-bold text-amber-400 text-base mb-1">{line}</p>
-          ) : (
-            <p key={idx} className="text-white/85 text-sm leading-relaxed">{line}</p>
-          )
-        )}
-        <span
-          className="inline-block w-0.5 h-4 bg-amber-400 align-middle ml-0.5"
-          style={{ opacity: cursorOn ? 1 : 0, transition: "opacity 0.1s" }}
-        />
-      </div>
-    );
-  }
-
   return (
-    <div
-      dir={lang === "fa" ? "rtl" : "ltr"}
-      className="relative w-full max-w-lg mx-auto rounded-2xl overflow-hidden
-        bg-white/10 backdrop-blur-xl border border-white/20
-        shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
-    >
-      {/* Terminal top bar */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5">
-        <span className="w-3 h-3 rounded-full bg-red-400" />
-        <span className="w-3 h-3 rounded-full bg-yellow-400" />
-        <span className="w-3 h-3 rounded-full bg-green-400" />
-        <span className={`text-white/70 text-sm font-medium tracking-wide ${lang === "fa" ? "mr-3" : "ml-3"}`}>
-          {tx.title}
+    <div dir={isRtl ? "rtl" : "ltr"}
+      className="relative w-full max-w-lg mx-auto rounded-3xl overflow-hidden"
+      style={{
+        background: "rgba(10,10,25,0.75)",
+        backdropFilter: "blur(24px)",
+        border: "1px solid rgba(251,191,36,0.2)",
+        boxShadow: "0 8px 48px rgba(0,0,0,0.5), 0 0 80px rgba(251,191,36,0.06)",
+      }}>
+
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-3.5"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.03)" }}>
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
+          <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+          <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+          <span className="text-xs font-bold text-amber-400 tracking-widest">{tx.title}</span>
+        </div>
+        <span className="text-xs px-2 py-0.5 rounded-full font-bold"
+          style={{ background: "rgba(251,191,36,0.12)", color: "#fbbf24", border: "1px solid rgba(251,191,36,0.2)" }}>
+          {tx.badge}
         </span>
       </div>
 
-      <div className="p-6 space-y-4">
+      <div className="p-5 space-y-4">
+        {/* Subtitle */}
+        <p className="text-xs" style={{ color: "rgba(240,240,245,0.45)" }}>{tx.subtitle}</p>
+
+        {/* Input row */}
         <div className="flex gap-2">
           <input
             type="text"
             value={business}
-            onChange={(e) => setBusiness(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+            onChange={e => setBusiness(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleSubmit()}
             placeholder={tx.placeholder}
             disabled={loading}
-            className="flex-1 bg-white/10 border border-white/20 rounded-lg
-              px-4 py-2.5 text-white text-sm placeholder:text-white/40
-              focus:outline-none focus:ring-2 focus:ring-amber-400/60
-              disabled:opacity-50 transition"
+            className="flex-1 rounded-xl px-4 py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-amber-400/50 disabled:opacity-50"
+            style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", color: "#f0f0f5" }}
           />
-          <button
-            onClick={handleSubmit}
-            disabled={loading || !business.trim()}
-            className="px-4 py-2.5 rounded-lg text-sm font-semibold
-              bg-amber-400 text-gray-900 hover:bg-amber-300
-              disabled:opacity-40 disabled:cursor-not-allowed
-              transition-all active:scale-95 whitespace-nowrap"
-          >
+          <button onClick={() => handleSubmit()} disabled={loading || !business.trim()}
+            className="px-4 py-2.5 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-40 whitespace-nowrap"
+            style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 20px rgba(251,191,36,0.3)" }}>
             {tx.btn}
           </button>
         </div>
 
-        <div className="min-h-[80px]">
+        {/* Category chips */}
+        <div>
+          <p className="text-xs mb-2" style={{ color: "rgba(240,240,245,0.35)" }}>{tx.categoryLabel}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {cats.map(cat => (
+              <button key={cat} onClick={() => handleSubmit(cat)}
+                disabled={loading}
+                className="text-xs px-3 py-1 rounded-full transition-all hover:border-amber-400/60 hover:text-amber-400 disabled:opacity-40"
+                style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,240,245,0.5)", background: "rgba(255,255,255,0.04)" }}>
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Output */}
+        <div className="min-h-[90px]">
           {loading && (
-            <div className="flex items-center gap-2 text-white/60 text-sm">
-              <svg className="animate-spin w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24">
+            <div className="flex items-center gap-3 py-2">
+              <svg className="animate-spin w-4 h-4 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
               </svg>
-              {tx.thinking}
+              <span className="text-sm animate-pulse" style={{ color: "rgba(240,240,245,0.5)" }}>{tx.thinking}</span>
             </div>
           )}
-          {error && !loading && (
-            <p className={`text-red-400 text-sm ${lang === "fa" ? "text-right" : "text-left"}`}>{error}</p>
+
+          {hasError && !loading && (
+            <div className="rounded-2xl p-4"
+              style={{ background: "rgba(251,191,36,0.06)", border: "1px solid rgba(251,191,36,0.2)" }}>
+              <p className="text-xs font-bold text-amber-400 mb-2">✦ {tx.errorTitle}</p>
+              {tx.errorMsg.split("\n").map((line, i) => (
+                <p key={i} className="text-sm leading-relaxed" style={{ color: "rgba(240,240,245,0.65)" }}>{line}</p>
+              ))}
+              <a href="https://t.me/Mahirofficalll" target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-amber-400 hover:underline">
+                ✈ {tx.tg}
+              </a>
+            </div>
           )}
-          {!loading && !error && displayed && renderIdea()}
+
+          {!loading && !hasError && displayed && (
+            <div className={isRtl ? "text-right" : "text-left"} style={{ padding: "4px 0" }}>
+              {displayed.split("\n").map((line, idx) =>
+                idx === 0
+                  ? <p key={idx} className="font-extrabold text-amber-400 text-base mb-2">{line}</p>
+                  : line.trim()
+                    ? <p key={idx} className="text-sm leading-relaxed mb-1" style={{ color: "rgba(240,240,245,0.8)" }}>{line}</p>
+                    : <br key={idx} />
+              )}
+              <span className="inline-block w-0.5 h-4 bg-amber-400 align-middle ml-0.5"
+                style={{ opacity: cursorOn ? 1 : 0, transition: "opacity 0.1s" }} />
+            </div>
+          )}
         </div>
       </div>
     </div>

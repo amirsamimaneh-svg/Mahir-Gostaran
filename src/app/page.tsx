@@ -8,6 +8,85 @@ import Marquee from "@/components/Marquee";
 import Counter from "@/components/Counter";
 import { LangProvider, useLang } from "@/context/LangContext";
 
+const TEAM = {
+  fa: [
+    {
+      role: "استراتژیست رشد",
+      desc: "تحلیل بازار، تعریف مسیر رشد و طراحی نقشه‌راه کسب‌وکار",
+      icon: "🎯",
+      tags: ["استراتژی", "بازار", "رشد"],
+    },
+    {
+      role: "طراح هویت برند",
+      desc: "خلق هویت بصری منسجم از لوگو تا سیستم رنگ و تایپوگرافی",
+      icon: "✦",
+      tags: ["لوگو", "UI/UX", "برندینگ"],
+    },
+    {
+      role: "متخصص بازاریابی دیجیتال",
+      desc: "اجرای کمپین‌های هدفمند در شبکه‌های اجتماعی و تبلیغات آنلاین",
+      icon: "📱",
+      tags: ["اینستاگرام", "SEO", "تبلیغات"],
+    },
+    {
+      role: "توسعه‌دهنده هوش مصنوعی",
+      desc: "پیاده‌سازی ابزارهای AI برای اتوماسیون و شخصی‌سازی تجربه مشتری",
+      icon: "🤖",
+      tags: ["AI", "اتوماسیون", "چت‌بات"],
+    },
+    {
+      role: "متخصص محتوا و سئو",
+      desc: "تولید محتوای تخصصی و بهینه‌سازی موتور جستجو برای جذب ارگانیک",
+      icon: "📝",
+      tags: ["محتوا", "SEO", "کپی‌رایتینگ"],
+    },
+    {
+      role: "مدیر پروژه",
+      desc: "هماهنگی تیم، پیگیری اهداف و تضمین تحویل به‌موقع پروژه‌ها",
+      icon: "📊",
+      tags: ["مدیریت", "پیگیری", "تیم"],
+    },
+  ],
+  en: [
+    {
+      role: "Growth Strategist",
+      desc: "Market analysis, growth path definition, and business roadmap design",
+      icon: "🎯",
+      tags: ["Strategy", "Market", "Growth"],
+    },
+    {
+      role: "Brand Identity Designer",
+      desc: "Creating cohesive visual identity from logo to color system and typography",
+      icon: "✦",
+      tags: ["Logo", "UI/UX", "Branding"],
+    },
+    {
+      role: "Digital Marketing Specialist",
+      desc: "Running targeted campaigns on social media and online advertising platforms",
+      icon: "📱",
+      tags: ["Instagram", "SEO", "Ads"],
+    },
+    {
+      role: "AI Developer",
+      desc: "Implementing AI tools for automation and personalizing customer experience",
+      icon: "🤖",
+      tags: ["AI", "Automation", "Chatbot"],
+    },
+    {
+      role: "Content & SEO Specialist",
+      desc: "Producing expert content and search engine optimization for organic growth",
+      icon: "📝",
+      tags: ["Content", "SEO", "Copywriting"],
+    },
+    {
+      role: "Project Manager",
+      desc: "Team coordination, goal tracking, and ensuring timely project delivery",
+      icon: "📊",
+      tags: ["Management", "Tracking", "Team"],
+    },
+  ],
+};
+
 const t = {
   fa: {
     brand: "ماهیر",
@@ -40,6 +119,8 @@ const t = {
     consultTitle: "مشاوره", consultBrand: "اختصاصی",
     consultDesc: "با پاسخ به ۳ سوال کوتاه، یک راهکار رشد کاملاً شخصی‌سازی‌شده دریافت کن.",
     consultCta: "شروع مشاوره رایگان ←",
+    teamTitle: "تیم", teamBrand: "ماهیر",
+    teamSub: "متخصصانی که هر روز برای رشد کسب‌وکار شما کار می‌کنند",
     aboutTitle: "چرا", aboutBrand: "ماهیر؟",
     aboutDesc: "ماهیر با تیمی از متخصصان استراتژی، طراحی و فناوری، به کسب‌وکارهای ایرانی کمک می‌کند تا با هویتی قوی و استراتژی هوشمند، در بازار رقابتی امروز متمایز شوند.",
     footerIg: "اینستاگرام", footerLi: "لینکدین",
@@ -77,6 +158,8 @@ const t = {
     consultTitle: "Personalized", consultBrand: "Consultation",
     consultDesc: "Answer 3 quick questions and receive a fully personalized growth strategy.",
     consultCta: "Start Free Consultation →",
+    teamTitle: "The", teamBrand: "Team",
+    teamSub: "Specialists who work every day to grow your business",
     aboutTitle: "Why", aboutBrand: "Mahir?",
     aboutDesc: "Mahir's team of strategy, design, and tech experts helps businesses stand out in today's competitive market with a strong identity and smart strategy.",
     footerIg: "Instagram", footerLi: "LinkedIn",
@@ -440,6 +523,63 @@ function ConsultCTA() {
   );
 }
 
+// ── Team ──────────────────────────────────────────────────
+function Team() {
+  const { lang } = useLang();
+  const tx = t[lang];
+  const members = TEAM[lang];
+  return (
+    <section id="team" className="py-24 px-6 w-full max-w-6xl mx-auto">
+      <div className="text-center mb-14">
+        <h2 className="font-extrabold mb-3" style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)" }}>
+          <span className="c-fg">{tx.teamTitle} </span>
+          <span className="text-shimmer">{tx.teamBrand}</span>
+        </h2>
+        <p className="text-sm c-fg2 max-w-md mx-auto">{tx.teamSub}</p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {members.map((m, i) => (
+          <div key={i} className="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1"
+            style={{
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              backdropFilter: "blur(12px)",
+            }}>
+            {/* glow on hover */}
+            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+              style={{ background: "radial-gradient(ellipse at top right, rgba(251,191,36,0.06), transparent 70%)" }} />
+
+            <div className="relative z-10">
+              {/* Icon */}
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4"
+                style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.15)" }}>
+                {m.icon}
+              </div>
+
+              {/* Role */}
+              <h3 className="font-extrabold text-base mb-2" style={{ color: "#f0f0f5" }}>{m.role}</h3>
+
+              {/* Desc */}
+              <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(240,240,245,0.45)" }}>{m.desc}</p>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-1.5">
+                {m.tags.map(tag => (
+                  <span key={tag} className="text-xs px-2.5 py-1 rounded-full font-medium"
+                    style={{ background: "rgba(251,191,36,0.07)", color: "rgba(251,191,36,0.7)", border: "1px solid rgba(251,191,36,0.12)" }}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ── About ─────────────────────────────────────────────────
 function About() {
   const { lang } = useLang();
@@ -498,6 +638,7 @@ function PageContent() {
       <Stats />
       <Services />
       <Portfolio />
+      <Team />
       <ConsultCTA />
       <About />
       <Footer />

@@ -35,7 +35,7 @@ export default function BottomNav({ lang = "fa" }: { lang?: "fa" | "en" }) {
     <nav
       className="md:hidden fixed z-50"
       style={{
-        bottom: "5px",
+        bottom: "16px",
         left: "12px",
         right: "12px",
         background: "rgba(5,5,20,0.55)",

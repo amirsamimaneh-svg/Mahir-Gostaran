@@ -25,25 +25,44 @@ body {
 body.light {
   --bg: #f5f4ef;
   --fg: #0f0f1a;
-  --card: rgba(0,0,0,0.04);
+  --card: rgba(0,0,0,0.05);
   --border: rgba(0,0,0,0.1);
-  --muted: rgba(0,0,0,0.5);
   background: #f5f4ef;
   color: #0f0f1a;
 }
 
-/* light mode nav */
-body.light nav {
-  background: rgba(245,244,239,0.85) !important;
-  border-color: rgba(0,0,0,0.07) !important;
+/* light mode — همه متن‌ها مشکی */
+body.light * {
+  color: inherit;
 }
-
-/* light mode text overrides */
+body.light nav,
+body.light header {
+  background: rgba(245,244,239,0.9) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+}
+body.light [style*="color: white"],
+body.light [style*="color:white"] {
+  color: #0f0f1a !important;
+}
+body.light [style*="rgba(255,255,255"] {
+  color: rgba(15,15,26,0.7) !important;
+}
 body.light .text-white { color: #0f0f1a !important; }
-body.light .text-white\/50 { color: rgba(15,15,26,0.55) !important; }
-body.light .text-white\/45 { color: rgba(15,15,26,0.5) !important; }
-body.light .text-white\/60 { color: rgba(15,15,26,0.6) !important; }
-body.light .text-white\/70 { color: rgba(15,15,26,0.7) !important; }
+body.light p, body.light h1, body.light h2, body.light h3, body.light span, body.light a:not(.text-amber-400) {
+  color: #0f0f1a !important;
+}
+body.light .text-shimmer {
+  -webkit-text-fill-color: transparent !important;
+}
+body.light .card-glow {
+  background: rgba(0,0,0,0.04) !important;
+  border-color: rgba(0,0,0,0.1) !important;
+}
+body.light .grid-bg {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(0,0,0,0.05) 1px, transparent 1px) !important;
+}
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }

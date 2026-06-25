@@ -101,10 +101,28 @@ function ThemeToggle({ dark, setDark }: { dark: boolean; setDark: (v: boolean) =
 }
 
 // ── Navbar ────────────────────────────────────────────────
+const NAV_FEATURES = {
+  fa: [
+    { icon: "🤖", label: "مشاوره AI", href: "/consult" },
+    { icon: "📁", label: "نمونه‌کارها", href: "#portfolio" },
+    { icon: "🎯", label: "خدمات", href: "#services" },
+    { icon: "💬", label: "تماس", href: "#contact" },
+  ],
+  en: [
+    { icon: "🤖", label: "AI Consult", href: "/consult" },
+    { icon: "📁", label: "Portfolio", href: "#portfolio" },
+    { icon: "🎯", label: "Services", href: "#services" },
+    { icon: "💬", label: "Contact", href: "#contact" },
+  ],
+};
+
 function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
   const { lang, toggle } = useLang();
   const tx = t[lang];
+  const isRtl = lang === "fa";
+  const features = NAV_FEATURES[lang];
   const [user, setUser] = useState<{ name: string; unread: number } | null>(null);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me").then(r => r.json()).then(d => {
@@ -112,45 +130,101 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
     }).catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 anim-slide-down"
-      style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-4">
-        <span className="text-xl font-extrabold text-amber-400 tracking-widest">{tx.brand}</span>
-        <ul className="hidden md:flex gap-10 text-sm">
-          {tx.nav.map(item => (
+    <nav className="fixed top-0 inset-x-0 z-50 anim-slide-down transition-all duration-300"
+      style={{
+        background: scrolled ? "var(--nav-bg)" : "rgba(5,5,15,0.6)",
+        backdropFilter: "blur(24px)",
+        borderBottom: scrolled ? "1px solid var(--nav-border)" : "1px solid transparent",
+        boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,0.3)" : "none",
+      }}>
+
+      {/* top micro-bar */}
+      <div className="hidden md:flex items-center justify-center gap-6 py-1.5 text-xs"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", background: "rgba(251,191,36,0.04)" }}>
+        {(isRtl
+          ? ["✦ استراتژی رشد", "✦ هویت برند", "✦ بازاریابی دیجیتال", "✦ هوش مصنوعی", "✦ مشاوره رایگان"]
+          : ["✦ Growth Strategy", "✦ Brand Identity", "✦ Digital Marketing", "✦ AI Solutions", "✦ Free Consultation"]
+        ).map(s => (
+          <span key={s} style={{ color: "rgba(251,191,36,0.55)", letterSpacing: "0.05em" }}>{s}</span>
+        ))}
+      </div>
+
+      {/* main bar */}
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-10 py-3" dir={isRtl ? "rtl" : "ltr"}>
+
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-sm"
+            style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)", color: "#111" }}>
+            M
+          </div>
+          <div>
+            <span className="text-lg font-extrabold text-amber-400 tracking-widest leading-none block">{tx.brand}</span>
+            <span className="text-xs leading-none" style={{ color: "rgba(240,240,245,0.35)" }}>
+              {isRtl ? "مشاور رشد کسب‌وکار" : "Business Growth Partner"}
+            </span>
+          </div>
+        </div>
+
+        {/* Feature nav pills */}
+        <ul className="hidden md:flex items-center gap-1">
+          {features.map(item => (
             <li key={item.label}>
-              <a href={item.href} onClick={e => { e.preventDefault(); go(item.href); }}
-                className="c-fg2 hover:text-amber-400 transition-colors relative group">
-                {item.label}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-amber-400 group-hover:w-full transition-all duration-300" />
-              </a>
+              {item.href.startsWith("#") ? (
+                <a href={item.href}
+                  onClick={e => { e.preventDefault(); go(item.href); }}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-amber-400 group"
+                  style={{ color: "rgba(240,240,245,0.55)" }}>
+                  <span className="text-sm">{item.icon}</span>
+                  {item.label}
+                  <span className="block h-px w-0 group-hover:w-full transition-all duration-300 mt-0.5" style={{ background: "#fbbf24" }} />
+                </a>
+              ) : (
+                <Link href={item.href}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-amber-400"
+                  style={{ color: "rgba(240,240,245,0.55)" }}>
+                  <span className="text-sm">{item.icon}</span>
+                  {item.label}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
+
+        {/* Right actions */}
         <div className="flex items-center gap-2">
           <ThemeToggle dark={dark} setDark={setDark} />
           <button onClick={toggle}
-            className="text-xs font-bold px-3 py-2 rounded-lg bg-card c-fg3 hover:text-amber-400 transition-all">
+            className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-amber-400"
+            style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,240,245,0.45)" }}>
             {tx.langBtn}
           </button>
+
           {user ? (
             <Link href="/profile"
-              className="relative flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-xl transition-all hover:scale-105"
+              className="relative flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl transition-all hover:scale-105"
               style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.3)", color: "#fbbf24" }}>
               <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold"
                 style={{ background: "rgba(251,191,36,0.25)" }}>{user.name.charAt(0)}</span>
-              {user.name}
+              <span className="hidden sm:block">{user.name}</span>
               {user.unread > 0 && (
-                <span className="absolute -top-1 -left-1 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold"
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold"
                   style={{ background: "#ef4444", color: "#fff" }}>{user.unread}</span>
               )}
             </Link>
           ) : (
             <Link href="/login"
-              className="text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-105"
-              style={{ background: "#fbbf24", color: "#111" }}>
-              {tx.consultBtn}
+              className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl transition-all hover:scale-105"
+              style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 20px rgba(251,191,36,0.3)" }}>
+              <span>✦</span>
+              {isRtl ? "ورود / ثبت‌نام" : "Login / Sign up"}
             </Link>
           )}
         </div>

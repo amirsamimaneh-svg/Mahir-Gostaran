@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 68px;
+  }
+}
+
 :root {
   --bg: #05050f;
   --fg: #f0f0f5;

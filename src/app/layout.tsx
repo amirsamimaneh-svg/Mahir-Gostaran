@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ParticlesBg from "@/components/ParticlesBg";
+import BottomNav from "@/components/BottomNav";
 import "@fontsource/vazirmatn/300.css";
 import "@fontsource/vazirmatn/400.css";
 import "@fontsource/vazirmatn/600.css";
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body className="antialiased min-h-full">
         <ParticlesBg />
         {children}
+        <BottomNav />
       </body>
     </html>
   );

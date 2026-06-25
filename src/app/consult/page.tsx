@@ -5,53 +5,53 @@ import Link from "next/link";
 
 const STEPS = [
   {
-    key: "business",
     icon: "🏢",
     q_fa: "کسب‌وکار شما چیست؟",
     q_en: "What is your business?",
     ph_fa: "مثلاً: فروشگاه آنلاین لباس، کافه، آموزشگاه زبان…",
     ph_en: "e.g. Online clothing store, café, language school…",
-    hint_fa: "هرچقدر دقیق‌تر بنویسید، مشاوره بهتری می‌گیرید",
-    hint_en: "The more specific you are, the better advice you'll get",
+    hint_fa: "یک عکس از کسب‌وکارتان هم می‌توانید بفرستید",
+    hint_en: "You can also send a photo of your business",
+    showImage: true,
   },
   {
-    key: "challenge",
     icon: "⚡",
     q_fa: "بزرگ‌ترین چالش شما الان چیست؟",
     q_en: "What is your biggest challenge right now?",
     ph_fa: "مثلاً: مشتری کم، برند ضعیف، رقبای زیاد…",
     ph_en: "e.g. Low customers, weak brand, too many competitors…",
-    hint_fa: "چه چیزی شب‌ها نمی‌گذارد بخوابید؟",
-    hint_en: "What keeps you up at night?",
+    hint_fa: "چه چیزی بیشتر نگرانتان می‌کند؟",
+    hint_en: "What worries you the most?",
+    showImage: false,
   },
   {
-    key: "goal",
     icon: "🎯",
     q_fa: "هدف شما در ۶ ماه آینده چیست؟",
     q_en: "What is your goal for the next 6 months?",
     ph_fa: "مثلاً: ۲ برابر کردن فروش، ورود به بازار جدید…",
-    ph_en: "e.g. Double sales, enter a new market, get 1000 customers…",
-    hint_fa: "یک هدف مشخص و قابل اندازه‌گیری بنویسید",
-    hint_en: "Write one specific and measurable goal",
+    ph_en: "e.g. Double sales, enter a new market, 1000 customers…",
+    hint_fa: "یک هدف مشخص بنویسید",
+    hint_en: "Write one specific goal",
+    showImage: false,
   },
-];
-
-const FEATURES = [
-  { icon: "⚡", fa: "در کمتر از ۳۰ ثانیه", en: "In less than 30 seconds" },
-  { icon: "🎯", fa: "کاملاً اختصاصی", en: "Fully personalized" },
-  { icon: "🔒", fa: "کاملاً رایگان", en: "Completely free" },
 ];
 
 export default function ConsultPage() {
   const [lang, setLang] = useState<"fa" | "en">("fa");
-  const [step, setStep] = useState(-1); // -1 = landing
+  const [step, setStep] = useState(-1);
   const [answers, setAnswers] = useState(["", "", ""]);
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [image, setImage] = useState<{ base64: string; mime: string; preview: string } | null>(null);
+  const [listening, setListening] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
 
   const isRtl = lang === "fa";
 
@@ -65,32 +65,79 @@ export default function ConsultPage() {
     if (result) resultRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [result]);
 
+  // voice input
+  function toggleVoice() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as any;
+    const SR = w.SpeechRecognition || w.webkitSpeechRecognition;
+    if (!SR) {
+      alert(isRtl ? "مرورگر شما از میکروفون پشتیبانی نمی‌کند. از Chrome استفاده کنید." : "Your browser doesn't support voice. Use Chrome.");
+      return;
+    }
+
+    if (listening) {
+      recognitionRef.current?.stop();
+      setListening(false);
+      return;
+    }
+
+    const rec = new SR();
+    rec.lang = lang === "fa" ? "fa-IR" : "en-US";
+    rec.continuous = false;
+    rec.interimResults = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onresult = (e: any) => {
+      setInput(e.results[0][0].transcript);
+      setListening(false);
+    };
+    rec.onerror = () => setListening(false);
+    rec.onend = () => setListening(false);
+    rec.start();
+    recognitionRef.current = rec;
+    setListening(true);
+  }
+
+  // image upload
+  function handleImageFile(file: File) {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      const base64 = dataUrl.split(",")[1];
+      setImage({ base64, mime: file.type, preview: dataUrl });
+    };
+    reader.readAsDataURL(file);
+  }
+
   async function handleNext() {
     const val = input.trim();
     if (!val) return;
-
     const newAnswers = [...answers];
     newAnswers[step] = val;
     setAnswers(newAnswers);
     setInput("");
 
     if (step < STEPS.length - 1) {
-      setStep((s) => s + 1);
+      setStep(s => s + 1);
     } else {
-      setStep(STEPS.length); // done
+      setStep(STEPS.length);
       setLoading(true);
       setError("");
       try {
         const res = await fetch("/api/consult", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ answers: newAnswers, lang }),
+          body: JSON.stringify({
+            answers: newAnswers, lang,
+            imageBase64: image?.base64 ?? null,
+            imageMime: image?.mime ?? null,
+          }),
         });
         const data = await res.json();
         if (data.error) setError(data.error);
         else setResult(data.advice ?? "");
       } catch {
-        setError(isRtl ? "خطا در اتصال. دوباره امتحان کنید." : "Connection error. Please try again.");
+        setError(isRtl ? "خطا در اتصال." : "Connection error.");
       } finally {
         setLoading(false);
       }
@@ -104,19 +151,17 @@ export default function ConsultPage() {
     setResult("");
     setError("");
     setLoading(false);
+    setImage(null);
   }
 
-  // ── Landing ──
+  // ── Landing ──────────────────────────────────────────────
   if (step === -1) return (
     <Page lang={lang} setLang={setLang} isRtl={isRtl}>
-      <div className="flex flex-col items-center text-center max-w-2xl mx-auto px-4 py-16 anim-fade-up">
-
-        {/* icon */}
-        <div className="w-20 h-20 rounded-2xl mb-8 flex items-center justify-center text-4xl anim-float"
+      <div className="flex flex-col items-center text-center max-w-lg mx-auto px-4 py-12 anim-fade-up">
+        <div className="w-20 h-20 rounded-2xl mb-6 flex items-center justify-center text-4xl anim-float"
           style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.3)" }}>
           🤖
         </div>
-
         <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-5"
           style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.2)" }}>
           <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
@@ -124,96 +169,132 @@ export default function ConsultPage() {
             {isRtl ? "مشاور هوش مصنوعی ماهیر" : "Mahir AI Consultant"}
           </span>
         </div>
-
-        <h1 className="font-extrabold text-white mb-4" style={{ fontSize: "clamp(1.8rem,5vw,3.2rem)" }}>
-          {isRtl ? "مشاوره رشد" : "Growth"}{" "}
-          <span className="text-shimmer">{isRtl ? "رایگان کسب‌وکار" : "Consultation"}</span>
+        <h1 className="font-extrabold mb-3" style={{ fontSize: "clamp(1.6rem,5vw,2.8rem)", color: "var(--fg)" }}>
+          {isRtl ? "مشاوره رشد " : "Free Growth "}
+          <span className="text-shimmer">{isRtl ? "رایگان" : "Consultation"}</span>
         </h1>
-
-        <p className="text-base leading-relaxed mb-10 max-w-md"
-          style={{ color: "rgba(255,255,255,0.55)" }}>
+        <p className="text-sm leading-relaxed mb-8 max-w-sm" style={{ color: "var(--fg2)" }}>
           {isRtl
-            ? "به ۳ سوال کوتاه جواب بده تا هوش مصنوعی ماهیر یک راهکار رشد کاملاً شخصی و عملی برات بسازه."
-            : "Answer 3 quick questions and Mahir's AI will build a fully personalized, actionable growth plan for you."}
+            ? "به ۳ سوال کوتاه جواب بده — متن، صدا یا عکس — تا ماهیر یک راهکار رشد اختصاصی برات بسازه."
+            : "Answer 3 quick questions — text, voice or photo — and get a personalized growth plan."}
         </p>
 
-        {/* features */}
-        <div className="flex flex-wrap gap-3 justify-center mb-10">
-          {FEATURES.map((f) => (
-            <div key={f.icon} className="flex items-center gap-2 rounded-full px-4 py-2 text-sm"
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)" }}>
-              <span>{f.icon}</span>
-              <span>{isRtl ? f.fa : f.en}</span>
+        <div className="flex flex-wrap gap-3 justify-center mb-8">
+          {[
+            { icon: "⌨️", fa: "متن", en: "Text" },
+            { icon: "🎤", fa: "صدا", en: "Voice" },
+            { icon: "📸", fa: "عکس", en: "Photo" },
+          ].map(f => (
+            <div key={f.icon} className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs"
+              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "var(--fg2)" }}>
+              {f.icon} {isRtl ? f.fa : f.en}
             </div>
           ))}
         </div>
 
         <button onClick={() => setStep(0)}
-          className="px-10 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105 active:scale-95"
-          style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 50px rgba(251,191,36,0.4)" }}>
+          className="w-full max-w-xs px-8 py-4 rounded-xl font-bold text-base transition-all hover:scale-105 active:scale-95"
+          style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 40px rgba(251,191,36,0.35)" }}>
           {isRtl ? "شروع مشاوره رایگان ←" : "Start Free Consultation →"}
         </button>
-
-        <p className="mt-4 text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
+        <p className="mt-3 text-xs" style={{ color: "var(--fg3)" }}>
           {isRtl ? "بدون ثبت‌نام • بدون پرداخت" : "No signup • No payment"}
         </p>
       </div>
     </Page>
   );
 
-  // ── Steps ──
+  // ── Steps ─────────────────────────────────────────────────
   if (step < STEPS.length) {
-    const current = STEPS[step];
+    const cur = STEPS[step];
     return (
       <Page lang={lang} setLang={setLang} isRtl={isRtl}>
-        <div className="w-full max-w-xl mx-auto px-4 py-12 flex flex-col items-center">
+        <div className="w-full max-w-lg mx-auto px-4 py-8 flex flex-col items-center">
 
           {/* progress */}
-          <div className="flex gap-2 mb-10">
+          <div className="flex gap-2 mb-8">
             {STEPS.map((_, i) => (
               <div key={i} className="h-1.5 rounded-full transition-all duration-500"
-                style={{ width: i <= step ? "48px" : "20px", background: i <= step ? "#fbbf24" : "rgba(255,255,255,0.12)" }} />
+                style={{ width: i <= step ? "48px" : "18px", background: i <= step ? "#fbbf24" : "rgba(255,255,255,0.12)" }} />
             ))}
           </div>
 
-          {/* step card */}
-          <div className="w-full rounded-3xl p-8 md:p-10 anim-scale-in"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          {/* card */}
+          <div className="w-full rounded-3xl p-6 md:p-8 anim-scale-in"
+            style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
 
-            <div className="text-5xl mb-5 text-center">{current.icon}</div>
-
+            <div className="text-4xl mb-3 text-center">{cur.icon}</div>
             <p className="text-xs text-amber-400 tracking-widest text-center mb-2 font-medium">
               {isRtl ? `سوال ${step + 1} از ${STEPS.length}` : `Question ${step + 1} of ${STEPS.length}`}
             </p>
-
-            <h2 className="font-bold text-white text-center mb-6 text-xl md:text-2xl">
-              {isRtl ? current.q_fa : current.q_en}
+            <h2 className="font-bold text-center mb-5 text-lg" style={{ color: "var(--fg)" }}>
+              {isRtl ? cur.q_fa : cur.q_en}
             </h2>
 
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleNext()}
-              placeholder={isRtl ? current.ph_fa : current.ph_en}
-              className="w-full rounded-xl px-4 py-3.5 text-sm mb-3 transition-all
-                focus:outline-none focus:ring-2 focus:ring-amber-400/50"
-              style={{
-                background: "rgba(255,255,255,0.07)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                color: "white",
-              }}
-              dir={isRtl ? "rtl" : "ltr"}
-            />
+            {/* input row */}
+            <div className="flex gap-2 mb-3">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleNext()}
+                placeholder={isRtl ? cur.ph_fa : cur.ph_en}
+                dir={isRtl ? "rtl" : "ltr"}
+                className="flex-1 rounded-xl px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", color: "var(--fg)" }}
+              />
 
-            <p className="text-xs text-center mb-6" style={{ color: "rgba(255,255,255,0.35)" }}>
-              💡 {isRtl ? current.hint_fa : current.hint_en}
+              {/* voice button */}
+              <button onClick={toggleVoice}
+                className="w-11 h-11 flex-shrink-0 rounded-xl flex items-center justify-center text-lg transition-all hover:scale-110 active:scale-95"
+                style={{
+                  background: listening ? "rgba(251,191,36,0.25)" : "rgba(255,255,255,0.07)",
+                  border: listening ? "1px solid #fbbf24" : "1px solid rgba(255,255,255,0.12)",
+                }}
+                title={isRtl ? "ورودی صوتی" : "Voice input"}>
+                {listening ? "⏹" : "🎤"}
+              </button>
+            </div>
+
+            {listening && (
+              <p className="text-xs text-amber-400 text-center mb-3 animate-pulse">
+                {isRtl ? "در حال گوش دادن…" : "Listening…"}
+              </p>
+            )}
+
+            {/* image upload — only step 0 */}
+            {cur.showImage && (
+              <div className="mb-4">
+                <input ref={fileRef} type="file" accept="image/*" capture="environment" className="hidden"
+                  onChange={e => e.target.files?.[0] && handleImageFile(e.target.files[0])} />
+
+                {image ? (
+                  <div className="relative rounded-xl overflow-hidden h-36">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={image.preview} alt="business" className="w-full h-full object-cover" />
+                    <button onClick={() => setImage(null)}
+                      className="absolute top-2 left-2 w-7 h-7 rounded-full bg-black/60 text-white text-sm flex items-center justify-center">
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={() => fileRef.current?.click()}
+                    className="w-full h-24 rounded-xl flex flex-col items-center justify-center gap-1 text-sm transition-all hover:border-amber-400/50 hover:text-amber-400"
+                    style={{ border: "1.5px dashed rgba(255,255,255,0.18)", color: "var(--fg3)" }}>
+                    <span className="text-2xl">📸</span>
+                    <span className="text-xs">{isRtl ? "عکس کسب‌وکار (اختیاری)" : "Business photo (optional)"}</span>
+                  </button>
+                )}
+              </div>
+            )}
+
+            <p className="text-xs text-center mb-5" style={{ color: "var(--fg3)" }}>
+              💡 {isRtl ? cur.hint_fa : cur.hint_en}
             </p>
 
             <button onClick={handleNext} disabled={!input.trim()}
-              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all
-                hover:scale-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full py-3.5 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 disabled:opacity-40"
               style={{ background: "#fbbf24", color: "#111" }}>
               {step < STEPS.length - 1
                 ? (isRtl ? "بعدی ←" : "Next →")
@@ -221,14 +302,14 @@ export default function ConsultPage() {
             </button>
           </div>
 
-          {/* previous answers */}
+          {/* prev answers */}
           {step > 0 && (
-            <div className="w-full mt-6 space-y-2">
+            <div className="w-full mt-4 space-y-2">
               {answers.slice(0, step).map((a, i) => a && (
                 <div key={i} className="flex items-start gap-3 rounded-xl px-4 py-3 text-sm"
                   style={{ background: "rgba(251,191,36,0.06)", border: "1px solid rgba(251,191,36,0.15)" }}>
-                  <span className="text-amber-400 font-bold flex-shrink-0">{STEPS[i].icon}</span>
-                  <span style={{ color: "rgba(255,255,255,0.6)" }}>{a}</span>
+                  <span className="text-amber-400 flex-shrink-0">{STEPS[i].icon}</span>
+                  <span style={{ color: "var(--fg2)" }}>{a}</span>
                 </div>
               ))}
             </div>
@@ -238,11 +319,10 @@ export default function ConsultPage() {
     );
   }
 
-  // ── Result ──
+  // ── Result ────────────────────────────────────────────────
   return (
     <Page lang={lang} setLang={setLang} isRtl={isRtl}>
-      <div className="w-full max-w-2xl mx-auto px-4 py-12 flex flex-col items-center">
-
+      <div className="w-full max-w-lg mx-auto px-4 py-8 flex flex-col items-center">
         {loading ? (
           <div className="flex flex-col items-center gap-5 py-20">
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl anim-float"
@@ -255,69 +335,57 @@ export default function ConsultPage() {
                   style={{ animationDelay: `${i*0.15}s` }} />
               ))}
             </div>
-            <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <p className="text-sm" style={{ color: "var(--fg3)" }}>
               {isRtl ? "در حال تحلیل کسب‌وکار شما…" : "Analyzing your business…"}
             </p>
           </div>
         ) : error ? (
           <div className="text-center py-20">
             <p className="text-red-400 mb-4">{error}</p>
-            <button onClick={restart} className="px-6 py-2.5 rounded-xl border border-amber-400/30
-              text-amber-400 hover:bg-amber-400/10 transition-all text-sm">
+            <button onClick={restart} className="px-6 py-2.5 rounded-xl border border-amber-400/30 text-amber-400 text-sm">
               {isRtl ? "دوباره امتحان" : "Try Again"}
             </button>
           </div>
         ) : (
           <div ref={resultRef} className="w-full anim-fade-up">
-
-            {/* success header */}
-            <div className="text-center mb-8">
-              <div className="text-5xl mb-4">🎉</div>
-              <h2 className="font-extrabold text-white text-2xl mb-2">
+            <div className="text-center mb-6">
+              <div className="text-5xl mb-3">🎉</div>
+              <h2 className="font-extrabold text-xl mb-1" style={{ color: "var(--fg)" }}>
                 {isRtl ? "راهکار رشد شما آماده است!" : "Your Growth Plan is Ready!"}
               </h2>
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
-                {isRtl ? "بر اساس اطلاعاتی که دادید، ماهیر این راهکار را برای شما طراحی کرد" : "Based on your answers, Mahir designed this plan just for you"}
+              <p className="text-xs" style={{ color: "var(--fg3)" }}>
+                {isRtl ? "بر اساس اطلاعات شما طراحی شد" : "Designed based on your inputs"}
               </p>
             </div>
 
-            {/* result card */}
-            <div className="w-full rounded-3xl p-8 mb-6"
+            {image && (
+              <div className="w-full rounded-2xl overflow-hidden h-40 mb-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={image.preview} alt="business" className="w-full h-full object-cover" />
+              </div>
+            )}
+
+            <div className="w-full rounded-3xl p-6 mb-5"
               style={{ background: "rgba(251,191,36,0.06)", border: "1px solid rgba(251,191,36,0.2)" }}>
               {result.split("\n").map((line, i) =>
-                i === 0 ? (
-                  <p key={i} className="font-extrabold text-amber-400 text-xl mb-4">{line}</p>
-                ) : line.trim() ? (
-                  <p key={i} className="text-sm leading-relaxed mb-2" style={{ color: "rgba(255,255,255,0.8)" }}>{line}</p>
-                ) : <br key={i} />
+                i === 0
+                  ? <p key={i} className="font-extrabold text-amber-400 text-lg mb-3">{line}</p>
+                  : line.trim()
+                    ? <p key={i} className="text-sm leading-relaxed mb-1.5" style={{ color: "var(--fg2)" }}>{line}</p>
+                    : <br key={i} />
               )}
             </div>
 
-            {/* summary of answers */}
-            <div className="w-full rounded-2xl p-5 mb-8 space-y-3"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              <p className="text-xs text-amber-400 font-bold tracking-widest mb-3">
-                {isRtl ? "اطلاعات شما" : "YOUR INPUTS"}
-              </p>
-              {STEPS.map((s, i) => (
-                <div key={i} className="flex items-start gap-3 text-sm">
-                  <span>{s.icon}</span>
-                  <span style={{ color: "rgba(255,255,255,0.5)" }}>{answers[i]}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* actions */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex gap-3">
               <button onClick={restart}
-                className="px-6 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
+                className="flex-1 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
                 style={{ background: "#fbbf24", color: "#111" }}>
-                {isRtl ? "مشاوره جدید ←" : "New Consultation →"}
+                {isRtl ? "مشاوره جدید" : "New Consultation"}
               </button>
               <Link href="/"
-                className="px-6 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105 text-center"
-                style={{ border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.6)" }}>
-                {isRtl ? "بازگشت به سایت" : "Back to Site"}
+                className="flex-1 py-3 rounded-xl font-bold text-sm text-center transition-all hover:scale-105"
+                style={{ border: "1px solid var(--border)", color: "var(--fg2)" }}>
+                {isRtl ? "بازگشت" : "Back"}
               </Link>
             </div>
           </div>
@@ -327,7 +395,7 @@ export default function ConsultPage() {
   );
 }
 
-// ── Layout wrapper ────────────────────────────────────────
+// ── Layout ────────────────────────────────────────────────
 function Page({ children, lang, setLang, isRtl }: {
   children: React.ReactNode;
   lang: "fa" | "en";
@@ -336,29 +404,26 @@ function Page({ children, lang, setLang, isRtl }: {
 }) {
   return (
     <div className="min-h-screen grid-bg" dir={isRtl ? "rtl" : "ltr"}
-      style={{ background: "#05050f", color: "#f0f0f5" }}>
-
-      {/* blobs */}
+      style={{ background: "var(--bg)", color: "var(--fg)" }}>
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="anim-blob absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full blur-[140px]"
+        <div className="anim-blob absolute -top-40 -right-40 w-96 h-96 rounded-full blur-[130px]"
           style={{ background: "rgba(251,191,36,0.07)" }} />
-        <div className="anim-blob d5 absolute -bottom-40 -left-40 w-[400px] h-[400px] rounded-full blur-[140px]"
+        <div className="anim-blob d5 absolute -bottom-40 -left-40 w-80 h-80 rounded-full blur-[130px]"
           style={{ background: "rgba(99,102,241,0.07)" }} />
       </div>
 
-      {/* header */}
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 md:px-12 py-4"
-        style={{ background: "rgba(5,5,15,0.8)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <header className="sticky top-0 z-40 flex items-center justify-between px-5 py-3.5"
+        style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
         <Link href="/" className="font-extrabold text-amber-400 text-lg tracking-widest">
           {isRtl ? "ماهیر" : "Mahir"}
         </Link>
         <div className="flex items-center gap-2">
-          <span className="text-xs hidden md:block" style={{ color: "rgba(255,255,255,0.35)" }}>
+          <span className="text-xs hidden sm:block" style={{ color: "var(--fg3)" }}>
             {isRtl ? "مشاوره هوشمند" : "AI Consultation"}
           </span>
           <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
-            style={{ border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.5)" }}>
+            style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>
             {lang === "fa" ? "EN" : "فا"}
           </button>
         </div>

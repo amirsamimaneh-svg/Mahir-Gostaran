@@ -3,29 +3,47 @@ import path from "path";
 import crypto from "crypto";
 
 const DB_PATH = path.join(process.cwd(), "data", "users.json");
+const MSG_PATH = path.join(process.cwd(), "data", "messages.json");
 
 export type User = {
   id: string;
   phone: string;
+  name: string;
   passwordHash: string;
   createdAt: string;
   consultCount: number;
 };
 
+export type Message = {
+  id: string;
+  from: "admin" | "user";
+  userPhone: string;
+  text: string;
+  createdAt: string;
+  read: boolean;
+};
+
 function readDB(): User[] {
   try {
-    if (!fs.existsSync(path.dirname(DB_PATH))) {
-      fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-    }
+    if (!fs.existsSync(path.dirname(DB_PATH))) fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
     if (!fs.existsSync(DB_PATH)) return [];
     return JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
-  } catch {
-    return [];
-  }
+  } catch { return []; }
 }
 
 function writeDB(users: User[]) {
   fs.writeFileSync(DB_PATH, JSON.stringify(users, null, 2));
+}
+
+function readMessages(): Message[] {
+  try {
+    if (!fs.existsSync(MSG_PATH)) return [];
+    return JSON.parse(fs.readFileSync(MSG_PATH, "utf-8"));
+  } catch { return []; }
+}
+
+function writeMessages(msgs: Message[]) {
+  fs.writeFileSync(MSG_PATH, JSON.stringify(msgs, null, 2));
 }
 
 export function hashPassword(password: string): string {
@@ -36,11 +54,11 @@ export function findUserByPhone(phone: string): User | undefined {
   return readDB().find(u => u.phone === phone);
 }
 
-export function createUser(phone: string, password: string): User {
+export function createUser(phone: string, name: string, password: string): User {
   const users = readDB();
   const user: User = {
     id: crypto.randomUUID(),
-    phone,
+    phone, name,
     passwordHash: hashPassword(password),
     createdAt: new Date().toISOString(),
     consultCount: 0,
@@ -48,6 +66,12 @@ export function createUser(phone: string, password: string): User {
   users.push(user);
   writeDB(users);
   return user;
+}
+
+export function updateUserName(phone: string, name: string) {
+  const users = readDB();
+  const u = users.find(u => u.phone === phone);
+  if (u) { u.name = name; writeDB(users); }
 }
 
 export function getAllUsers(): Omit<User, "passwordHash">[] {
@@ -58,4 +82,35 @@ export function incrementConsult(phone: string) {
   const users = readDB();
   const u = users.find(u => u.phone === phone);
   if (u) { u.consultCount++; writeDB(users); }
+}
+
+export function sendMessage(from: "admin" | "user", userPhone: string, text: string): Message {
+  const msgs = readMessages();
+  const msg: Message = {
+    id: crypto.randomUUID(),
+    from, userPhone, text,
+    createdAt: new Date().toISOString(),
+    read: false,
+  };
+  msgs.push(msg);
+  writeMessages(msgs);
+  return msg;
+}
+
+export function getMessages(userPhone: string): Message[] {
+  return readMessages().filter(m => m.userPhone === userPhone).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+}
+
+export function markRead(userPhone: string) {
+  const msgs = readMessages();
+  msgs.filter(m => m.userPhone === userPhone && m.from === "admin").forEach(m => m.read = true);
+  writeMessages(msgs);
+}
+
+export function getAllMessages(): Message[] {
+  return readMessages().sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export function getUnreadCount(userPhone: string): number {
+  return readMessages().filter(m => m.userPhone === userPhone && m.from === "admin" && !m.read).length;
 }

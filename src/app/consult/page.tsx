@@ -42,6 +42,7 @@ export default function ConsultPage() {
   const [lang, setLang] = useState<"fa" | "en">("fa");
   const [step, setStep] = useState(-1);
   const [authChecked, setAuthChecked] = useState(false);
+  const [userName, setUserName] = useState("");
   const [answers, setAnswers] = useState(["", "", ""]);
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
@@ -62,7 +63,7 @@ export default function ConsultPage() {
   useEffect(() => {
     fetch("/api/auth/me").then(r => r.json()).then(d => {
       if (!d.user) router.replace("/login");
-      else setAuthChecked(true);
+      else { setAuthChecked(true); setUserName(d.user.name || ""); }
     });
   }, [router]);
 
@@ -184,7 +185,7 @@ export default function ConsultPage() {
 
   // ── Landing ──────────────────────────────────────────────
   if (step === -1) return (
-    <Page lang={lang} setLang={setLang} isRtl={isRtl}>
+    <Page lang={lang} setLang={setLang} isRtl={isRtl} userName={userName}>
       <div className="flex flex-col items-center text-center max-w-lg mx-auto px-4 py-12 anim-fade-up">
         <div className="w-20 h-20 rounded-2xl mb-6 flex items-center justify-center text-4xl anim-float"
           style={{ background: "rgba(251,191,36,0.12)", border: "1px solid rgba(251,191,36,0.3)" }}>
@@ -236,7 +237,7 @@ export default function ConsultPage() {
   if (step < STEPS.length) {
     const cur = STEPS[step];
     return (
-      <Page lang={lang} setLang={setLang} isRtl={isRtl}>
+      <Page lang={lang} setLang={setLang} isRtl={isRtl} userName={userName}>
         <div className="w-full max-w-lg mx-auto px-4 py-8 flex flex-col items-center">
 
           {/* progress */}
@@ -355,7 +356,7 @@ export default function ConsultPage() {
 
   // ── Result ────────────────────────────────────────────────
   return (
-    <Page lang={lang} setLang={setLang} isRtl={isRtl}>
+    <Page lang={lang} setLang={setLang} isRtl={isRtl} userName={userName}>
       <div className="w-full max-w-lg mx-auto px-4 py-8 flex flex-col items-center">
         {loading ? (
           <div className="flex flex-col items-center gap-5 py-20">
@@ -430,11 +431,12 @@ export default function ConsultPage() {
 }
 
 // ── Layout ────────────────────────────────────────────────
-function Page({ children, lang, setLang, isRtl }: {
+function Page({ children, lang, setLang, isRtl, userName }: {
   children: React.ReactNode;
   lang: "fa" | "en";
   setLang: (l: "fa" | "en") => void;
   isRtl: boolean;
+  userName?: string;
 }) {
   return (
     <div className="min-h-screen grid-bg" dir={isRtl ? "rtl" : "ltr"}
@@ -452,9 +454,15 @@ function Page({ children, lang, setLang, isRtl }: {
           {isRtl ? "ماهیر" : "Mahir"}
         </Link>
         <div className="flex items-center gap-2">
-          <span className="text-xs hidden sm:block" style={{ color: "var(--fg3)" }}>
-            {isRtl ? "مشاوره هوشمند" : "AI Consultation"}
-          </span>
+          {userName && (
+            <Link href="/profile"
+              className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-amber-400"
+              style={{ border: "1px solid rgba(251,191,36,0.25)", color: "#fbbf24", background: "rgba(251,191,36,0.07)" }}>
+              <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
+                style={{ background: "rgba(251,191,36,0.2)" }}>{userName.charAt(0)}</span>
+              {userName}
+            </Link>
+          )}
           <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
             style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>

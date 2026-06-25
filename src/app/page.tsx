@@ -6,7 +6,6 @@ import IdeaCard from "@/components/IdeaCard";
 import ScrollToTop from "@/components/ScrollToTop";
 import Marquee from "@/components/Marquee";
 import Counter from "@/components/Counter";
-import WelcomeBar from "@/components/WelcomeBar";
 import { LangProvider, useLang } from "@/context/LangContext";
 
 const t = {
@@ -354,7 +353,6 @@ function PageContent() {
       <About />
       <Footer />
       <ScrollToTop />
-      <WelcomeBar onApply={handlePrefs} />
     </div>
   );
 }

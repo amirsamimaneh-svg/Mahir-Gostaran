@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ParticlesBg from "@/components/ParticlesBg";
 import "@fontsource/vazirmatn/300.css";
 import "@fontsource/vazirmatn/400.css";
 import "@fontsource/vazirmatn/600.css";
@@ -17,7 +18,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html>
-      <body className="antialiased min-h-full">{children}</body>
+      <body className="antialiased min-h-full">
+        <ParticlesBg />
+        {children}
+      </body>
     </html>
   );
 }

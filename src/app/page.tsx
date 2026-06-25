@@ -104,6 +104,14 @@ function ThemeToggle({ dark, setDark }: { dark: boolean; setDark: (v: boolean) =
 function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
   const { lang, toggle } = useLang();
   const tx = t[lang];
+  const [user, setUser] = useState<{ name: string; unread: number } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/me").then(r => r.json()).then(d => {
+      if (d.user) setUser({ name: d.user.name, unread: d.user.unread ?? 0 });
+    }).catch(() => {});
+  }, []);
+
   return (
     <nav className="fixed top-0 inset-x-0 z-50 anim-slide-down"
       style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
@@ -126,11 +134,25 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
             className="text-xs font-bold px-3 py-2 rounded-lg bg-card c-fg3 hover:text-amber-400 transition-all">
             {tx.langBtn}
           </button>
-          <Link href="/consult"
-            className="text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-105"
-            style={{ background: "#fbbf24", color: "#111" }}>
-            {tx.consultBtn}
-          </Link>
+          {user ? (
+            <Link href="/profile"
+              className="relative flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-xl transition-all hover:scale-105"
+              style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.3)", color: "#fbbf24" }}>
+              <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold"
+                style={{ background: "rgba(251,191,36,0.25)" }}>{user.name.charAt(0)}</span>
+              {user.name}
+              {user.unread > 0 && (
+                <span className="absolute -top-1 -left-1 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold"
+                  style={{ background: "#ef4444", color: "#fff" }}>{user.unread}</span>
+              )}
+            </Link>
+          ) : (
+            <Link href="/login"
+              className="text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-105"
+              style={{ background: "#fbbf24", color: "#111" }}>
+              {tx.consultBtn}
+            </Link>
+          )}
         </div>
       </div>
     </nav>

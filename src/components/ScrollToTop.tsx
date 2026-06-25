@@ -11,12 +11,22 @@ export default function ScrollToTop() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   return (
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="بازگشت به بالا"
+      style={{ bottom: isMobile ? "106px" : "32px" }}
       className={`
-        fixed bottom-8 left-6 z-50 w-11 h-11 rounded-full
+        fixed left-6 z-50 w-11 h-11 rounded-full
         bg-amber-400 text-gray-900 shadow-lg
         flex items-center justify-center
         hover:bg-amber-300 active:scale-95

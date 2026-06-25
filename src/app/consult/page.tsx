@@ -73,15 +73,15 @@ export default function ConsultPage() {
     }
   }, [step]);
 
+  useEffect(() => {
+    if (result) resultRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [result]);
+
   if (!authChecked) return (
     <div style={{ background: "#05050f", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div className="w-8 h-8 rounded-full border-2 border-amber-400 border-t-transparent animate-spin" />
     </div>
   );
-
-  useEffect(() => {
-    if (result) resultRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [result]);
 
   // voice input
   function toggleVoice() {

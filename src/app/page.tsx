@@ -8,7 +8,6 @@ import Marquee from "@/components/Marquee";
 import Counter from "@/components/Counter";
 import { LangProvider, useLang } from "@/context/LangContext";
 
-// ── translations ─────────────────────────────────────────
 const t = {
   fa: {
     brand: "ماهیر",
@@ -20,12 +19,10 @@ const t = {
     ],
     consultBtn: "مشاوره رایگان",
     badge: "شریک هوشمند رشد کسب‌وکار شما",
-    h1a: "از ایده",
-    h1b: "تا رشد",
-    h1c: "واقعی",
+    h1: "از ایده تا",
+    h1b: "رشد واقعی",
     sub: "ماهیر با ترکیب استراتژی، هویت برند و هوش مصنوعی، مسیر رشد کسب‌وکار شما را هموار می‌کند.",
-    cta1: "خدمات ما",
-    cta2: "مشاوره هوشمند",
+    cta1: "خدمات ما", cta2: "مشاوره هوشمند",
     servTitle: "خدمات", servBrand: "ماهیر",
     servSub: "راه‌حل‌های جامع برای هر مرحله از مسیر رشد",
     services: [
@@ -59,12 +56,10 @@ const t = {
     ],
     consultBtn: "Free Consultation",
     badge: "Your Smart Business Growth Partner",
-    h1a: "From",
-    h1b: "Idea to",
-    h1c: "Real Growth",
+    h1: "From Idea to",
+    h1b: "Real Growth",
     sub: "Mahir combines strategy, brand identity, and AI to pave the way for your business growth.",
-    cta1: "Our Services",
-    cta2: "AI Consultation",
+    cta1: "Our Services", cta2: "AI Consultation",
     servTitle: "Our", servBrand: "Services",
     servSub: "Comprehensive solutions for every stage of your growth journey",
     services: [
@@ -94,7 +89,7 @@ function go(href: string) {
   document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
 }
 
-// ── Dark/Light toggle ─────────────────────────────────────
+// ── Theme toggle ──────────────────────────────────────────
 function ThemeToggle() {
   const [dark, setDark] = useState(true);
   useEffect(() => {
@@ -102,8 +97,8 @@ function ThemeToggle() {
   }, [dark]);
   return (
     <button onClick={() => setDark(d => !d)}
-      className="w-9 h-9 rounded-lg border border-white/15 flex items-center justify-center
-        text-white/50 hover:border-amber-400/50 hover:text-amber-400 transition-all text-base">
+      className="w-9 h-9 rounded-lg flex items-center justify-center text-base transition-all hover:scale-110 bg-card"
+      title={dark ? "حالت روشن" : "حالت تاریک"}>
       {dark ? "🌙" : "☀️"}
     </button>
   );
@@ -115,17 +110,16 @@ function Navbar() {
   const tx = t[lang];
   return (
     <nav className="fixed top-0 inset-x-0 z-50 anim-slide-down"
-      style={{ background: "rgba(5,5,15,0.75)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 py-4">
         <span className="text-xl font-extrabold text-amber-400 tracking-widest">{tx.brand}</span>
-        <ul className="hidden md:flex gap-10 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
-          {tx.nav.map((item) => (
+        <ul className="hidden md:flex gap-10 text-sm">
+          {tx.nav.map(item => (
             <li key={item.label}>
-              <a href={item.href} onClick={(e) => { e.preventDefault(); go(item.href); }}
-                className="hover:text-amber-400 transition-colors relative group">
+              <a href={item.href} onClick={e => { e.preventDefault(); go(item.href); }}
+                className="c-fg2 hover:text-amber-400 transition-colors relative group">
                 {item.label}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-amber-400
-                  group-hover:w-full transition-all duration-300" />
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-amber-400 group-hover:w-full transition-all duration-300" />
               </a>
             </li>
           ))}
@@ -133,13 +127,12 @@ function Navbar() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <button onClick={toggle}
-            className="text-xs font-bold px-3 py-2 rounded-lg border border-white/15
-              text-white/50 hover:border-amber-400/50 hover:text-amber-400 transition-all">
+            className="text-xs font-bold px-3 py-2 rounded-lg bg-card c-fg3 hover:text-amber-400 transition-all">
             {tx.langBtn}
           </button>
           <Link href="/consult"
-            className="text-sm font-bold px-5 py-2 rounded-xl bg-amber-400 text-gray-900
-              hover:bg-amber-300 hover:scale-105 transition-all">
+            className="text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-105"
+            style={{ background: "#fbbf24", color: "#111" }}>
             {tx.consultBtn}
           </Link>
         </div>
@@ -155,34 +148,27 @@ function Hero() {
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center
       overflow-hidden pt-20 pb-0 text-center">
-
       {/* blobs */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="anim-blob d1 absolute -top-40 -right-40 w-[700px] h-[700px]
-          rounded-full blur-[160px]" style={{ background: "rgba(251,191,36,0.08)" }} />
-        <div className="anim-blob d5 absolute -bottom-40 -left-40 w-[600px] h-[600px]
-          rounded-full blur-[160px]" style={{ background: "rgba(99,102,241,0.08)" }} />
-        <div className="anim-blob d3 absolute top-1/2 left-1/3 w-[500px] h-[500px]
-          rounded-full blur-[140px]" style={{ background: "rgba(139,92,246,0.06)" }} />
+        <div className="anim-blob d1 absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full blur-[160px]"
+          style={{ background: "rgba(251,191,36,0.08)" }} />
+        <div className="anim-blob d5 absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full blur-[160px]"
+          style={{ background: "rgba(99,102,241,0.08)" }} />
+        <div className="anim-blob d3 absolute top-1/2 left-1/3 w-[500px] h-[500px] rounded-full blur-[140px]"
+          style={{ background: "rgba(139,92,246,0.06)" }} />
       </div>
-
       {/* particles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {Array.from({ length: 20 }).map((_, i) => (
+        {Array.from({ length: 18 }).map((_, i) => (
           <span key={i} className="absolute rounded-full anim-blob"
-            style={{
-              width: `${2 + (i % 4)}px`, height: `${2 + (i % 4)}px`,
-              top: `${5 + (i * 4.7) % 88}%`, left: `${3 + (i * 5.1) % 94}%`,
-              background: "rgba(251,191,36,0.25)",
-              animationDelay: `${i * 0.4}s`,
-              animationDuration: `${5 + (i % 5) * 1.5}s`,
-            }} />
+            style={{ width: `${2+(i%4)}px`, height: `${2+(i%4)}px`,
+              top: `${5+(i*4.7)%88}%`, left: `${3+(i*5.1)%94}%`,
+              background: "rgba(251,191,36,0.2)",
+              animationDelay: `${i*0.4}s`, animationDuration: `${5+(i%5)*1.5}s` }} />
         ))}
       </div>
 
-      {/* content */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col items-center">
-
         {/* badge */}
         <div className="anim-fade-up d1 mb-8 inline-flex items-center gap-2 rounded-full px-5 py-2"
           style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.25)" }}>
@@ -191,29 +177,24 @@ function Hero() {
         </div>
 
         {/* headline */}
-        <div className="anim-fade-up d2 mb-6 w-full">
-          <h1 className="font-extrabold tracking-tight"
-            style={{ fontSize: "clamp(2.2rem, 6vw, 5rem)", lineHeight: 1.15 }}>
-            <span style={{ color: "var(--fg)" }}>{tx.h1a} {tx.h1b} </span>
-            <span className="text-shimmer">{tx.h1c}</span>
-          </h1>
-        </div>
+        <h1 className="anim-fade-up d2 font-extrabold tracking-tight mb-6"
+          style={{ fontSize: "clamp(2.2rem,6vw,5rem)", lineHeight: 1.15 }}>
+          <span className="c-fg">{tx.h1} </span>
+          <span className="text-shimmer">{tx.h1b}</span>
+        </h1>
 
-        <p className="anim-fade-up d3 max-w-xl text-base md:text-lg leading-relaxed mb-10"
-          style={{ color: "rgba(255,255,255,0.5)" }}>
-          {tx.sub}
-        </p>
+        <p className="anim-fade-up d3 c-fg2 text-base md:text-lg max-w-xl mb-10 leading-relaxed">{tx.sub}</p>
 
-        {/* CTA */}
+        {/* CTAs */}
         <div className="anim-fade-up d4 flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <a href="#services" onClick={(e) => { e.preventDefault(); go("#services"); }}
+          <a href="#services" onClick={e => { e.preventDefault(); go("#services"); }}
             className="px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
             style={{ background: "#fbbf24", color: "#111", boxShadow: "0 0 40px rgba(251,191,36,0.3)" }}>
             {tx.cta1}
           </a>
           <Link href="/consult"
-            className="px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
-            style={{ border: "1px solid rgba(251,191,36,0.4)", color: "#fbbf24" }}>
+            className="px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105 bg-card"
+            style={{ color: "#fbbf24", border: "1px solid rgba(251,191,36,0.3)" }}>
             {tx.cta2}
           </Link>
         </div>
@@ -223,21 +204,16 @@ function Hero() {
           <IdeaCard lang={lang} />
         </div>
 
-        {/* scroll */}
-        <div className="anim-fade-in d9 mt-10 mb-0 flex flex-col items-center gap-1"
-          style={{ color: "rgba(255,255,255,0.2)" }}>
+        {/* scroll hint */}
+        <div className="anim-fade-in d9 mt-10 flex flex-col items-center gap-1 c-fg3">
           <span style={{ fontSize: "10px", letterSpacing: "0.3em" }}>SCROLL</span>
-          <svg className="animate-bounce w-4 h-4" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" strokeWidth="2">
+          <svg className="animate-bounce w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </div>
 
-      {/* marquee at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 z-10">
-        <Marquee />
-      </div>
+      <div className="absolute bottom-0 left-0 right-0 z-10"><Marquee /></div>
     </section>
   );
 }
@@ -249,10 +225,10 @@ function Stats() {
   return (
     <section className="py-20 px-6 w-full max-w-6xl mx-auto">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {tx.stats.map((s) => (
+        {tx.stats.map(s => (
           <div key={s.label} className="card-glow rounded-2xl p-7 text-center">
             <Counter target={s.target} suffix={s.suffix} />
-            <p className="text-xs mt-2" style={{ color: "rgba(255,255,255,0.45)" }}>{s.label}</p>
+            <p className="text-xs mt-2 c-fg3">{s.label}</p>
           </div>
         ))}
       </div>
@@ -268,18 +244,19 @@ function Services() {
     <section id="services" className="py-24 px-6 w-full max-w-6xl mx-auto">
       <div className="text-center mb-16">
         <h2 className="font-extrabold mb-3" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-          {tx.servTitle} <span className="text-shimmer">{tx.servBrand}</span>
+          <span className="c-fg">{tx.servTitle} </span>
+          <span className="text-shimmer">{tx.servBrand}</span>
         </h2>
-        <p className="max-w-sm mx-auto text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>{tx.servSub}</p>
+        <p className="max-w-sm mx-auto text-sm c-fg3">{tx.servSub}</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {tx.services.map((s) => (
+        {tx.services.map(s => (
           <div key={s.title} className="card-glow rounded-2xl p-8 text-center group">
             <div className="text-4xl mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
               {s.icon}
             </div>
-            <h3 className="font-bold mb-2 text-white">{s.title}</h3>
-            <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>{s.desc}</p>
+            <h3 className="font-bold mb-2 c-fg">{s.title}</h3>
+            <p className="text-sm leading-relaxed c-fg2">{s.desc}</p>
           </div>
         ))}
       </div>
@@ -293,8 +270,7 @@ function ConsultCTA() {
   const tx = t[lang];
   return (
     <section className="py-20 px-6 w-full max-w-5xl mx-auto">
-      <div className="relative rounded-3xl overflow-hidden text-center p-12 md:p-20"
-        style={{ background: "linear-gradient(135deg,rgba(251,191,36,0.1),rgba(99,102,241,0.08))", border: "1px solid rgba(251,191,36,0.2)" }}>
+      <div className="relative rounded-3xl overflow-hidden text-center p-12 md:p-20 card-glow">
         <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-[100px]"
           style={{ background: "rgba(251,191,36,0.1)" }} />
         <div className="relative z-10">
@@ -303,12 +279,11 @@ function ConsultCTA() {
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
             <span className="text-xs text-amber-300 tracking-widest">AI Powered</span>
           </div>
-          <h2 className="font-extrabold text-white mb-4" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
-            {tx.consultTitle} <span className="text-shimmer">{tx.consultBrand}</span>
+          <h2 className="font-extrabold mb-4" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
+            <span className="c-fg">{tx.consultTitle} </span>
+            <span className="text-shimmer">{tx.consultBrand}</span>
           </h2>
-          <p className="max-w-md mx-auto text-sm leading-relaxed mb-8" style={{ color: "rgba(255,255,255,0.5)" }}>
-            {tx.consultDesc}
-          </p>
+          <p className="max-w-md mx-auto text-sm leading-relaxed mb-8 c-fg2">{tx.consultDesc}</p>
           <Link href="/consult"
             className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-sm
               transition-all hover:scale-105"
@@ -328,12 +303,11 @@ function About() {
   return (
     <section id="about" className="py-24 px-6 w-full max-w-4xl mx-auto">
       <div className="card-glow rounded-3xl p-12 md:p-16 text-center">
-        <h2 className="font-extrabold text-white mb-5" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
-          {tx.aboutTitle} <span className="text-shimmer">{tx.aboutBrand}</span>
+        <h2 className="font-extrabold mb-5" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
+          <span className="c-fg">{tx.aboutTitle} </span>
+          <span className="text-shimmer">{tx.aboutBrand}</span>
         </h2>
-        <p className="leading-relaxed text-base max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
-          {tx.aboutDesc}
-        </p>
+        <p className="leading-relaxed text-base max-w-2xl mx-auto c-fg2">{tx.aboutDesc}</p>
       </div>
     </section>
   );
@@ -345,9 +319,8 @@ function Footer() {
   const tx = t[lang];
   return (
     <footer id="contact" className="py-10 px-6 w-full max-w-6xl mx-auto"
-      style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm"
-        style={{ color: "rgba(255,255,255,0.35)" }}>
+      style={{ borderTop: "1px solid var(--border)" }}>
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm c-fg3">
         <span className="font-extrabold text-amber-400 text-lg tracking-widest">{tx.brand}</span>
         <div className="flex gap-6">
           <a href="mailto:hello@mahir.ir" className="hover:text-amber-400 transition-colors">hello@mahir.ir</a>

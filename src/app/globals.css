@@ -3,9 +3,23 @@
 :root {
   --bg: #05050f;
   --fg: #f0f0f5;
+  --fg2: rgba(240,240,245,0.5);
+  --fg3: rgba(240,240,245,0.35);
   --card: rgba(255,255,255,0.04);
   --border: rgba(255,255,255,0.08);
-  --muted: rgba(255,255,255,0.45);
+  --nav-bg: rgba(5,5,15,0.8);
+  --nav-border: rgba(255,255,255,0.05);
+}
+
+body.light {
+  --bg: #f5f4ef;
+  --fg: #0f0f1a;
+  --fg2: rgba(15,15,26,0.55);
+  --fg3: rgba(15,15,26,0.38);
+  --card: rgba(0,0,0,0.04);
+  --border: rgba(0,0,0,0.1);
+  --nav-bg: rgba(245,244,239,0.88);
+  --nav-border: rgba(0,0,0,0.07);
 }
 
 @theme inline {
@@ -20,48 +34,6 @@ body {
   color: var(--fg);
   font-family: "Vazirmatn", "Tahoma", "Segoe UI", sans-serif;
   transition: background 0.4s, color 0.4s;
-}
-
-body.light {
-  --bg: #f5f4ef;
-  --fg: #0f0f1a;
-  --card: rgba(0,0,0,0.05);
-  --border: rgba(0,0,0,0.1);
-  background: #f5f4ef;
-  color: #0f0f1a;
-}
-
-/* light mode — همه متن‌ها مشکی */
-body.light * {
-  color: inherit;
-}
-body.light nav,
-body.light header {
-  background: rgba(245,244,239,0.9) !important;
-  border-color: rgba(0,0,0,0.08) !important;
-}
-body.light [style*="color: white"],
-body.light [style*="color:white"] {
-  color: #0f0f1a !important;
-}
-body.light [style*="rgba(255,255,255"] {
-  color: rgba(15,15,26,0.7) !important;
-}
-body.light .text-white { color: #0f0f1a !important; }
-body.light p, body.light h1, body.light h2, body.light h3, body.light span, body.light a:not(.text-amber-400) {
-  color: #0f0f1a !important;
-}
-body.light .text-shimmer {
-  -webkit-text-fill-color: transparent !important;
-}
-body.light .card-glow {
-  background: rgba(0,0,0,0.04) !important;
-  border-color: rgba(0,0,0,0.1) !important;
-}
-body.light .grid-bg {
-  background-image:
-    linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-    linear-gradient(90deg,rgba(0,0,0,0.05) 1px, transparent 1px) !important;
 }
 
 ::-webkit-scrollbar { width: 5px; }
@@ -123,7 +95,6 @@ body.light .grid-bg {
   animation: shimmer 3.5s linear infinite;
 }
 
-/* grid background */
 .grid-bg {
   background-image:
     linear-gradient(rgba(251,191,36,.04) 1px, transparent 1px),
@@ -133,11 +104,10 @@ body.light .grid-bg {
 }
 body.light .grid-bg {
   background-image:
-    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
-    linear-gradient(90deg,rgba(0,0,0,.04) 1px, transparent 1px);
+    linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(0,0,0,.05) 1px, transparent 1px);
 }
 
-/* card */
 .card-glow {
   background: var(--card);
   border: 1px solid var(--border);
@@ -148,3 +118,9 @@ body.light .grid-bg {
   border-color: rgba(251,191,36,.45);
   box-shadow: 0 0 28px rgba(251,191,36,.12);
 }
+
+/* CSS variable helpers */
+.c-fg  { color: var(--fg); }
+.c-fg2 { color: var(--fg2); }
+.c-fg3 { color: var(--fg3); }
+.bg-card { background: var(--card); border: 1px solid var(--border); }

@@ -8,11 +8,12 @@ export type Project = {
   desc_en: string;
   tags: string[];
   emoji: string;
-  color: string; // gradient stop color
+  color: string;
   details_fa: string[];
   details_en: string[];
   result_fa: string;
   result_en: string;
+  images: string[];
 };
 
 export const projects: Project[] = [
@@ -41,6 +42,11 @@ export const projects: Project[] = [
     ],
     result_fa: "۴۰٪ افزایش مشتری در ماه اول راه‌اندازی",
     result_en: "40% increase in customers in the first month",
+    images: [
+      "https://picsum.photos/seed/cafe1/800/500",
+      "https://picsum.photos/seed/cafe2/800/500",
+      "https://picsum.photos/seed/cafe3/800/500",
+    ],
   },
   {
     slug: "growth-strategy-ecommerce",
@@ -67,6 +73,11 @@ export const projects: Project[] = [
     ],
     result_fa: "۱۱۵٪ رشد فروش در ۶ ماه",
     result_en: "115% sales growth in 6 months",
+    images: [
+      "https://picsum.photos/seed/shop1/800/500",
+      "https://picsum.photos/seed/shop2/800/500",
+      "https://picsum.photos/seed/shop3/800/500",
+    ],
   },
   {
     slug: "ai-automation-clinic",
@@ -93,6 +104,11 @@ export const projects: Project[] = [
     ],
     result_fa: "۶۵٪ کاهش تماس‌های تلفنی، ۳۰٪ کاهش نوبت‌های فراموش‌شده",
     result_en: "65% drop in phone calls, 30% fewer missed appointments",
+    images: [
+      "https://picsum.photos/seed/clinic1/800/500",
+      "https://picsum.photos/seed/clinic2/800/500",
+      "https://picsum.photos/seed/clinic3/800/500",
+    ],
   },
   {
     slug: "digital-marketing-restaurant",
@@ -119,6 +135,11 @@ export const projects: Project[] = [
     ],
     result_fa: "از ۸۰۰ به ۱۲,۰۰۰ فالوور در ۴ ماه",
     result_en: "From 800 to 12,000 followers in 4 months",
+    images: [
+      "https://picsum.photos/seed/resto1/800/500",
+      "https://picsum.photos/seed/resto2/800/500",
+      "https://picsum.photos/seed/resto3/800/500",
+    ],
   },
   {
     slug: "brand-strategy-startup",
@@ -145,6 +166,11 @@ export const projects: Project[] = [
     ],
     result_fa: "جذب ۵,۰۰۰ کاربر در هفته اول لانچ",
     result_en: "5,000 users acquired in the first launch week",
+    images: [
+      "https://picsum.photos/seed/fintech1/800/500",
+      "https://picsum.photos/seed/fintech2/800/500",
+      "https://picsum.photos/seed/fintech3/800/500",
+    ],
   },
   {
     slug: "seo-real-estate",
@@ -171,5 +197,10 @@ export const projects: Project[] = [
     ],
     result_fa: "صفحه اول گوگل برای ۳۸ کلمه کلیدی هدف",
     result_en: "Page 1 Google ranking for 38 target keywords",
+    images: [
+      "https://picsum.photos/seed/realestate1/800/500",
+      "https://picsum.photos/seed/realestate2/800/500",
+      "https://picsum.photos/seed/realestate3/800/500",
+    ],
   },
 ];

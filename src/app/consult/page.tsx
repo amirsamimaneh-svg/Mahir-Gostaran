@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const STEPS = [
   {
@@ -37,8 +38,10 @@ const STEPS = [
 ];
 
 export default function ConsultPage() {
+  const router = useRouter();
   const [lang, setLang] = useState<"fa" | "en">("fa");
   const [step, setStep] = useState(-1);
+  const [authChecked, setAuthChecked] = useState(false);
   const [answers, setAnswers] = useState(["", "", ""]);
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
@@ -57,10 +60,23 @@ export default function ConsultPage() {
   const isRtl = lang === "fa";
 
   useEffect(() => {
+    fetch("/api/auth/me").then(r => r.json()).then(d => {
+      if (!d.user) router.replace("/login");
+      else setAuthChecked(true);
+    });
+  }, [router]);
+
+  useEffect(() => {
     if (step >= 0 && step < STEPS.length) {
       setTimeout(() => inputRef.current?.focus(), 300);
     }
   }, [step]);
+
+  if (!authChecked) return (
+    <div style={{ background: "#05050f", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div className="w-8 h-8 rounded-full border-2 border-amber-400 border-t-transparent animate-spin" />
+    </div>
+  );
 
   useEffect(() => {
     if (result) resultRef.current?.scrollIntoView({ behavior: "smooth" });

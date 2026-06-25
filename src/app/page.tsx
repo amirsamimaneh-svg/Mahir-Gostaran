@@ -145,17 +145,6 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
         boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,0.3)" : "none",
       }}>
 
-      {/* top micro-bar */}
-      <div className="hidden md:flex items-center justify-center gap-6 py-1.5 text-xs"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", background: "rgba(251,191,36,0.04)" }}>
-        {(isRtl
-          ? ["✦ استراتژی رشد", "✦ هویت برند", "✦ بازاریابی دیجیتال", "✦ هوش مصنوعی", "✦ مشاوره رایگان"]
-          : ["✦ Growth Strategy", "✦ Brand Identity", "✦ Digital Marketing", "✦ AI Solutions", "✦ Free Consultation"]
-        ).map(s => (
-          <span key={s} style={{ color: "rgba(251,191,36,0.55)", letterSpacing: "0.05em" }}>{s}</span>
-        ))}
-      </div>
-
       {/* main bar */}
       <div className="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-10 py-3" dir={isRtl ? "rtl" : "ltr"}>
 

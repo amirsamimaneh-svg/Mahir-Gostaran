@@ -432,60 +432,110 @@ function Services() {
 function Portfolio() {
   const { lang } = useLang();
   const isRtl = lang === "fa";
-  // import inline to keep page.tsx self-contained
+  const [hovered, setHovered] = useState<number | null>(null);
+
   const items = [
-    { slug: "brand-identity-cafe",      emoji: "☕", color: "#d97706", category_fa: "هویت برند",        category_en: "Brand Identity",     title_fa: "کافه رزتا",        title_en: "Rosetta Café",      result_fa: "۴۰٪ رشد مشتری",       result_en: "40% growth" },
-    { slug: "growth-strategy-ecommerce",emoji: "📈", color: "#7c3aed", category_fa: "استراتژی رشد",     category_en: "Growth Strategy",    title_fa: "دیجی‌استایل",      title_en: "DigiStyle",         result_fa: "۱۱۵٪ رشد فروش",      result_en: "115% sales growth" },
-    { slug: "ai-automation-clinic",     emoji: "🤖", color: "#0891b2", category_fa: "هوش مصنوعی",       category_en: "AI Solutions",       title_fa: "کلینیک دکتر سپهری",title_en: "Dr. Sepehri Clinic",result_fa: "۶۵٪ کاهش تماس",      result_en: "65% fewer calls" },
-    { slug: "digital-marketing-restaurant",emoji:"🍽️",color:"#dc2626",category_fa:"بازاریابی دیجیتال",category_en:"Digital Marketing",   title_fa: "رستوران آرارات",   title_en: "Ararat Restaurant", result_fa: "از ۸۰۰ به ۱۲k فالوور",result_en: "800→12k followers" },
-    { slug: "brand-strategy-startup",   emoji: "💳", color: "#059669", category_fa: "استراتژی برند",    category_en: "Brand Strategy",     title_fa: "استارتاپ فین‌پی",  title_en: "FinPay Startup",    result_fa: "۵,۰۰۰ کاربر هفته اول",result_en: "5k users week 1" },
-    { slug: "seo-real-estate",          emoji: "🏠", color: "#ea580c", category_fa: "سئو و محتوا",      category_en: "SEO & Content",      title_fa: "مشاور املاک آریا", title_en: "Arya Real Estate",  result_fa: "صفحه اول گوگل ۳۸ کلمه",result_en: "38 keywords page 1" },
+    { slug: "brand-identity-cafe",         emoji: "☕", color: "#d97706", category_fa: "هویت برند",        category_en: "Brand Identity",     title_fa: "کافه رزتا",         title_en: "Rosetta Café",       result_fa: "۴۰٪ رشد مشتری",         result_en: "40% growth" },
+    { slug: "growth-strategy-ecommerce",   emoji: "📈", color: "#7c3aed", category_fa: "استراتژی رشد",     category_en: "Growth Strategy",    title_fa: "دیجی‌استایل",       title_en: "DigiStyle",          result_fa: "۱۱۵٪ رشد فروش",        result_en: "115% sales growth" },
+    { slug: "ai-automation-clinic",        emoji: "🤖", color: "#0891b2", category_fa: "هوش مصنوعی",       category_en: "AI Solutions",       title_fa: "کلینیک دکتر سپهری", title_en: "Dr. Sepehri Clinic", result_fa: "۶۵٪ کاهش تماس",        result_en: "65% fewer calls" },
+    { slug: "digital-marketing-restaurant",emoji: "🍽️",color: "#dc2626", category_fa: "بازاریابی دیجیتال",category_en: "Digital Marketing",  title_fa: "رستوران آرارات",    title_en: "Ararat Restaurant",  result_fa: "از ۸۰۰ به ۱۲k فالوور",  result_en: "800→12k followers" },
+    { slug: "brand-strategy-startup",      emoji: "💳", color: "#059669", category_fa: "استراتژی برند",    category_en: "Brand Strategy",     title_fa: "استارتاپ فین‌پی",   title_en: "FinPay Startup",     result_fa: "۵,۰۰۰ کاربر هفته اول", result_en: "5k users week 1" },
+    { slug: "seo-real-estate",             emoji: "🏠", color: "#ea580c", category_fa: "سئو و محتوا",      category_en: "SEO & Content",      title_fa: "مشاور املاک آریا",  title_en: "Arya Real Estate",   result_fa: "صفحه اول گوگل ۳۸ کلمه", result_en: "38 keywords page 1" },
   ];
 
   return (
-    <section id="portfolio" className="py-24 px-6 w-full max-w-6xl mx-auto">
-      <div className="text-center mb-14">
-        <h2 className="font-extrabold mb-3" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-          <span className="c-fg">{isRtl ? "نمونه‌" : "Our "}</span>
-          <span className="text-shimmer">{isRtl ? "کارها" : "Portfolio"}</span>
-        </h2>
-        <p className="max-w-sm mx-auto text-sm c-fg3">
-          {isRtl ? "پروژه‌هایی که نتیجه واقعی ساختند" : "Projects that delivered real results"}
-        </p>
+    <section id="portfolio" className="py-24 w-full max-w-6xl mx-auto px-6">
+
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+        <div>
+          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(251,191,36,0.55)" }}>
+            {isRtl ? "✦ PORTFOLIO" : "✦ PORTFOLIO"}
+          </p>
+          <h2 className="font-extrabold leading-none" style={{ fontSize: "clamp(2.5rem,6vw,5rem)", color: "#f0f0f5" }}>
+            {isRtl ? "نمونه‌کارها" : "Selected"}
+            <br />
+            <span className="text-shimmer">{isRtl ? "برتر ما" : "Works"}</span>
+          </h2>
+        </div>
+        <Link href="/portfolio"
+          className="group self-start md:self-end inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all hover:gap-4"
+          style={{ border: "1px solid rgba(251,191,36,0.3)", color: "#fbbf24" }}>
+          {isRtl ? "همه پروژه‌ها" : "All Projects"}
+          <span className="transition-transform group-hover:translate-x-1">{isRtl ? "←" : "→"}</span>
+        </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-        {items.map(p => (
+      {/* Project list — editorial style */}
+      <div className="flex flex-col">
+        {items.map((p, i) => (
           <Link key={p.slug} href={`/portfolio/${p.slug}?lang=${lang}`}
-            className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
-            style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-            <div className="h-1" style={{ background: p.color }} />
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-3">
-                <span className="text-3xl">{p.emoji}</span>
-                <span className="text-xs px-2 py-1 rounded-full font-medium"
-                  style={{ background: `${p.color}18`, color: p.color, border: `1px solid ${p.color}30` }}>
-                  {isRtl ? p.category_fa : p.category_en}
-                </span>
-              </div>
-              <h3 className="font-bold mb-3 c-fg">{isRtl ? p.title_fa : p.title_en}</h3>
-              <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid var(--border)" }}>
-                <span className="text-xs font-bold" style={{ color: p.color }}>
-                  ✦ {isRtl ? p.result_fa : p.result_en}
-                </span>
-                <span className="text-xs c-fg3 transition-transform group-hover:translate-x-1">{isRtl ? "←" : "→"}</span>
-              </div>
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
+            className="group relative flex items-center gap-6 py-6 transition-all duration-300 cursor-pointer"
+            style={{
+              borderTop: "1px solid rgba(255,255,255,0.07)",
+              borderBottom: i === items.length - 1 ? "1px solid rgba(255,255,255,0.07)" : "none",
+            }}>
+
+            {/* Number */}
+            <span className="text-xs font-mono font-bold w-8 flex-shrink-0 transition-colors duration-300"
+              style={{ color: hovered === i ? p.color : "rgba(240,240,245,0.18)" }}>
+              0{i + 1}
+            </span>
+
+            {/* Emoji bubble */}
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 transition-all duration-300"
+              style={{
+                background: hovered === i ? `${p.color}22` : "rgba(255,255,255,0.04)",
+                border: `1px solid ${hovered === i ? p.color + "44" : "rgba(255,255,255,0.08)"}`,
+                transform: hovered === i ? "scale(1.1) rotate(-4deg)" : "scale(1)",
+              }}>
+              {p.emoji}
             </div>
+
+            {/* Title + category */}
+            <div className="flex-1 min-w-0">
+              <h3 className="font-extrabold text-lg md:text-2xl leading-tight transition-colors duration-300"
+                style={{ color: hovered === i ? "#f0f0f5" : "rgba(240,240,245,0.7)" }}>
+                {isRtl ? p.title_fa : p.title_en}
+              </h3>
+              <p className="text-xs mt-1 transition-colors duration-300"
+                style={{ color: hovered === i ? p.color : "rgba(240,240,245,0.3)" }}>
+                {isRtl ? p.category_fa : p.category_en}
+              </p>
+            </div>
+
+            {/* Result badge — shown on hover */}
+            <div className="hidden md:flex items-center gap-2 flex-shrink-0 transition-all duration-300"
+              style={{ opacity: hovered === i ? 1 : 0, transform: hovered === i ? "translateY(0)" : "translateY(6px)" }}>
+              <span className="text-xs font-bold px-4 py-2 rounded-full"
+                style={{ background: `${p.color}15`, color: p.color, border: `1px solid ${p.color}30` }}>
+                ✦ {isRtl ? p.result_fa : p.result_en}
+              </span>
+            </div>
+
+            {/* Arrow */}
+            <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300"
+              style={{
+                background: hovered === i ? p.color : "rgba(255,255,255,0.04)",
+                border: `1px solid ${hovered === i ? p.color : "rgba(255,255,255,0.08)"}`,
+                transform: hovered === i ? "scale(1.1)" : "scale(1)",
+              }}>
+              <span className="text-sm font-bold transition-colors duration-300"
+                style={{ color: hovered === i ? "#111" : "rgba(240,240,245,0.3)" }}>
+                {isRtl ? "←" : "→"}
+              </span>
+            </div>
+
+            {/* full-row glow */}
+            <div className="absolute inset-0 rounded-xl pointer-events-none transition-opacity duration-300"
+              style={{
+                background: `radial-gradient(ellipse at ${isRtl ? "right" : "left"}, ${p.color}08, transparent 70%)`,
+                opacity: hovered === i ? 1 : 0,
+              }} />
           </Link>
         ))}
-      </div>
-
-      <div className="text-center">
-        <Link href="/portfolio"
-          className="inline-flex items-center gap-2 px-7 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
-          style={{ border: "1px solid rgba(251,191,36,0.35)", color: "#fbbf24" }}>
-          {isRtl ? "مشاهده همه پروژه‌ها ←" : "View All Projects →"}
-        </Link>
       </div>
     </section>
   );
@@ -528,53 +578,114 @@ function Team() {
   const { lang } = useLang();
   const tx = t[lang];
   const members = TEAM[lang];
+  const isRtl = lang === "fa";
+
+  const COLORS = ["#fbbf24", "#a78bfa", "#34d399", "#60a5fa", "#f87171", "#fb923c"];
+
   return (
     <section id="team" className="py-24 px-6 w-full max-w-6xl mx-auto">
-      <div className="text-center mb-14">
-        <h2 className="font-extrabold mb-3" style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)" }}>
-          <span className="c-fg">{tx.teamTitle} </span>
-          <span className="text-shimmer">{tx.teamBrand}</span>
-        </h2>
-        <p className="text-sm c-fg2 max-w-md mx-auto">{tx.teamSub}</p>
+
+      {/* Header */}
+      <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(251,191,36,0.55)" }}>✦ TEAM</p>
+          <h2 className="font-extrabold leading-none" style={{ fontSize: "clamp(2.5rem,6vw,5rem)", color: "#f0f0f5" }}>
+            {isRtl ? "متخصصان" : "The"}
+            <br />
+            <span className="text-shimmer">{isRtl ? "تیم ما" : "Specialists"}</span>
+          </h2>
+        </div>
+        <p className="max-w-xs text-sm leading-relaxed md:text-right" style={{ color: "rgba(240,240,245,0.4)" }}>
+          {tx.teamSub}
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {members.map((m, i) => (
-          <div key={i} className="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1"
-            style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              backdropFilter: "blur(12px)",
-            }}>
-            {/* glow on hover */}
-            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-              style={{ background: "radial-gradient(ellipse at top right, rgba(251,191,36,0.06), transparent 70%)" }} />
+      {/* Bento grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
+        {members.map((m, i) => {
+          const color = COLORS[i];
+          // first card is wider
+          const isWide = i === 0;
+          return (
+            <div key={i}
+              className={`group relative rounded-3xl p-7 overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl ${isWide ? "sm:col-span-2 lg:col-span-1" : ""}`}
+              style={{
+                background: "rgba(255,255,255,0.025)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                backdropFilter: "blur(20px)",
+              }}>
 
-            <div className="relative z-10">
-              {/* Icon */}
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4"
-                style={{ background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.15)" }}>
-                {m.icon}
-              </div>
+              {/* Big decorative number */}
+              <span className="absolute -bottom-4 font-extrabold select-none pointer-events-none transition-all duration-500 group-hover:opacity-20"
+                style={{
+                  fontSize: "7rem",
+                  lineHeight: 1,
+                  color,
+                  opacity: 0.06,
+                  right: isRtl ? "auto" : "-8px",
+                  left: isRtl ? "-8px" : "auto",
+                }}>
+                0{i + 1}
+              </span>
 
-              {/* Role */}
-              <h3 className="font-extrabold text-base mb-2" style={{ color: "#f0f0f5" }}>{m.role}</h3>
+              {/* Color accent top bar */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-3xl transition-all duration-500"
+                style={{ background: `linear-gradient(90deg, ${color}, transparent)`, opacity: 0.6 }} />
 
-              {/* Desc */}
-              <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(240,240,245,0.45)" }}>{m.desc}</p>
+              {/* Glow blob */}
+              <div className="absolute pointer-events-none transition-all duration-500 opacity-0 group-hover:opacity-100"
+                style={{
+                  width: 200, height: 200,
+                  borderRadius: "50%",
+                  background: color,
+                  filter: "blur(80px)",
+                  opacity: 0,
+                  top: -60, right: -60,
+                }} />
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1.5">
-                {m.tags.map(tag => (
-                  <span key={tag} className="text-xs px-2.5 py-1 rounded-full font-medium"
-                    style={{ background: "rgba(251,191,36,0.07)", color: "rgba(251,191,36,0.7)", border: "1px solid rgba(251,191,36,0.12)" }}>
-                    {tag}
-                  </span>
-                ))}
+              <div className="relative z-10 flex flex-col h-full">
+                {/* Icon + role */}
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    style={{ background: `${color}15`, border: `1px solid ${color}30` }}>
+                    {m.icon}
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-base leading-tight transition-colors duration-300 group-hover:text-amber-400"
+                      style={{ color: "#f0f0f5" }}>
+                      {m.role}
+                    </h3>
+                    <div className="flex gap-1 mt-1.5 flex-wrap">
+                      {m.tags.map(tag => (
+                        <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full font-bold"
+                          style={{ background: `${color}12`, color, border: `1px solid ${color}25` }}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div className="h-px mb-4 transition-all duration-300"
+                  style={{ background: `linear-gradient(90deg, ${color}30, transparent)` }} />
+
+                {/* Desc */}
+                <p className="text-sm leading-relaxed flex-1" style={{ color: "rgba(240,240,245,0.5)" }}>
+                  {m.desc}
+                </p>
+
+                {/* Bottom arrow */}
+                <div className="mt-5 flex justify-end">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:scale-110"
+                    style={{ background: `${color}20`, border: `1px solid ${color}40` }}>
+                    <span className="text-xs" style={{ color }}>✦</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

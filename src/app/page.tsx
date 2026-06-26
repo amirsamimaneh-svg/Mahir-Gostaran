@@ -452,9 +452,8 @@ function Portfolio() {
           <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(251,191,36,0.55)" }}>
             {isRtl ? "✦ PORTFOLIO" : "✦ PORTFOLIO"}
           </p>
-          <h2 className="font-extrabold leading-none" style={{ fontSize: "clamp(2.5rem,6vw,5rem)", color: "#f0f0f5" }}>
-            {isRtl ? "نمونه‌کارها" : "Selected"}
-            <br />
+          <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)", color: "#f0f0f5" }}>
+            {isRtl ? "نمونه‌کارها " : "Selected "}
             <span className="text-shimmer">{isRtl ? "برتر ما" : "Works"}</span>
           </h2>
         </div>
@@ -589,9 +588,8 @@ function Team() {
       <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(251,191,36,0.55)" }}>✦ TEAM</p>
-          <h2 className="font-extrabold leading-none" style={{ fontSize: "clamp(2.5rem,6vw,5rem)", color: "#f0f0f5" }}>
-            {isRtl ? "متخصصان" : "The"}
-            <br />
+          <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)", color: "#f0f0f5" }}>
+            {isRtl ? "متخصصان " : "The "}
             <span className="text-shimmer">{isRtl ? "تیم ما" : "Specialists"}</span>
           </h2>
         </div>

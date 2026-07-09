@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useLang } from "@/context/LangContext";
 
 const STEPS = [
   {
@@ -39,7 +40,7 @@ const STEPS = [
 
 export default function ConsultPage() {
   const router = useRouter();
-  const [lang, setLang] = useState<"fa" | "en">("fa");
+  const { lang, setLang, isRtl } = useLang();
   const [step, setStep] = useState(-1);
   const [authChecked, setAuthChecked] = useState(false);
   const [userName, setUserName] = useState("");
@@ -58,7 +59,7 @@ export default function ConsultPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
 
-  const isRtl = lang === "fa";
+
 
   useEffect(() => {
     fetch("/api/auth/me").then(r => r.json()).then(d => {
@@ -433,8 +434,8 @@ export default function ConsultPage() {
 // ── Layout ────────────────────────────────────────────────
 function Page({ children, lang, setLang, isRtl, userName }: {
   children: React.ReactNode;
-  lang: "fa" | "en";
-  setLang: (l: "fa" | "en") => void;
+  lang: string;
+  setLang: (l: "fa" | "en" | "ar") => void;
   isRtl: boolean;
   userName?: string;
 }) {
@@ -463,10 +464,10 @@ function Page({ children, lang, setLang, isRtl, userName }: {
               {userName}
             </Link>
           )}
-          <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
+          <button onClick={() => setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa")}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
             style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>
-            {lang === "fa" ? "EN" : "فا"}
+            {lang === "fa" ? "EN" : lang === "en" ? "عر" : "فا"}
           </button>
         </div>
       </header>

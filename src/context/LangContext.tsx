@@ -1,23 +1,46 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type Lang = "fa" | "en";
+export type Lang = "fa" | "en" | "ar";
 
 interface LangContextType {
   lang: Lang;
-  toggle: () => void;
   setLang: (l: Lang) => void;
+  cycle: () => void;
+  isRtl: boolean;
 }
 
-const LangContext = createContext<LangContextType>({ lang: "fa", toggle: () => {}, setLang: () => {} });
+const LangContext = createContext<LangContextType>({
+  lang: "fa", setLang: () => {}, cycle: () => {}, isRtl: true,
+});
 
 export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>("fa");
-  const toggle = () => setLang(l => l === "fa" ? "en" : "fa");
+  const [lang, setLangState] = useState<Lang>("fa");
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("mahir-lang") as Lang | null;
+    if (saved && ["fa", "en", "ar"].includes(saved)) setLangState(saved);
+    setReady(true);
+  }, []);
+
+  function setLang(l: Lang) {
+    setLangState(l);
+    localStorage.setItem("mahir-lang", l);
+  }
+
+  function cycle() {
+    setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa");
+  }
+
+  const isRtl = lang !== "en";
+
+  if (!ready) return null;
+
   return (
-    <LangContext.Provider value={{ lang, toggle, setLang }}>
-      <div dir={lang === "fa" ? "rtl" : "ltr"} lang={lang}>
+    <LangContext.Provider value={{ lang, setLang, cycle, isRtl }}>
+      <div dir={isRtl ? "rtl" : "ltr"} lang={lang}>
         {children}
       </div>
     </LangContext.Provider>

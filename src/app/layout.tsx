@@ -3,6 +3,8 @@ import ParticlesBg from "@/components/ParticlesBg";
 import BottomNav from "@/components/BottomNav";
 import ChatBot from "@/components/ChatBot";
 import PageLoader from "@/components/PageLoader";
+import ClientProviders from "@/components/ClientProviders";
+import WelcomeBar from "@/components/WelcomeBar";
 import "@fontsource/vazirmatn/300.css";
 import "@fontsource/vazirmatn/400.css";
 import "@fontsource/vazirmatn/600.css";
@@ -35,11 +37,14 @@ export default function RootLayout({
   return (
     <html>
       <body className="antialiased min-h-full">
-        <PageLoader />
-        <ParticlesBg />
-        {children}
-        <BottomNav />
-        <ChatBot />
+        <ClientProviders>
+          <PageLoader />
+          <ParticlesBg />
+          {children}
+          <BottomNav />
+          <ChatBot />
+          <WelcomeBar />
+        </ClientProviders>
       </body>
     </html>
   );

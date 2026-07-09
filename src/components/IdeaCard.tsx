@@ -34,9 +34,9 @@ const labels = {
   },
 };
 
-export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
-  const tx = labels[lang];
-  const cats = CATEGORIES[lang];
+export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" | "ar" }) {
+  const tx = (labels as Record<string, typeof labels.fa>)[lang] ?? labels.fa;
+  const cats = (CATEGORIES as Record<string, typeof CATEGORIES.fa>)[lang] ?? CATEGORIES.fa;
   const [business, setBusiness] = useState("");
   const [loading, setLoading] = useState(false);
   const [displayed, setDisplayed] = useState("");

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useLang } from "@/context/LangContext";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -18,32 +19,50 @@ const SUGGESTIONS_EN = [
   "How to attract more customers?",
 ];
 
-export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
-  const isRtl = lang === "fa";
+const SUGGESTIONS_AR = [
+  "كيف أزيد مبيعاتي؟",
+  "من أين أبدأ في بناء العلامة التجارية؟",
+  "كيف يساعد الذكاء الاصطناعي عملي؟",
+  "كيف أجذب المزيد من العملاء؟",
+];
+
+const GREETING: Record<string, string> = {
+  fa: "سلام! 👋 من دستیار هوشمند ماهیر هستم. هر سوالی درباره رشد کسب‌وکارت داری، اینجام — ۲۴ ساعته، ۷ روز هفته! 🚀",
+  en: "Hi! 👋 I'm Mahir's AI assistant. Any questions about growing your business? I'm here 24/7! 🚀",
+  ar: "مرحباً! 👋 أنا المساعد الذكي لماهير. هل لديك أي سؤال حول تنمية عملك؟ أنا هنا ٢٤/٧! 🚀",
+};
+
+export default function ChatBot() {
+  const { lang, isRtl } = useLang();
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [unread, setUnread] = useState(false);
+  const [prevLang, setPrevLang] = useState(lang);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const suggestions = isRtl ? SUGGESTIONS_FA : SUGGESTIONS_EN;
+
+  const suggestions = lang === "fa" ? SUGGESTIONS_FA : lang === "ar" ? SUGGESTIONS_AR : SUGGESTIONS_EN;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs, loading]);
+
+  // Reset greeting when language changes
+  useEffect(() => {
+    if (lang !== prevLang) {
+      setPrevLang(lang);
+      setMsgs([{ role: "assistant", content: GREETING[lang] }]);
+    }
+  }, [lang]);
 
   useEffect(() => {
     if (open) {
       setUnread(false);
       setTimeout(() => inputRef.current?.focus(), 100);
       if (msgs.length === 0) {
-        setMsgs([{
-          role: "assistant",
-          content: isRtl
-            ? "سلام! 👋 من دستیار هوشمند ماهیر هستم. هر سوالی درباره رشد کسب‌وکارت داری، اینجام — ۲۴ ساعته، ۷ روز هفته! 🚀"
-            : "Hi! 👋 I'm Mahir's AI assistant. Any questions about growing your business? I'm here 24/7! 🚀",
-        }]);
+        setMsgs([{ role: "assistant", content: GREETING[lang] }]);
       }
     }
   }, [open]);
@@ -69,7 +88,8 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
       const data = await res.json();
       setMsgs(prev => [...prev, { role: "assistant", content: data.reply ?? "خطا در پاسخ." }]);
     } catch {
-      setMsgs(prev => [...prev, { role: "assistant", content: isRtl ? "خطا در اتصال. دوباره تلاش کن." : "Connection error. Please try again." }]);
+      const errMsg = lang === "en" ? "Connection error. Please try again." : lang === "ar" ? "خطأ في الاتصال. حاول مجدداً." : "خطا در اتصال. دوباره تلاش کن.";
+      setMsgs(prev => [...prev, { role: "assistant", content: errMsg }]);
     } finally {
       setLoading(false);
     }
@@ -82,6 +102,11 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
       return <p key={i} className="mb-1 leading-relaxed" dangerouslySetInnerHTML={{ __html: bold }} />;
     });
   }
+
+  const headerLabel = lang === "fa" ? "دستیار ماهیر" : lang === "ar" ? "مساعد ماهير" : "Mahir Assistant";
+  const onlineLabel = lang === "fa" ? "آنلاین — ۲۴/۷" : lang === "ar" ? "متصل — ٢٤/٧" : "Online — 24/7";
+  const clearLabel = lang === "fa" ? "پاک" : lang === "ar" ? "مسح" : "Clear";
+  const placeholder = lang === "fa" ? "پیام خود را بنویس…" : lang === "ar" ? "اكتب رسالتك…" : "Type your message…";
 
   return (
     <>
@@ -136,20 +161,16 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
               <span className="text-base font-extrabold text-gray-900">M</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-sm text-[#2563EB] leading-none">
-                {isRtl ? "دستیار ماهیر" : "Mahir Assistant"}
-              </p>
+              <p className="font-bold text-sm text-[#2563EB] leading-none">{headerLabel}</p>
               <div className="flex items-center gap-1.5 mt-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-[10px]" style={{ color: "rgba(240,240,245,0.4)" }}>
-                  {isRtl ? "آنلاین — ۲۴/۷" : "Online — 24/7"}
-                </span>
+                <span className="text-[10px]" style={{ color: "rgba(240,240,245,0.4)" }}>{onlineLabel}</span>
               </div>
             </div>
             <button onClick={() => setMsgs([])}
               className="text-xs px-2 py-1 rounded-lg transition-all hover:bg-white/10"
               style={{ color: "rgba(240,240,245,0.3)" }}>
-              {isRtl ? "پاک" : "Clear"}
+              {clearLabel}
             </button>
           </div>
 
@@ -206,7 +227,7 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && send()}
-                placeholder={isRtl ? "پیام خود را بنویس…" : "Type your message…"}
+                placeholder={placeholder}
                 disabled={loading}
                 className="flex-1 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-[#2563EB]/50 disabled:opacity-50"
                 style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }}
@@ -215,7 +236,7 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
                 className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all hover:scale-105 active:scale-95 disabled:opacity-40"
                 style={{ background: "#2563EB" }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5">
-                  <path d={isRtl ? "M5 12h14M12 5l7 7-7 7" : "M5 12h14M12 5l7 7-7 7"} strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
             </div>

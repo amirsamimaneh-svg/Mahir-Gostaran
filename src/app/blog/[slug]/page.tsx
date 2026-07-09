@@ -1,15 +1,13 @@
 "use client";
 
-import { use, useState, Suspense } from "react";
+import { use, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { posts } from "@/data/posts";
+import { useLang } from "@/context/LangContext";
 
 function BlogPostInner({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const searchParams = useSearchParams();
-  const [lang, setLang] = useState<"fa" | "en">((searchParams.get("lang") as "fa" | "en") ?? "fa");
-  const isRtl = lang === "fa";
+  const { lang, setLang, isRtl } = useLang();
 
   const post = posts.find(p => p.slug === slug);
 
@@ -33,10 +31,10 @@ function BlogPostInner({ params }: { params: Promise<{ slug: string }> }) {
             {isRtl ? "ماهیر" : "Mahir"}
           </Link>
           <div className="flex items-center gap-3">
-            <button onClick={() => setLang(l => l === "fa" ? "en" : "fa")}
+            <button onClick={() => setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa")}
               className="text-xs font-bold px-3 py-2 rounded-lg hover:text-[#5B9CF6] transition-all"
               style={{ background: "var(--surface)", color: "var(--fg2)", border: "1px solid var(--border)" }}>
-              {isRtl ? "EN" : "فا"}
+              {lang === "fa" ? "EN" : lang === "en" ? "عر" : "فا"}
             </button>
             <Link href="/blog" className="text-sm px-4 py-2 rounded-xl hover:text-[#5B9CF6] transition-all"
               style={{ color: "var(--fg2)", border: "1px solid var(--border)" }}>

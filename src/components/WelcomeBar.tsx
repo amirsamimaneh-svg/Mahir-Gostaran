@@ -1,40 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLang, Lang } from "@/context/LangContext";
 
-interface Prefs {
-  lang: "fa" | "en";
-}
-
-export default function WelcomeBar({
-  onApply,
-}: {
-  onApply: (prefs: Prefs) => void;
-}) {
+export default function WelcomeBar() {
+  const { lang, setLang } = useLang();
   const [visible, setVisible] = useState(false);
-  const [lang, setLang] = useState<"fa" | "en">("fa");
+  const [localLang, setLocalLang] = useState<Lang>(lang);
 
   useEffect(() => {
-    // فقط دفعه اول نشون بده
-    const saved = localStorage.getItem("mahir-prefs");
+    const saved = localStorage.getItem("mahir-lang");
     if (!saved) {
       setTimeout(() => setVisible(true), 800);
-    } else {
-      const p: Prefs = JSON.parse(saved);
-      onApply(p);
     }
   }, []);
 
   function apply() {
-    const prefs: Prefs = { lang };
-    localStorage.setItem("mahir-prefs", JSON.stringify(prefs));
-    onApply(prefs);
+    setLang(localLang);
+    localStorage.setItem("mahir-lang", localLang);
     setVisible(false);
   }
 
   if (!visible) return null;
 
-  const isRtl = lang === "fa";
+  const isRtl = localLang !== "en";
 
   return (
     <div
@@ -56,46 +45,34 @@ export default function WelcomeBar({
         }
       `}</style>
 
-      {/* Title */}
       <p className="text-xs font-bold text-[#5B9CF6] tracking-widest mb-3 text-center">
-        {isRtl ? "🌐 زبان سایت" : "🌐 Site Language"}
+        {localLang === "fa" ? "🌐 زبان سایت" : localLang === "ar" ? "🌐 لغة الموقع" : "🌐 Site Language"}
       </p>
 
       <div className="flex flex-col sm:flex-row items-center gap-3">
-
-        {/* Language */}
         <div className="flex items-center gap-1.5 rounded-xl p-1"
           style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <button
-            onClick={() => setLang("fa")}
-            className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
-            style={{
-              background: lang === "fa" ? "#2563EB" : "transparent",
-              color: lang === "fa" ? "#111" : "rgba(255,255,255,0.55)",
-            }}>
-            🇮🇷 فارسی
-          </button>
-          <button
-            onClick={() => setLang("en")}
-            className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
-            style={{
-              background: lang === "en" ? "#2563EB" : "transparent",
-              color: lang === "en" ? "#111" : "rgba(255,255,255,0.55)",
-            }}>
-            🇬🇧 English
-          </button>
+          {(["fa", "en", "ar"] as Lang[]).map(l => (
+            <button key={l}
+              onClick={() => setLocalLang(l)}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
+              style={{
+                background: localLang === l ? "#2563EB" : "transparent",
+                color: localLang === l ? "#111" : "rgba(255,255,255,0.55)",
+              }}>
+              {l === "fa" ? "🇮🇷 فارسی" : l === "ar" ? "🇦🇪 العربية" : "🇬🇧 English"}
+            </button>
+          ))}
         </div>
 
-        {/* Confirm */}
         <button
           onClick={apply}
           className="px-5 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
           style={{ background: "#2563EB", color: "#111" }}>
-          {isRtl ? "تأیید ✓" : "Confirm ✓"}
+          {localLang === "fa" ? "تأیید ✓" : localLang === "ar" ? "تأكيد ✓" : "Confirm ✓"}
         </button>
       </div>
 
-      {/* skip */}
       <button
         onClick={apply}
         className="absolute top-3 text-xs transition-colors hover:text-[#2563EB]"

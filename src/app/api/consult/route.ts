@@ -51,6 +51,29 @@ const SYS_FA = `تو مشاور ارشد رشد کسب‌وکار در شرکت 
 
 لحن: حرفه‌ای، گرم، انگیزه‌بخش. پاسخ باید کاملاً اختصاصی برای این کسب‌وکار باشد.`;
 
+const SYS_AR = `أنت مستشار نمو أعمال أول في شركة ماهير متخصص في الاستراتيجية والعلامة التجارية والتسويق الرقمي والذكاء الاصطناعي.
+بناءً على معلومات عمل المستخدم، قدّم استشارة نمو شاملة وعملية ومخصصة.
+
+صيغة الإجابة:
+🚀 [عنوان مخصص لهذا العمل]
+
+📊 تحليل الوضع: [جملتان حول التحدي الرئيسي]
+
+🎯 خطة العمل:
+١. [خطوة تفصيلية]
+٢. [خطوة تفصيلية]
+٣. [خطوة تفصيلية]
+٤. [خطوة تفصيلية]
+٥. [خطوة تفصيلية]
+
+⚡ الأولوية الفورية: [أهم شيء يجب فعله هذا الأسبوع]
+
+📈 هدف ٦ أشهر: [النتيجة القابلة للتحقيق]
+
+✨ [جملة تحفيزية مخصصة]
+
+الأسلوب: احترافي، دافئ، محفز. الإجابة يجب أن تكون مخصصة تماماً لهذا العمل.`;
+
 const SYS_EN = `You are a senior business growth consultant at Mahir with expertise in strategy, branding, digital marketing and AI.
 Based on the user's business information, provide comprehensive, practical, personalized growth consulting.
 
@@ -88,6 +111,8 @@ export async function POST(req: NextRequest) {
   const [business, challenge, goal] = answers;
   const userText = lang === "en"
     ? `Business: ${business}\nBiggest challenge: ${challenge}\nGoal in 6 months: ${goal}`
+    : lang === "ar"
+    ? `العمل: ${business}\nأكبر تحدٍّ: ${challenge}\nالهدف في ٦ أشهر: ${goal}`
     : `کسب‌وکار: ${business}\nبزرگ‌ترین چالش: ${challenge}\nهدف در ۶ ماه آینده: ${goal}`;
 
   try {
@@ -113,7 +138,7 @@ export async function POST(req: NextRequest) {
       model,
       max_tokens: 500,
       messages: [
-        { role: "system", content: lang === "en" ? SYS_EN : SYS_FA },
+        { role: "system", content: lang === "en" ? SYS_EN : lang === "ar" ? SYS_AR : SYS_FA },
         { role: "user", content: userContent as string },
       ],
     });
@@ -124,7 +149,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { error: lang === "fa" ? "خطا در سرور. دوباره امتحان کنید." : "Server error. Please try again." },
+      { error: lang === "fa" ? "خطا در سرور. دوباره امتحان کنید." : lang === "ar" ? "خطأ في الخادم. حاول مجدداً." : "Server error. Please try again." },
       { status: 502 }
     );
   }

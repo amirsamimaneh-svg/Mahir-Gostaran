@@ -3,10 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { projects } from "@/data/projects";
+import { useLang } from "@/context/LangContext";
 
 export default function PortfolioPage() {
-  const [lang, setLang] = useState<"fa" | "en">("fa");
-  const isRtl = lang === "fa";
+  const { lang, setLang, isRtl } = useLang();
 
   const categories = Array.from(
     new Set(projects.map(p => isRtl ? p.category_fa : p.category_en))
@@ -30,10 +30,10 @@ export default function PortfolioPage() {
             {isRtl ? "ماهیر" : "Mahir"}
           </Link>
           <div className="flex items-center gap-3">
-            <button onClick={() => setLang(l => l === "fa" ? "en" : "fa")}
+            <button onClick={() => setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa")}
               className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
               style={{ background: "rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.5)" }}>
-              {isRtl ? "EN" : "فا"}
+              {lang === "fa" ? "EN" : lang === "en" ? "عر" : "فا"}
             </button>
             <Link href="/consult"
               className="text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-105"

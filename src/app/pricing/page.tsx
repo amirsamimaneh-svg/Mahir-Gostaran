@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useLang } from "@/context/LangContext";
 
 const PLANS = {
   fa: [
@@ -113,9 +113,8 @@ const PLANS = {
 };
 
 export default function PricingPage() {
-  const [lang, setLang] = useState<"fa" | "en">("fa");
-  const isRtl = lang === "fa";
-  const plans = PLANS[lang];
+  const { lang, setLang, isRtl } = useLang();
+  const plans = (PLANS as Record<string, typeof PLANS.fa>)[lang] ?? PLANS.fa;
 
   return (
     <div dir={isRtl ? "rtl" : "ltr"} style={{ background: "var(--bg)", minHeight: "100vh", color: "var(--fg)" }}>
@@ -127,10 +126,10 @@ export default function PricingPage() {
             {isRtl ? "ماهیر" : "Mahir"}
           </Link>
           <div className="flex items-center gap-3">
-            <button onClick={() => setLang(l => l === "fa" ? "en" : "fa")}
+            <button onClick={() => setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa")}
               className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
               style={{ background: "var(--surface)", color: "var(--fg2)", border: "1px solid var(--border)" }}>
-              {isRtl ? "EN" : "فا"}
+              {lang === "fa" ? "EN" : lang === "en" ? "عر" : "فا"}
             </button>
             <Link href="/" className="text-sm font-medium px-4 py-2 rounded-xl c-fg2 hover:text-[#2563EB] transition-all"
               style={{ border: "1px solid var(--border)" }}>

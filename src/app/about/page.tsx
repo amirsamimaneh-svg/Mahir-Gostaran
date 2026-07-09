@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import MahirLogo from "@/components/MahirLogo";
+import { useLang } from "@/context/LangContext";
 
 const VALUES = [
   { icon: "🎯", fa: "نتیجه‌محور", en: "Results-Driven", descFa: "هر تصمیم را با یک سوال می‌سنجیم: آیا به رشد کسب‌وکار کمک می‌کند؟", descEn: "We measure every decision with one question: does it help the business grow?" },
@@ -20,8 +20,7 @@ const TIMELINE = [
 ];
 
 export default function AboutPage() {
-  const [lang, setLang] = useState<"fa" | "en">("fa");
-  const isRtl = lang === "fa";
+  const { lang, setLang, isRtl } = useLang();
 
   return (
     <div dir={isRtl ? "rtl" : "ltr"} style={{ background: "var(--bg)", minHeight: "100vh", color: "var(--fg)" }}>
@@ -34,10 +33,10 @@ export default function AboutPage() {
             <span className="text-lg font-extrabold text-[#5B9CF6] tracking-widest">{isRtl ? "ماهیر" : "Mahir"}</span>
           </Link>
           <div className="flex items-center gap-3">
-            <button onClick={() => setLang(l => l === "fa" ? "en" : "fa")}
+            <button onClick={() => setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa")}
               className="text-xs font-bold px-3 py-2 rounded-lg hover:text-[#5B9CF6] transition-all"
               style={{ background: "var(--surface)", color: "var(--fg2)", border: "1px solid var(--border)" }}>
-              {isRtl ? "EN" : "فا"}
+              {lang === "fa" ? "EN" : lang === "en" ? "عر" : "فا"}
             </button>
             <Link href="/" className="text-sm px-4 py-2 rounded-xl hover:text-[#5B9CF6] transition-all"
               style={{ color: "var(--fg2)", border: "1px solid var(--border)" }}>

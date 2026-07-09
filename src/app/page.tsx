@@ -7,7 +7,7 @@ import IdeaCard from "@/components/IdeaCard";
 import ScrollToTop from "@/components/ScrollToTop";
 import Marquee from "@/components/Marquee";
 import Counter from "@/components/Counter";
-import { LangProvider, useLang } from "@/context/LangContext";
+import { useLang } from "@/context/LangContext";
 
 const TEAM = {
   fa: [
@@ -85,6 +85,14 @@ const TEAM = {
       icon: "📊",
       tags: ["Management", "Tracking", "Team"],
     },
+  ],
+  ar: [
+    { role: "استراتيجي النمو",        desc: "تحليل السوق وتعريف مسار النمو وتصميم خارطة طريق الأعمال", icon: "🎯", tags: ["استراتيجية", "السوق", "نمو"] },
+    { role: "مصمم هوية العلامة",      desc: "إنشاء هوية بصرية متماسكة من الشعار إلى نظام الألوان",    icon: "✦",  tags: ["شعار", "UI/UX", "علامة تجارية"] },
+    { role: "متخصص التسويق الرقمي",   desc: "إدارة حملات مستهدفة على وسائل التواصل والإعلانات",       icon: "📱", tags: ["إنستاغرام", "SEO", "إعلانات"] },
+    { role: "مطور الذكاء الاصطناعي",  desc: "تطبيق أدوات AI للأتمتة وتخصيص تجربة العملاء",           icon: "🤖", tags: ["AI", "أتمتة", "تشات بوت"] },
+    { role: "متخصص المحتوى والسيو",   desc: "إنتاج محتوى متخصص وتحسين محركات البحث للنمو العضوي",    icon: "📝", tags: ["محتوى", "SEO", "كتابة"] },
+    { role: "مدير المشروع",           desc: "تنسيق الفريق وتتبع الأهداف وضمان التسليم في الوقت المحدد",icon: "📊", tags: ["إدارة", "تتبع", "فريق"] },
   ],
 };
 
@@ -167,6 +175,45 @@ const t = {
     footerR: "© 2025 Mahir. All rights reserved.",
     langBtn: "فا",
   },
+  ar: {
+    brand: "ماهير",
+    nav: [
+      { label: "الخدمات",  href: "#services" },
+      { label: "أعمالنا",  href: "#portfolio" },
+      { label: "عن ماهير", href: "#about" },
+      { label: "تواصل",    href: "#contact" },
+    ],
+    consultBtn: "استشارة مجانية",
+    badge: "شريكك الذكي لنمو الأعمال",
+    h1: "من الفكرة إلى",
+    h1b: "النمو الحقيقي",
+    sub: "ماهير بجانبك — من استراتيجية النمو وهوية العلامة التجارية إلى التسويق الرقمي وتطبيقات الذكاء الاصطناعي. نحلل عملك ونبني خارطة طريق حقيقية للنمو.",
+    cta1: "خدماتنا", cta2: "استشارة ذكية",
+    servTitle: "خدمات", servBrand: "ماهير",
+    servSub: "حلول شاملة لكل مرحلة من مراحل النمو",
+    services: [
+      { icon: "🎯", title: "استراتيجية النمو",      desc: "تحليل السوق، دراسة المنافسين، وتصميم خارطة طريق النمو." },
+      { icon: "✦",  title: "هوية العلامة التجارية", desc: "هوية بصرية ولفظية متماسكة تبقى في ذاكرة جمهورك." },
+      { icon: "📱", title: "التسويق الرقمي",         desc: "حملات مستهدفة على وسائل التواصل الاجتماعي وSEO والإعلانات." },
+      { icon: "🤖", title: "الذكاء الاصطناعي",       desc: "تطبيق أدوات الذكاء الاصطناعي لأتمتة العمليات وتخصيص تجربة العملاء." },
+    ],
+    stats: [
+      { target: 50,  suffix: "+",  label: "عمل ناجح" },
+      { target: 80,  suffix: "%+", label: "متوسط النمو" },
+      { target: 3,   suffix: "",   label: "سنوات خبرة" },
+      { target: 120, suffix: "+",  label: "مشروع مُسلَّم" },
+    ],
+    consultTitle: "استشارة", consultBrand: "مخصصة",
+    consultDesc: "أجب على ٣ أسئلة قصيرة واحصل على استراتيجية نمو مخصصة تماماً.",
+    consultCta: "ابدأ الاستشارة المجانية ←",
+    teamTitle: "فريق", teamBrand: "ماهير",
+    teamSub: "متخصصون يعملون كل يوم من أجل نمو عملك",
+    aboutTitle: "لماذا", aboutBrand: "ماهير؟",
+    aboutDesc: "يساعد فريق ماهير من خبراء الاستراتيجية والتصميم والتقنية الأعمال على التميز في السوق التنافسي بهوية قوية واستراتيجية ذكية.",
+    footerIg: "إنستاغرام", footerLi: "لينكدإن",
+    footerR: "© ٢٠٢٥ ماهير. جميع الحقوق محفوظة.",
+    langBtn: "فا",
+  },
 };
 
 function go(href: string) {
@@ -193,13 +240,20 @@ const NAV_FEATURES = {
     { icon: "ℹ️", label: "About", href: "/about" },
     { icon: "💬", label: "Contact", href: "#contact" },
   ],
+  ar: [
+    { icon: "🤖", label: "استشارة AI", href: "/consult" },
+    { icon: "📁", label: "أعمالنا",    href: "#portfolio" },
+    { icon: "📝", label: "المدونة",    href: "/blog" },
+    { icon: "💰", label: "الأسعار",    href: "/pricing" },
+    { icon: "ℹ️", label: "عن ماهير",  href: "/about" },
+    { icon: "💬", label: "تواصل",      href: "#contact" },
+  ],
 };
 
 function Navbar() {
-  const { lang, toggle } = useLang();
-  const tx = t[lang];
-  const isRtl = lang === "fa";
-  const features = NAV_FEATURES[lang];
+  const { lang, cycle, isRtl } = useLang();
+  const tx = t[lang as keyof typeof t] ?? t.fa;
+  const features = (NAV_FEATURES as Record<string, typeof NAV_FEATURES.fa>)[lang] ?? NAV_FEATURES.fa;
   const [user, setUser] = useState<{ name: string; unread: number } | null>(null);
   const [scrolled, setScrolled] = useState(false);
 
@@ -266,7 +320,7 @@ function Navbar() {
         {/* Right actions */}
         <div className="flex items-center gap-2">
 
-          <button onClick={toggle}
+          <button onClick={cycle}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#2563EB]"
             style={{ border: "1px solid var(--border)", color: "var(--fg2)" }}>
             {tx.langBtn}
@@ -301,7 +355,7 @@ function Navbar() {
 // ── Hero ──────────────────────────────────────────────────
 function Hero() {
   const { lang } = useLang();
-  const tx = t[lang];
+  const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center
       overflow-hidden pt-20 pb-16 text-center">
@@ -378,7 +432,7 @@ function Hero() {
 // ── Stats ─────────────────────────────────────────────────
 function Stats() {
   const { lang } = useLang();
-  const tx = t[lang];
+  const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
   return (
     <section className="py-20 px-6 w-full max-w-6xl mx-auto">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -396,7 +450,7 @@ function Stats() {
 // ── Services ──────────────────────────────────────────────
 function Services() {
   const { lang } = useLang();
-  const tx = t[lang];
+  const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
   return (
     <section id="services" className="py-24 px-6 w-full max-w-6xl mx-auto">
       <div className="text-center mb-16">
@@ -423,8 +477,7 @@ function Services() {
 
 // ── Portfolio ─────────────────────────────────────────────
 function Portfolio() {
-  const { lang } = useLang();
-  const isRtl = lang === "fa";
+  const { lang, isRtl } = useLang();
   const [hovered, setHovered] = useState<number | null>(null);
 
   const items = [
@@ -535,7 +588,7 @@ function Portfolio() {
 // ── Consult CTA ───────────────────────────────────────────
 function ConsultCTA() {
   const { lang } = useLang();
-  const tx = t[lang];
+  const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
   return (
     <section className="py-20 px-6 w-full max-w-5xl mx-auto">
       <div className="relative rounded-3xl overflow-hidden text-center p-12 md:p-20 card-glow">
@@ -566,11 +619,9 @@ function ConsultCTA() {
 
 // ── Team ──────────────────────────────────────────────────
 function Team() {
-  const { lang } = useLang();
-  const tx = t[lang];
-  const members = TEAM[lang];
-  const isRtl = lang === "fa";
-
+  const { lang, isRtl } = useLang();
+  const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
+  const members = (TEAM as Record<string, typeof TEAM.fa>)[lang] ?? TEAM.fa;
   const COLORS = ["#2563EB", "#a78bfa", "#34d399", "#60a5fa", "#f87171", "#fb923c"];
 
   return (
@@ -683,7 +734,7 @@ function Team() {
 // ── About ─────────────────────────────────────────────────
 function About() {
   const { lang } = useLang();
-  const tx = t[lang];
+  const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
   return (
     <section id="about" className="py-24 px-6 w-full max-w-4xl mx-auto">
       <div className="card-glow rounded-3xl p-12 md:p-16 text-center">
@@ -712,9 +763,8 @@ const TESTIMONIALS = {
 };
 
 function Testimonials() {
-  const { lang } = useLang();
-  const isRtl = lang === "fa";
-  const items = TESTIMONIALS[lang];
+  const { lang, isRtl } = useLang();
+  const items = (TESTIMONIALS as Record<string, typeof TESTIMONIALS.fa>)[lang] ?? TESTIMONIALS.fa;
   return (
     <section className="py-24 px-6 w-full max-w-6xl mx-auto">
       <div className="text-center mb-14">
@@ -748,8 +798,7 @@ function Testimonials() {
 
 // ── Contact Form ──────────────────────────────────────────
 function ContactForm() {
-  const { lang } = useLang();
-  const isRtl = lang === "fa";
+  const { lang, isRtl } = useLang();
   const [form, setForm] = useState({ name: "", phone: "", msg: "" });
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -826,7 +875,7 @@ function ContactForm() {
 // ── Footer ────────────────────────────────────────────────
 function Footer() {
   const { lang } = useLang();
-  const tx = t[lang];
+  const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
   return (
     <footer className="py-10 px-6 w-full max-w-6xl mx-auto"
       style={{ borderTop: "1px solid var(--border)" }}>
@@ -843,14 +892,7 @@ function Footer() {
   );
 }
 
-// ── Root ──────────────────────────────────────────────────
-function PageContent() {
-  const { setLang } = useLang();
-
-  function handlePrefs(prefs: { lang: "fa" | "en" }) {
-    setLang(prefs.lang);
-  }
-
+export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col items-center grid-bg" style={{ background: "var(--bg)" }}>
       <Navbar />
@@ -866,13 +908,5 @@ function PageContent() {
       <Footer />
       <ScrollToTop />
     </div>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <LangProvider>
-      <PageContent />
-    </LangProvider>
   );
 }

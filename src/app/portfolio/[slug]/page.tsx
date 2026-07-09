@@ -1,24 +1,17 @@
 "use client";
 
-import { use, useState, useEffect, Suspense } from "react";
+import { use, useState, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { projects } from "@/data/projects";
+import { useLang } from "@/context/LangContext";
 
 function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const searchParams = useSearchParams();
-  const initLang = (searchParams.get("lang") as "fa" | "en") ?? "fa";
-  const [lang, setLang] = useState<"fa" | "en">(initLang);
+  const { lang, setLang, isRtl } = useLang();
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   const project = projects.find(p => p.slug === slug);
-  const isRtl = lang === "fa";
-
-  useEffect(() => {
-    document.documentElement.dir = isRtl ? "rtl" : "ltr";
-  }, [isRtl]);
 
   if (!project) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: "#05050f", color: "#f0f0f5" }}>
@@ -44,10 +37,10 @@ function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
             {isRtl ? "ماهیر" : "Mahir"}
           </Link>
           <div className="flex items-center gap-3">
-            <button onClick={() => setLang(l => l === "fa" ? "en" : "fa")}
+            <button onClick={() => setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa")}
               className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
               style={{ background: "rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.5)" }}>
-              {isRtl ? "EN" : "فا"}
+              {lang === "fa" ? "EN" : lang === "en" ? "عر" : "فا"}
             </button>
             <Link href="/portfolio"
               className="text-sm font-medium px-4 py-2 rounded-xl transition-all hover:text-[#2563EB]"

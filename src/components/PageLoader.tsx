@@ -16,7 +16,7 @@ export default function PageLoader() {
     <div
       className="fixed inset-0 z-[200] flex flex-col items-center justify-center"
       style={{
-        background: "#030D0A",
+        background: "#03050C",
         animation: "loaderFade 0.5s ease 0.9s both",
       }}
     >
@@ -26,20 +26,20 @@ export default function PageLoader() {
           className="absolute w-20 h-20 rounded-full"
           style={{
             border: "2px solid transparent",
-            borderTopColor: "#00E5A0",
-            borderRightColor: "#00FFD1",
+            borderTopColor: "#4F6EFF",
+            borderRightColor: "#A78BFF",
             animation: "spin 0.8s linear infinite",
           }}
         />
         {/* logo */}
         <div
           className="w-12 h-12 rounded-2xl flex items-center justify-center font-extrabold text-xl"
-          style={{ background: "linear-gradient(135deg,#00E5A0,#00C990)", color: "#030D0A" }}
+          style={{ background: "linear-gradient(135deg,#4F6EFF,#3D5AE8)", color: "#03050C" }}
         >
           M
         </div>
       </div>
-      <p className="text-sm font-bold tracking-widest" style={{ color: "#00E5A0" }}>
+      <p className="text-sm font-bold tracking-widest" style={{ color: "#4F6EFF" }}>
         ماهیر
       </p>
       <style>{`

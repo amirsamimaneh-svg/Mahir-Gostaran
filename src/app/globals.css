@@ -7,41 +7,41 @@
 }
 
 :root {
-  --bg: #030D0A;
-  --bg2: #061410;
-  --surface: #0A1F18;
-  --surface2: #0D2920;
-  --fg: #E8F5F0;
-  --fg2: #7FB8A8;
-  --fg3: #3D7060;
-  --card: rgba(10,31,24,0.85);
-  --border: #103D2E;
-  --border2: #165240;
-  --nav-bg: rgba(3,13,10,0.92);
-  --nav-border: rgba(16,61,46,0.9);
+  --bg: #03050C;
+  --bg2: #060A16;
+  --surface: #090F20;
+  --surface2: #0E1630;
+  --fg: #EEF0FF;
+  --fg2: #8892C8;
+  --fg3: #454D7A;
+  --card: rgba(9,15,32,0.9);
+  --border: #1A2050;
+  --border2: #232B6A;
+  --nav-bg: rgba(3,5,12,0.94);
+  --nav-border: rgba(26,32,80,0.95);
   /* Brand */
-  --brand: #00E5A0;
-  --brand-light: #00FFD1;
-  --brand-glow: rgba(0,229,160,0.28);
+  --brand: #4F6EFF;
+  --brand-light: #7B93FF;
+  --brand-glow: rgba(79,110,255,0.32);
   /* Accent */
-  --accent: #00FFD1;
-  --accent-dim: rgba(0,255,209,0.12);
-  --accent-glow: rgba(0,255,209,0.25);
+  --accent: #A78BFF;
+  --accent-dim: rgba(167,139,255,0.12);
+  --accent-glow: rgba(167,139,255,0.28);
 }
 
 body.light {
-  --bg: #F0FAF6;
-  --bg2: #E4F5EE;
+  --bg: #F2F4FF;
+  --bg2: #E8ECFF;
   --surface: #FFFFFF;
-  --surface2: #F2FBF7;
-  --fg: #0A1F18;
-  --fg2: rgba(10,31,24,0.6);
-  --fg3: rgba(10,31,24,0.38);
-  --card: rgba(255,255,255,0.9);
-  --border: rgba(0,229,160,0.2);
-  --border2: rgba(0,229,160,0.35);
-  --nav-bg: rgba(240,250,246,0.92);
-  --nav-border: rgba(0,229,160,0.15);
+  --surface2: #F5F7FF;
+  --fg: #080C2A;
+  --fg2: rgba(8,12,42,0.6);
+  --fg3: rgba(8,12,42,0.38);
+  --card: rgba(255,255,255,0.92);
+  --border: rgba(79,110,255,0.15);
+  --border2: rgba(79,110,255,0.28);
+  --nav-bg: rgba(242,244,255,0.94);
+  --nav-border: rgba(79,110,255,0.12);
 }
 
 @theme inline {
@@ -60,7 +60,7 @@ body {
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,229,160,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(79,110,255,0.45); border-radius: 3px; }
 
 /* ── Keyframes ── */
 @keyframes fadeUp {
@@ -109,7 +109,7 @@ body {
 .d7{animation-delay:.7s} .d8{animation-delay:.8s} .d9{animation-delay:.9s}
 
 .text-shimmer {
-  background: linear-gradient(90deg,#00E5A0,#00FFD1,#7FFFD4,#00E5A0);
+  background: linear-gradient(90deg,#4F6EFF,#A78BFF,#7B93FF,#4F6EFF);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -119,8 +119,8 @@ body {
 
 .grid-bg {
   background-image:
-    linear-gradient(rgba(0,229,160,.05) 1px, transparent 1px),
-    linear-gradient(90deg,rgba(0,229,160,.05) 1px, transparent 1px);
+    linear-gradient(rgba(79,110,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(79,110,255,.05) 1px, transparent 1px);
   background-size: 60px 60px;
   animation: gridMove 10s linear infinite;
 }
@@ -137,8 +137,8 @@ body.light .grid-bg {
 }
 .card-glow:hover {
   transform: translateY(-5px);
-  border-color: rgba(0,229,160,.5);
-  box-shadow: 0 0 32px rgba(0,229,160,.18);
+  border-color: rgba(79,110,255,.5);
+  box-shadow: 0 0 32px rgba(79,110,255,.2);
 }
 
 /* CSS variable helpers */

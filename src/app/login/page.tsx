@@ -58,18 +58,18 @@ export default function LoginPage() {
       <div className="relative w-full max-w-sm text-center">
         <div className="mb-6">
           <div className="w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl mb-4"
-            style={{ background: "linear-gradient(135deg,rgba(0,229,160,0.2),rgba(0,229,160,0.05))", border: "2px solid rgba(0,229,160,0.3)", boxShadow: "0 0 40px rgba(0,229,160,0.15)" }}>
+            style={{ background: "linear-gradient(135deg,rgba(79,110,255,0.2),rgba(79,110,255,0.05))", border: "2px solid rgba(79,110,255,0.3)", boxShadow: "0 0 40px rgba(79,110,255,0.15)" }}>
             🎉
           </div>
-          <h2 className="text-2xl font-extrabold text-[#00E5A0] mb-1">خوش اومدی!</h2>
+          <h2 className="text-2xl font-extrabold text-[#4F6EFF] mb-1">خوش اومدی!</h2>
           <p className="text-sm" style={{ color: "rgba(240,240,245,0.45)" }}>حساب شما با موفقیت ساخته شد</p>
         </div>
 
         <div className="rounded-2xl p-6 mb-4"
-          style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,229,160,0.15)", backdropFilter: "blur(20px)" }}>
-          <div className="flex items-center gap-3 mb-4 p-3 rounded-xl" style={{ background: "rgba(0,229,160,0.06)" }}>
+          style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(79,110,255,0.15)", backdropFilter: "blur(20px)" }}>
+          <div className="flex items-center gap-3 mb-4 p-3 rounded-xl" style={{ background: "rgba(79,110,255,0.06)" }}>
             <div className="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-lg"
-              style={{ background: "linear-gradient(135deg,#00E5A0,#00C990)", color: "#111" }}>
+              style={{ background: "linear-gradient(135deg,#4F6EFF,#3D5AE8)", color: "#111" }}>
               {userName.charAt(0)}
             </div>
             <div className="text-right">
@@ -79,7 +79,7 @@ export default function LoginPage() {
           </div>
           <button onClick={() => router.push("/consult")}
             className="w-full py-3.5 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95"
-            style={{ background: "linear-gradient(135deg,#00E5A0,#00C990)", color: "#111", boxShadow: "0 0 30px rgba(0,229,160,0.3)" }}>
+            style={{ background: "linear-gradient(135deg,#4F6EFF,#3D5AE8)", color: "#111", boxShadow: "0 0 30px rgba(79,110,255,0.3)" }}>
             شروع مشاوره رایگان ✦
           </button>
         </div>
@@ -104,29 +104,29 @@ export default function LoginPage() {
               style={{
                 width: s, height: s,
                 top: -s / 2, left: -s / 2,
-                border: `1px solid rgba(0,229,160,${0.07 - i * 0.02})`,
+                border: `1px solid rgba(79,110,255,${0.07 - i * 0.02})`,
                 animation: `spin ${18 + i * 6}s linear infinite`,
               }} />
           ))}
           <div className="w-24 h-24 rounded-full flex items-center justify-center font-extrabold text-3xl"
-            style={{ background: "linear-gradient(135deg,#00E5A0,#00C990)", color: "#111", boxShadow: "0 0 60px rgba(0,229,160,0.25)" }}>
+            style={{ background: "linear-gradient(135deg,#4F6EFF,#3D5AE8)", color: "#111", boxShadow: "0 0 60px rgba(79,110,255,0.25)" }}>
             M
           </div>
         </div>
 
-        <Link href="/" className="text-2xl font-extrabold text-[#00E5A0] relative z-10">ماهیر</Link>
+        <Link href="/" className="text-2xl font-extrabold text-[#4F6EFF] relative z-10">ماهیر</Link>
 
         <div className="relative z-10">
-          <p className="text-xs font-bold tracking-widest mb-3" style={{ color: "rgba(0,229,160,0.5)" }}>امکانات</p>
+          <p className="text-xs font-bold tracking-widest mb-3" style={{ color: "rgba(79,110,255,0.5)" }}>امکانات</p>
           <div className="flex flex-col gap-3">
             {FEATURES.map((f, i) => (
               <div key={i} className="flex items-center gap-3 transition-all duration-500"
                 style={{ opacity: tick % FEATURES.length === i ? 1 : 0.35, transform: `translateX(${tick % FEATURES.length === i ? "0" : "6px"})` }}>
                 <span className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
-                  style={{ background: tick % FEATURES.length === i ? "rgba(0,229,160,0.15)" : "rgba(255,255,255,0.04)", border: "1px solid rgba(0,229,160,0.15)" }}>
+                  style={{ background: tick % FEATURES.length === i ? "rgba(79,110,255,0.15)" : "rgba(255,255,255,0.04)", border: "1px solid rgba(79,110,255,0.15)" }}>
                   {f.icon}
                 </span>
-                <span className="text-sm font-medium" style={{ color: tick % FEATURES.length === i ? "#00E5A0" : "rgba(240,240,245,0.4)" }}>{f.text}</span>
+                <span className="text-sm font-medium" style={{ color: tick % FEATURES.length === i ? "#4F6EFF" : "rgba(240,240,245,0.4)" }}>{f.text}</span>
               </div>
             ))}
           </div>
@@ -137,7 +137,7 @@ export default function LoginPage() {
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 relative z-10">
 
         {/* Mobile logo */}
-        <Link href="/" className="lg:hidden text-2xl font-extrabold text-[#00E5A0] mb-8">ماهیر</Link>
+        <Link href="/" className="lg:hidden text-2xl font-extrabold text-[#4F6EFF] mb-8">ماهیر</Link>
 
         <div className="w-full max-w-[380px]">
 
@@ -160,9 +160,9 @@ export default function LoginPage() {
               <button key={m} onClick={() => { setMode(m); setError(""); }}
                 className="flex-1 py-2.5 text-sm font-bold rounded-lg transition-all"
                 style={{
-                  background: mode === m ? "#00E5A0" : "transparent",
+                  background: mode === m ? "#4F6EFF" : "transparent",
                   color: mode === m ? "#111" : "rgba(240,240,245,0.4)",
-                  boxShadow: mode === m ? "0 2px 12px rgba(0,229,160,0.25)" : "none",
+                  boxShadow: mode === m ? "0 2px 12px rgba(79,110,255,0.25)" : "none",
                 }}>
                 {m === "login" ? "ورود" : "ثبت‌نام"}
               </button>
@@ -222,7 +222,7 @@ export default function LoginPage() {
 
             <button onClick={submit} disabled={loading}
               className="w-full py-4 rounded-xl font-extrabold text-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 mt-1 relative overflow-hidden"
-              style={{ background: "linear-gradient(135deg,#00E5A0,#00C990)", color: "#111", boxShadow: "0 0 30px rgba(0,229,160,0.25)" }}>
+              style={{ background: "linear-gradient(135deg,#4F6EFF,#3D5AE8)", color: "#111", boxShadow: "0 0 30px rgba(79,110,255,0.25)" }}>
               {loading
                 ? <span className="flex items-center justify-center gap-2">
                     <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
@@ -238,8 +238,8 @@ export default function LoginPage() {
 
           <p className="text-xs text-center mt-6" style={{ color: "rgba(240,240,245,0.25)" }}>
             {mode === "login"
-              ? <>حساب نداری؟ <button onClick={() => setMode("register")} className="text-[#00E5A0] font-bold hover:underline">ثبت‌نام کن</button></>
-              : <>حساب داری؟ <button onClick={() => setMode("login")} className="text-[#00E5A0] font-bold hover:underline">وارد شو</button></>
+              ? <>حساب نداری؟ <button onClick={() => setMode("register")} className="text-[#4F6EFF] font-bold hover:underline">ثبت‌نام کن</button></>
+              : <>حساب داری؟ <button onClick={() => setMode("login")} className="text-[#4F6EFF] font-bold hover:underline">وارد شو</button></>
             }
           </p>
         </div>
@@ -269,9 +269,9 @@ function Glow() {
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden">
       <div className="absolute -top-60 -right-60 w-[500px] h-[500px] rounded-full blur-[140px]"
-        style={{ background: "rgba(0,229,160,0.06)" }} />
+        style={{ background: "rgba(79,110,255,0.06)" }} />
       <div className="absolute -bottom-60 -left-60 w-[500px] h-[500px] rounded-full blur-[140px]"
-        style={{ background: "rgba(0,229,160,0.05)" }} />
+        style={{ background: "rgba(79,110,255,0.05)" }} />
     </div>
   );
 }

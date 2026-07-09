@@ -236,11 +236,11 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
         {/* Logo */}
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-sm"
-            style={{ background: "linear-gradient(135deg,#00E5A0,#00C990)", color: "#111" }}>
+            style={{ background: "linear-gradient(135deg,#4F6EFF,#3D5AE8)", color: "#111" }}>
             M
           </div>
           <div>
-            <span className="text-lg font-extrabold text-[#00E5A0] tracking-widest leading-none block">{tx.brand}</span>
+            <span className="text-lg font-extrabold text-[#4F6EFF] tracking-widest leading-none block">{tx.brand}</span>
             <span className="text-xs leading-none" style={{ color: "var(--fg3)" }}>
               {isRtl ? "مشاور رشد کسب‌وکار" : "Business Growth Partner"}
             </span>
@@ -254,15 +254,15 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
               {item.href.startsWith("#") ? (
                 <a href={item.href}
                   onClick={e => { e.preventDefault(); go(item.href); }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#00E5A0] group"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#4F6EFF] group"
                   style={{ color: "var(--fg2)" }}>
                   <span className="text-sm">{item.icon}</span>
                   {item.label}
-                  <span className="block h-px w-0 group-hover:w-full transition-all duration-300 mt-0.5" style={{ background: "#00E5A0" }} />
+                  <span className="block h-px w-0 group-hover:w-full transition-all duration-300 mt-0.5" style={{ background: "#4F6EFF" }} />
                 </a>
               ) : (
                 <Link href={item.href}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#00E5A0]"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#4F6EFF]"
                   style={{ color: "var(--fg2)" }}>
                   <span className="text-sm">{item.icon}</span>
                   {item.label}
@@ -276,7 +276,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
         <div className="flex items-center gap-2">
           <ThemeToggle dark={dark} setDark={setDark} />
           <button onClick={toggle}
-            className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#00E5A0]"
+            className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#4F6EFF]"
             style={{ border: "1px solid var(--border)", color: "var(--fg2)" }}>
             {tx.langBtn}
           </button>
@@ -284,9 +284,9 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           {user ? (
             <Link href="/profile"
               className="relative flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl transition-all hover:scale-105"
-              style={{ background: "rgba(0,229,160,0.1)", border: "1px solid rgba(0,229,160,0.3)", color: "#00E5A0" }}>
+              style={{ background: "rgba(79,110,255,0.1)", border: "1px solid rgba(79,110,255,0.3)", color: "#4F6EFF" }}>
               <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold"
-                style={{ background: "rgba(0,229,160,0.25)" }}>{user.name.charAt(0)}</span>
+                style={{ background: "rgba(79,110,255,0.25)" }}>{user.name.charAt(0)}</span>
               <span className="hidden sm:block">{user.name}</span>
               {user.unread > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold"
@@ -296,7 +296,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           ) : (
             <Link href="/login"
               className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl transition-all hover:scale-105"
-              style={{ background: "#00E5A0", color: "#111", boxShadow: "0 0 20px rgba(0,229,160,0.3)" }}>
+              style={{ background: "#4F6EFF", color: "#111", boxShadow: "0 0 20px rgba(79,110,255,0.3)" }}>
               <span>✦</span>
               {isRtl ? "ورود / ثبت‌نام" : "Login / Sign up"}
             </Link>
@@ -317,9 +317,9 @@ function Hero() {
       {/* blobs */}
       <div className="pointer-events-none absolute inset-0">
         <div className="anim-blob d1 absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full blur-[160px]"
-          style={{ background: "rgba(0,229,160,0.08)" }} />
+          style={{ background: "rgba(79,110,255,0.08)" }} />
         <div className="anim-blob d5 absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full blur-[160px]"
-          style={{ background: "rgba(0,229,160,0.08)" }} />
+          style={{ background: "rgba(79,110,255,0.08)" }} />
         <div className="anim-blob d3 absolute top-1/2 left-1/3 w-[500px] h-[500px] rounded-full blur-[140px]"
           style={{ background: "rgba(139,92,246,0.06)" }} />
       </div>
@@ -329,7 +329,7 @@ function Hero() {
           <span key={i} className="absolute rounded-full anim-blob"
             style={{ width: `${2+(i%4)}px`, height: `${2+(i%4)}px`,
               top: `${5+(i*4.7)%88}%`, left: `${3+(i*5.1)%94}%`,
-              background: "rgba(0,229,160,0.2)",
+              background: "rgba(79,110,255,0.2)",
               animationDelay: `${i*0.4}s`, animationDuration: `${5+(i%5)*1.5}s` }} />
         ))}
       </div>
@@ -337,9 +337,9 @@ function Hero() {
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col items-center">
         {/* badge */}
         <div className="anim-fade-up d1 mb-4 inline-flex items-center gap-2 rounded-full px-5 py-2"
-          style={{ background: "rgba(0,229,160,0.08)", border: "1px solid rgba(0,229,160,0.25)" }}>
-          <span className="w-2 h-2 rounded-full bg-[#00E5A0] animate-pulse" />
-          <span className="text-xs font-medium text-[#00FFD1] tracking-widest">{tx.badge}</span>
+          style={{ background: "rgba(79,110,255,0.08)", border: "1px solid rgba(79,110,255,0.25)" }}>
+          <span className="w-2 h-2 rounded-full bg-[#4F6EFF] animate-pulse" />
+          <span className="text-xs font-medium text-[#A78BFF] tracking-widest">{tx.badge}</span>
         </div>
 
         {/* headline */}
@@ -355,12 +355,12 @@ function Hero() {
         <div className="anim-fade-up d4 flex flex-col sm:flex-row gap-3 justify-center mb-8">
           <a href="#services" onClick={e => { e.preventDefault(); go("#services"); }}
             className="px-7 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
-            style={{ background: "#00E5A0", color: "#111", boxShadow: "0 0 40px rgba(0,229,160,0.3)" }}>
+            style={{ background: "#4F6EFF", color: "#111", boxShadow: "0 0 40px rgba(79,110,255,0.3)" }}>
             {tx.cta1}
           </a>
           <Link href="/consult"
             className="px-7 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105 bg-card"
-            style={{ color: "#00E5A0", border: "1px solid rgba(0,229,160,0.3)" }}>
+            style={{ color: "#4F6EFF", border: "1px solid rgba(79,110,255,0.3)" }}>
             {tx.cta2}
           </Link>
         </div>
@@ -451,7 +451,7 @@ function Portfolio() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
         <div>
-          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(0,229,160,0.55)" }}>
+          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(79,110,255,0.55)" }}>
             {isRtl ? "✦ PORTFOLIO" : "✦ PORTFOLIO"}
           </p>
           <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
@@ -461,7 +461,7 @@ function Portfolio() {
         </div>
         <Link href="/portfolio"
           className="group self-start md:self-end inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all hover:gap-4"
-          style={{ border: "1px solid rgba(0,229,160,0.3)", color: "#00E5A0" }}>
+          style={{ border: "1px solid rgba(79,110,255,0.3)", color: "#4F6EFF" }}>
           {isRtl ? "همه پروژه‌ها" : "All Projects"}
           <span className="transition-transform group-hover:translate-x-1">{isRtl ? "←" : "→"}</span>
         </Link>
@@ -549,12 +549,12 @@ function ConsultCTA() {
     <section className="py-20 px-6 w-full max-w-5xl mx-auto">
       <div className="relative rounded-3xl overflow-hidden text-center p-12 md:p-20 card-glow">
         <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-[100px]"
-          style={{ background: "rgba(0,229,160,0.1)" }} />
+          style={{ background: "rgba(79,110,255,0.1)" }} />
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6"
-            style={{ background: "rgba(0,229,160,0.1)", border: "1px solid rgba(0,229,160,0.25)" }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A0] animate-pulse" />
-            <span className="text-xs text-[#00FFD1] tracking-widest">AI Powered</span>
+            style={{ background: "rgba(79,110,255,0.1)", border: "1px solid rgba(79,110,255,0.25)" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#4F6EFF] animate-pulse" />
+            <span className="text-xs text-[#A78BFF] tracking-widest">AI Powered</span>
           </div>
           <h2 className="font-extrabold mb-4" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
             <span className="c-fg">{tx.consultTitle} </span>
@@ -564,7 +564,7 @@ function ConsultCTA() {
           <Link href="/consult"
             className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-sm
               transition-all hover:scale-105"
-            style={{ background: "#00E5A0", color: "#111", boxShadow: "0 0 50px rgba(0,229,160,0.35)" }}>
+            style={{ background: "#4F6EFF", color: "#111", boxShadow: "0 0 50px rgba(79,110,255,0.35)" }}>
             {tx.consultCta}
           </Link>
         </div>
@@ -580,7 +580,7 @@ function Team() {
   const members = TEAM[lang];
   const isRtl = lang === "fa";
 
-  const COLORS = ["#00E5A0", "#a78bfa", "#34d399", "#60a5fa", "#f87171", "#fb923c"];
+  const COLORS = ["#4F6EFF", "#a78bfa", "#34d399", "#60a5fa", "#f87171", "#fb923c"];
 
   return (
     <section id="team" className="py-24 px-6 w-full max-w-6xl mx-auto">
@@ -588,7 +588,7 @@ function Team() {
       {/* Header */}
       <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(0,229,160,0.55)" }}>✦ TEAM</p>
+          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(79,110,255,0.55)" }}>✦ TEAM</p>
           <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
             {isRtl ? "متخصصان " : "The "}
             <span className="text-shimmer">{isRtl ? "تیم ما" : "Specialists"}</span>
@@ -650,7 +650,7 @@ function Team() {
                     {m.icon}
                   </div>
                   <div>
-                    <h3 className="c-fg font-extrabold text-base leading-tight transition-colors duration-300 group-hover:text-[#00E5A0]">
+                    <h3 className="c-fg font-extrabold text-base leading-tight transition-colors duration-300 group-hover:text-[#4F6EFF]">
                       {m.role}
                     </h3>
                     <div className="flex gap-1 mt-1.5 flex-wrap">
@@ -727,7 +727,7 @@ function Testimonials() {
   return (
     <section className="py-24 px-6 w-full max-w-6xl mx-auto">
       <div className="text-center mb-14">
-        <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(0,229,160,0.6)" }}>✦ TESTIMONIALS</p>
+        <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(79,110,255,0.6)" }}>✦ TESTIMONIALS</p>
         <h2 className="font-extrabold" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
           <span className="c-fg">{isRtl ? "مشتریان " : "What Clients "}</span>
           <span className="text-shimmer">{isRtl ? "می‌گویند" : "Say"}</span>
@@ -737,12 +737,12 @@ function Testimonials() {
         {items.map((t, i) => (
           <div key={i} className="card-glow rounded-2xl p-7 flex flex-col gap-4">
             <div className="flex gap-1 mb-1">
-              {[...Array(5)].map((_, s) => <span key={s} className="text-[#00E5A0] text-sm">★</span>)}
+              {[...Array(5)].map((_, s) => <span key={s} className="text-[#4F6EFF] text-sm">★</span>)}
             </div>
             <p className="text-sm leading-relaxed c-fg2 flex-1">"{t.text}"</p>
             <div className="flex items-center gap-3 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
               <div className="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm flex-shrink-0"
-                style={{ background: "rgba(0,229,160,0.15)", color: "#00E5A0" }}>{t.avatar}</div>
+                style={{ background: "rgba(79,110,255,0.15)", color: "#4F6EFF" }}>{t.avatar}</div>
               <div>
                 <p className="font-bold text-sm c-fg">{t.name}</p>
                 <p className="text-xs c-fg3">{t.role}</p>
@@ -774,7 +774,7 @@ function ContactForm() {
   return (
     <section id="contact" className="py-24 px-6 w-full max-w-3xl mx-auto">
       <div className="text-center mb-12">
-        <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(0,229,160,0.6)" }}>✦ CONTACT</p>
+        <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(79,110,255,0.6)" }}>✦ CONTACT</p>
         <h2 className="font-extrabold" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
           <span className="c-fg">{isRtl ? "تماس " : "Get in "}</span>
           <span className="text-shimmer">{isRtl ? "با ما" : "Touch"}</span>
@@ -785,7 +785,7 @@ function ContactForm() {
       {sent ? (
         <div className="text-center rounded-2xl p-10 card-glow">
           <div className="text-5xl mb-4">🎉</div>
-          <h3 className="font-extrabold text-xl text-[#00E5A0] mb-2">{isRtl ? "پیام دریافت شد!" : "Message Received!"}</h3>
+          <h3 className="font-extrabold text-xl text-[#4F6EFF] mb-2">{isRtl ? "پیام دریافت شد!" : "Message Received!"}</h3>
           <p className="text-sm c-fg2">{isRtl ? "به زودی با شما تماس می‌گیریم." : "We'll contact you shortly."}</p>
         </div>
       ) : (
@@ -816,7 +816,7 @@ function ContactForm() {
           </div>
           <button onClick={submit} disabled={loading}
             className="w-full py-4 rounded-xl font-extrabold text-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
-            style={{ background: "#00E5A0", color: "#030D0A", boxShadow: "0 0 30px rgba(0,229,160,0.25)" }}>
+            style={{ background: "#4F6EFF", color: "#03050C", boxShadow: "0 0 30px rgba(79,110,255,0.25)" }}>
             {loading ? "در حال ارسال..." : isRtl ? "ارسال پیام ←" : "Send Message →"}
           </button>
         </div>
@@ -833,11 +833,11 @@ function Footer() {
     <footer className="py-10 px-6 w-full max-w-6xl mx-auto"
       style={{ borderTop: "1px solid var(--border)" }}>
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm c-fg3">
-        <span className="font-extrabold text-[#00E5A0] text-lg tracking-widest">{tx.brand}</span>
+        <span className="font-extrabold text-[#4F6EFF] text-lg tracking-widest">{tx.brand}</span>
         <div className="flex gap-6">
-          <a href="mailto:hello@mahir.ir" className="hover:text-[#00E5A0] transition-colors">hello@mahir.ir</a>
-          <a href="#" className="hover:text-[#00E5A0] transition-colors">{tx.footerIg}</a>
-          <a href="#" className="hover:text-[#00E5A0] transition-colors">{tx.footerLi}</a>
+          <a href="mailto:hello@mahir.ir" className="hover:text-[#4F6EFF] transition-colors">hello@mahir.ir</a>
+          <a href="#" className="hover:text-[#4F6EFF] transition-colors">{tx.footerIg}</a>
+          <a href="#" className="hover:text-[#4F6EFF] transition-colors">{tx.footerLi}</a>
         </div>
         <span>{tx.footerR}</span>
       </div>

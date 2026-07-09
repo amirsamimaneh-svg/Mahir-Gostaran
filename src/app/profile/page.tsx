@@ -8,19 +8,6 @@ type UserInfo = { phone: string; name: string; createdAt: string; consultCount: 
 type Message = { id: string; from: "admin" | "user"; text: string; createdAt: string };
 type Tab = "dashboard" | "chat" | "consults" | "settings";
 
-const QUICK_ACTIONS = [
-  { icon: "🤖", label: "مشاوره جدید", href: "/consult", color: "#00E5A0" },
-  { icon: "📁", label: "نمونه‌کارها", href: "/portfolio", color: "#00C2FF" },
-  { icon: "💰", label: "قیمت‌گذاری", href: "/pricing", color: "#A78BFA" },
-  { icon: "🏠", label: "صفحه اصلی", href: "/", color: "#F59E0B" },
-];
-
-const ACTIVITY = [
-  { icon: "🤖", text: "مشاوره AI دریافت کردی", time: "۲ ساعت پیش", color: "#00E5A0" },
-  { icon: "✅", text: "حساب کاربری ساخته شد", time: "دیروز", color: "#A78BFA" },
-  { icon: "👋", text: "به ماهیر خوش اومدی!", time: "دیروز", color: "#00C2FF" },
-];
-
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<UserInfo | null>(null);
@@ -28,11 +15,11 @@ export default function ProfilePage() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [tab, setTab] = useState<Tab>("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mobileNav, setMobileNav] = useState(false);
   const [editName, setEditName] = useState("");
   const [editPass, setEditPass] = useState("");
-  const [editMsg, setEditMsg] = useState("");
-  const [savingSettings, setSavingSettings] = useState(false);
+  const [saveMsg, setSaveMsg] = useState("");
+  const [saving, setSaving] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,13 +46,8 @@ export default function ProfilePage() {
   async function sendMsg() {
     if (!input.trim() || sending) return;
     setSending(true);
-    await fetch("/api/messages", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: input.trim() }),
-    });
-    setInput("");
-    setSending(false);
-    loadMessages();
+    await fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: input.trim() }) });
+    setInput(""); setSending(false); loadMessages();
   }
 
   async function logout() {
@@ -75,443 +57,470 @@ export default function ProfilePage() {
 
   async function saveSettings() {
     if (!editName.trim()) return;
-    setSavingSettings(true);
-    await new Promise(r => setTimeout(r, 700));
-    setSavingSettings(false);
-    setEditMsg("تغییرات ذخیره شد ✓");
-    setTimeout(() => setEditMsg(""), 3000);
+    setSaving(true);
+    await new Promise(r => setTimeout(r, 800));
+    setSaving(false); setSaveMsg("تغییرات با موفقیت ذخیره شد ✓");
+    setTimeout(() => setSaveMsg(""), 3000);
   }
 
-  function formatDate(iso: string) {
-    return new Date(iso).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" });
-  }
-  function formatTime(iso: string) {
-    return new Date(iso).toLocaleTimeString("fa-IR", { hour: "2-digit", minute: "2-digit" });
-  }
-  function daysSince(iso: string) {
-    return Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
-  }
+  const fmt = (iso: string) => new Date(iso).toLocaleDateString("fa-IR", { year: "numeric", month: "long", day: "numeric" });
+  const fmtT = (iso: string) => new Date(iso).toLocaleTimeString("fa-IR", { hour: "2-digit", minute: "2-digit" });
+  const days = (iso: string) => Math.max(1, Math.floor((Date.now() - new Date(iso).getTime()) / 86400000));
+  const score = (c: number) => Math.min(c * 12 + 40, 100);
 
   if (!user) return (
-    <div style={{ background: "var(--bg)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 rounded-full border-2 border-[#00E5A0] border-t-transparent animate-spin" />
-        <p className="text-sm" style={{ color: "var(--fg3)" }}>در حال بارگذاری...</p>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg)" }}>
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-12 h-12 rounded-full border-[3px] border-[#4F6EFF] border-t-transparent animate-spin" />
+        <p className="text-sm c-fg3">در حال بارگذاری...</p>
       </div>
     </div>
   );
 
-  const NAV_ITEMS: { key: Tab; icon: string; label: string; badge?: number }[] = [
-    { key: "dashboard", icon: "📊", label: "داشبورد" },
-    { key: "chat",      icon: "💬", label: "پیام‌ها", badge: user.unread || 0 },
-    { key: "consults",  icon: "🤖", label: "مشاوره‌ها" },
-    { key: "settings",  icon: "⚙️", label: "تنظیمات" },
+  const NAV: { key: Tab; icon: string; label: string; badge?: number }[] = [
+    { key: "dashboard", icon: "⊞", label: "داشبورد" },
+    { key: "chat",      icon: "✉", label: "پیام‌ها", badge: user.unread || 0 },
+    { key: "consults",  icon: "◈", label: "مشاوره‌ها" },
+    { key: "settings",  icon: "⚙", label: "تنظیمات" },
   ];
 
   return (
     <div dir="rtl" className="min-h-screen flex" style={{ background: "var(--bg)", color: "var(--fg)" }}>
 
-      {/* ── Sidebar ── */}
-      <aside
-        className={`fixed inset-y-0 right-0 z-50 flex flex-col transition-transform duration-300 md:translate-x-0 md:static md:flex`}
-        style={{
-          width: "260px",
-          background: "var(--surface)",
-          borderLeft: "1px solid var(--border)",
-          transform: sidebarOpen ? "translateX(0)" : undefined,
-        }}>
+      {/* ═══════════ SIDEBAR ═══════════ */}
+      <aside className={`
+        fixed inset-y-0 right-0 z-50 flex flex-col
+        transition-transform duration-300
+        md:static md:translate-x-0
+        ${mobileNav ? "translate-x-0" : "translate-x-full"}
+      `} style={{ width: 256, background: "var(--surface)", borderLeft: "1px solid var(--border)", flexShrink: 0 }}>
 
-        {/* Brand */}
-        <div className="flex items-center gap-3 px-6 py-5" style={{ borderBottom: "1px solid var(--border)" }}>
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-sm flex-shrink-0"
-            style={{ background: "linear-gradient(135deg,#00E5A0,#00C990)", color: "#030D0A" }}>M</div>
-          <div>
-            <p className="font-extrabold text-sm text-[#00E5A0]">ماهیر</p>
-            <p className="text-xs" style={{ color: "var(--fg3)" }}>پنل کاربری</p>
-          </div>
-          <button className="md:hidden mr-auto text-lg" onClick={() => setSidebarOpen(false)}>✕</button>
+        {/* Logo row */}
+        <div className="flex items-center gap-3 px-5 h-16 flex-shrink-0" style={{ borderBottom: "1px solid var(--border)" }}>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center font-extrabold text-sm"
+            style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff" }}>M</div>
+          <span className="font-extrabold text-[#4F6EFF]">ماهیر</span>
+          <button className="md:hidden mr-auto text-lg c-fg3 hover:c-fg transition-colors" onClick={() => setMobileNav(false)}>✕</button>
         </div>
 
-        {/* User card */}
-        <div className="mx-4 my-4 rounded-2xl p-4" style={{ background: "rgba(0,229,160,0.06)", border: "1px solid rgba(0,229,160,0.15)" }}>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center font-extrabold text-lg flex-shrink-0"
-              style={{ background: "rgba(0,229,160,0.15)", color: "#00E5A0" }}>
+        {/* Avatar card */}
+        <div className="mx-4 mt-5 rounded-2xl p-4 relative overflow-hidden"
+          style={{ background: "linear-gradient(135deg,rgba(79,110,255,0.12),rgba(167,139,255,0.08))", border: "1px solid rgba(79,110,255,0.2)" }}>
+          <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full blur-2xl"
+            style={{ background: "rgba(79,110,255,0.2)" }} />
+          <div className="relative flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-extrabold text-xl flex-shrink-0"
+              style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.4)" }}>
               {user.name.charAt(0)}
             </div>
             <div className="min-w-0">
-              <p className="font-bold text-sm truncate c-fg">{user.name}</p>
-              <p className="text-xs font-mono truncate" style={{ color: "var(--fg3)" }} dir="ltr">{user.phone}</p>
+              <p className="font-extrabold text-sm c-fg truncate">{user.name}</p>
+              <p className="text-xs font-mono c-fg3 truncate" dir="ltr">{user.phone}</p>
+              <div className="mt-1.5 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[10px] text-emerald-400 font-bold">فعال</span>
+              </div>
             </div>
           </div>
-          <div className="flex gap-2 mt-3">
-            <span className="text-xs px-2.5 py-1 rounded-full font-bold"
-              style={{ background: "rgba(0,229,160,0.12)", color: "#00E5A0", border: "1px solid rgba(0,229,160,0.2)" }}>
-              ✦ کاربر فعال
-            </span>
-            <span className="text-xs px-2.5 py-1 rounded-full"
-              style={{ background: "var(--surface2)", color: "var(--fg3)", border: "1px solid var(--border)" }}>
-              {daysSince(user.createdAt)} روز
-            </span>
+          {/* XP bar */}
+          <div className="mt-3">
+            <div className="flex justify-between text-[10px] c-fg3 mb-1">
+              <span>امتیاز</span><span>{score(user.consultCount)}%</span>
+            </div>
+            <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(79,110,255,0.15)" }}>
+              <div className="h-full rounded-full transition-all duration-1000"
+                style={{ width: `${score(user.consultCount)}%`, background: "linear-gradient(90deg,#4F6EFF,#A78BFF)" }} />
+            </div>
           </div>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 px-3 flex flex-col gap-1">
-          {NAV_ITEMS.map(item => (
+        {/* Nav items */}
+        <nav className="flex-1 px-3 mt-4 flex flex-col gap-1 overflow-y-auto">
+          <p className="text-[10px] font-bold tracking-widest c-fg3 px-3 mb-2">منو</p>
+          {NAV.map(item => (
             <button key={item.key}
-              onClick={() => { setTab(item.key); setSidebarOpen(false); }}
-              className="relative w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all text-right"
+              onClick={() => { setTab(item.key); setMobileNav(false); }}
+              className="relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all text-right w-full group"
               style={{
-                background: tab === item.key ? "rgba(0,229,160,0.1)" : "transparent",
-                color: tab === item.key ? "#00E5A0" : "var(--fg2)",
-                border: tab === item.key ? "1px solid rgba(0,229,160,0.2)" : "1px solid transparent",
+                background: tab === item.key ? "rgba(79,110,255,0.12)" : "transparent",
+                color: tab === item.key ? "#7B93FF" : "var(--fg2)",
               }}>
-              <span className="text-base">{item.icon}</span>
-              {item.label}
-              {item.badge ? (
-                <span className="mr-auto min-w-5 h-5 px-1.5 rounded-full flex items-center justify-center text-xs font-bold"
+              <span className="text-base w-5 text-center">{item.icon}</span>
+              <span className="flex-1">{item.label}</span>
+              {(item.badge ?? 0) > 0 && (
+                <span className="min-w-5 h-5 px-1.5 rounded-full flex items-center justify-center text-[10px] font-bold"
                   style={{ background: "#ef4444", color: "#fff" }}>{item.badge}</span>
-              ) : null}
-              {tab === item.key && (
-                <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-l-full bg-[#00E5A0]" />
               )}
+              {tab === item.key && <span className="absolute right-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-l bg-[#4F6EFF]" />}
             </button>
           ))}
         </nav>
 
-        {/* Bottom */}
-        <div className="px-3 pb-5 flex flex-col gap-2">
+        {/* CTA + logout */}
+        <div className="p-3 flex flex-col gap-2" style={{ borderTop: "1px solid var(--border)" }}>
           <Link href="/consult"
-            className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
-            style={{ background: "#00E5A0", color: "#030D0A" }}>
-            <span>🤖</span> مشاوره جدید
+            className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all hover:opacity-90"
+            style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.3)" }}>
+            ✦ مشاوره جدید
           </Link>
           <button onClick={logout}
-            className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all hover:bg-red-500/10"
-            style={{ color: "var(--fg3)", border: "1px solid var(--border)" }}>
-            خروج از حساب
+            className="py-2.5 rounded-xl text-sm font-bold transition-all hover:bg-red-500/10 c-fg3">
+            خروج
           </button>
         </div>
       </aside>
 
-      {/* Overlay mobile */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={() => setSidebarOpen(false)} />
-      )}
+      {/* Mobile overlay */}
+      {mobileNav && <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden" onClick={() => setMobileNav(false)} />}
 
-      {/* ── Main ── */}
-      <main className="flex-1 flex flex-col min-h-screen overflow-y-auto">
+      {/* ═══════════ MAIN ═══════════ */}
+      <div className="flex-1 flex flex-col min-w-0">
 
-        {/* Top bar */}
-        <header className="sticky top-0 z-30 flex items-center justify-between px-6 py-4"
+        {/* Topbar */}
+        <header className="sticky top-0 z-30 h-16 flex items-center px-6 gap-4"
           style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--border)" }}>
-          <div className="flex items-center gap-3">
-            <button className="md:hidden text-xl" onClick={() => setSidebarOpen(true)}>☰</button>
-            <div>
-              <h1 className="font-extrabold text-base c-fg">
-                {tab === "dashboard" && "داشبورد"}
-                {tab === "chat" && "پیام‌ها"}
-                {tab === "consults" && "مشاوره‌ها"}
-                {tab === "settings" && "تنظیمات"}
-              </h1>
-              <p className="text-xs c-fg3">{formatDate(new Date().toISOString())}</p>
-            </div>
+          <button className="md:hidden text-xl c-fg2" onClick={() => setMobileNav(true)}>☰</button>
+          <div className="flex-1">
+            <h1 className="font-extrabold text-base c-fg">
+              {tab === "dashboard" && "داشبورد"}
+              {tab === "chat" && "پیام‌ها"}
+              {tab === "consults" && "مشاوره‌ها"}
+              {tab === "settings" && "تنظیمات"}
+            </h1>
           </div>
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-xs px-3 py-1.5 rounded-lg c-fg3 hover:text-[#00E5A0] transition-all"
-              style={{ border: "1px solid var(--border)" }}>← خانه</Link>
-          </div>
+          <Link href="/" className="text-xs font-bold px-3 py-1.5 rounded-lg c-fg3 hover:text-[#4F6EFF] transition-colors"
+            style={{ border: "1px solid var(--border)" }}>← خانه</Link>
         </header>
 
-        <div className="flex-1 p-6 max-w-4xl w-full mx-auto">
+        {/* Content */}
+        <main className="flex-1 overflow-y-auto p-5 md:p-8">
+          <div className="max-w-4xl mx-auto">
 
-          {/* ── DASHBOARD ── */}
-          {tab === "dashboard" && (
-            <div className="flex flex-col gap-6">
+            {/* ─── DASHBOARD ─── */}
+            {tab === "dashboard" && (
+              <div className="flex flex-col gap-6">
 
-              {/* Welcome */}
-              <div className="rounded-2xl p-6 relative overflow-hidden"
-                style={{ background: "rgba(0,229,160,0.06)", border: "1px solid rgba(0,229,160,0.2)" }}>
-                <div className="absolute -top-10 -left-10 w-40 h-40 rounded-full blur-[60px]"
-                  style={{ background: "rgba(0,229,160,0.1)" }} />
-                <div className="relative z-10">
-                  <p className="text-xs font-bold text-[#00E5A0] tracking-widest mb-1">✦ خوش اومدی</p>
-                  <h2 className="text-2xl font-extrabold c-fg mb-1">{user.name} عزیز 👋</h2>
-                  <p className="text-sm c-fg2">آماده‌ای رشد کسب‌وکارت رو شروع کنی؟</p>
-                </div>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {[
-                  { icon: "🤖", label: "مشاوره دریافتی", value: user.consultCount, color: "#00E5A0", suffix: "بار" },
-                  { icon: "💬", label: "پیام‌های خوانده‌نشده", value: user.unread, color: "#A78BFA", suffix: "پیام" },
-                  { icon: "📅", label: "روز عضویت", value: daysSince(user.createdAt) || 1, color: "#00C2FF", suffix: "روز" },
-                  { icon: "⭐", label: "امتیاز", value: Math.min((user.consultCount * 10) + 50, 100), color: "#F59E0B", suffix: "%" },
-                ].map(s => (
-                  <div key={s.label} className="rounded-2xl p-5 flex flex-col gap-3"
-                    style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-                      style={{ background: `${s.color}15` }}>{s.icon}</div>
+                {/* Hero welcome */}
+                <div className="relative rounded-3xl overflow-hidden p-7"
+                  style={{ background: "linear-gradient(135deg,rgba(79,110,255,0.15) 0%,rgba(167,139,255,0.08) 100%)", border: "1px solid rgba(79,110,255,0.25)" }}>
+                  <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full blur-3xl pointer-events-none"
+                    style={{ background: "rgba(79,110,255,0.12)" }} />
+                  <div className="absolute -bottom-10 -left-10 w-40 h-40 rounded-full blur-3xl pointer-events-none"
+                    style={{ background: "rgba(167,139,255,0.1)" }} />
+                  <div className="relative z-10 flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center font-extrabold text-3xl flex-shrink-0 hidden sm:flex"
+                      style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 8px 32px rgba(79,110,255,0.4)" }}>
+                      {user.name.charAt(0)}
+                    </div>
                     <div>
-                      <p className="font-extrabold text-2xl c-fg">{s.value}<span className="text-sm font-medium c-fg3 mr-1">{s.suffix}</span></p>
-                      <p className="text-xs c-fg3 mt-0.5">{s.label}</p>
+                      <p className="text-xs font-bold tracking-widest mb-1" style={{ color: "#7B93FF" }}>✦ خوش اومدی</p>
+                      <h2 className="text-2xl font-extrabold c-fg">{user.name}</h2>
+                      <p className="text-sm c-fg2 mt-0.5">عضو از {fmt(user.createdAt)}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              {/* Quick actions */}
-              <div>
-                <h3 className="font-bold text-sm c-fg2 mb-3">دسترسی سریع</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {QUICK_ACTIONS.map(a => (
-                    <Link key={a.href} href={a.href}
-                      className="flex flex-col items-center gap-2 py-5 rounded-2xl text-center font-bold text-sm transition-all hover:-translate-y-1 hover:scale-105"
-                      style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-                      <span className="text-2xl">{a.icon}</span>
-                      <span style={{ color: a.color }}>{a.label}</span>
-                    </Link>
-                  ))}
                 </div>
-              </div>
 
-              {/* Activity */}
-              <div>
-                <h3 className="font-bold text-sm c-fg2 mb-3">فعالیت اخیر</h3>
-                <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
-                  {ACTIVITY.map((a, i) => (
-                    <div key={i} className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-white/[0.02]"
-                      style={{ borderBottom: i < ACTIVITY.length - 1 ? "1px solid var(--border)" : "none" }}>
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
-                        style={{ background: `${a.color}15` }}>{a.icon}</div>
-                      <p className="flex-1 text-sm c-fg">{a.text}</p>
-                      <span className="text-xs c-fg3 flex-shrink-0">{a.time}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Profile summary */}
-              <div className="rounded-2xl p-5" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-                <h3 className="font-bold text-sm c-fg2 mb-4">اطلاعات حساب</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Stats grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   {[
-                    { label: "نام", value: user.name, icon: "👤" },
-                    { label: "موبایل", value: user.phone, icon: "📱", ltr: true },
-                    { label: "تاریخ عضویت", value: formatDate(user.createdAt), icon: "📅" },
-                    { label: "وضعیت حساب", value: "فعال ✓", icon: "✅" },
-                  ].map(item => (
-                    <div key={item.label} className="flex items-center gap-3 rounded-xl px-4 py-3"
-                      style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-                      <span className="text-lg">{item.icon}</span>
+                    { label: "مشاوره دریافتی",       value: user.consultCount, unit: "بار",  icon: "◈", color: "#4F6EFF", bg: "rgba(79,110,255,0.1)" },
+                    { label: "پیام خوانده‌نشده",       value: user.unread,       unit: "پیام", icon: "✉", color: "#A78BFF", bg: "rgba(167,139,255,0.1)" },
+                    { label: "روز عضویت",              value: days(user.createdAt), unit: "روز", icon: "◷", color: "#38BDF8", bg: "rgba(56,189,248,0.1)" },
+                    { label: "امتیاز شما",             value: score(user.consultCount), unit: "%", icon: "★", color: "#F59E0B", bg: "rgba(245,158,11,0.1)" },
+                  ].map(s => (
+                    <div key={s.label} className="rounded-2xl p-5 flex flex-col gap-4 transition-all hover:scale-[1.02]"
+                      style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold"
+                        style={{ background: s.bg, color: s.color }}>{s.icon}</div>
                       <div>
-                        <p className="text-xs c-fg3 mb-0.5">{item.label}</p>
-                        <p className="font-bold text-sm c-fg" dir={item.ltr ? "ltr" : "rtl"}>{item.value}</p>
+                        <p className="font-extrabold text-2xl c-fg leading-none">{s.value}<span className="text-xs font-medium c-fg3 mr-1">{s.unit}</span></p>
+                        <p className="text-xs c-fg3 mt-1">{s.label}</p>
+                      </div>
+                      <div className="h-1 rounded-full overflow-hidden" style={{ background: "var(--border)" }}>
+                        <div className="h-full rounded-full" style={{ width: `${Math.min((s.value / (s.unit === "%" ? 100 : 10)) * 100, 100)}%`, background: s.color }} />
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
-          )}
 
-          {/* ── CHAT ── */}
-          {tab === "chat" && (
-            <div className="flex flex-col h-[calc(100vh-160px)]">
-              <div className="rounded-2xl overflow-hidden flex flex-col flex-1"
-                style={{ border: "1px solid var(--border)" }}>
+                {/* Two col: quick actions + activity */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                  {/* Quick actions */}
+                  <div className="rounded-2xl p-5" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                    <p className="text-xs font-bold c-fg3 tracking-widest mb-4">دسترسی سریع</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { icon: "◈", label: "مشاوره جدید", href: "/consult",   color: "#4F6EFF" },
+                        { icon: "📁", label: "نمونه‌کارها", href: "/portfolio", color: "#A78BFF" },
+                        { icon: "💰", label: "قیمت‌گذاری", href: "/pricing",   color: "#38BDF8" },
+                        { icon: "🏠", label: "صفحه اصلی",  href: "/",          color: "#F59E0B" },
+                      ].map(a => (
+                        <Link key={a.href} href={a.href}
+                          className="flex flex-col items-center gap-2 py-4 rounded-xl text-center transition-all hover:-translate-y-1"
+                          style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
+                          <span className="text-2xl">{a.icon}</span>
+                          <span className="text-xs font-bold" style={{ color: a.color }}>{a.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Activity timeline */}
+                  <div className="rounded-2xl p-5" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                    <p className="text-xs font-bold c-fg3 tracking-widest mb-4">فعالیت اخیر</p>
+                    <div className="flex flex-col gap-1">
+                      {[
+                        { icon: "◈", text: "مشاوره AI دریافت شد",    time: "۲ ساعت پیش", color: "#4F6EFF" },
+                        { icon: "✉", text: "پیام جدید از تیم",        time: "دیروز",       color: "#A78BFF" },
+                        { icon: "★", text: "امتیاز به‌روز شد",        time: "۲ روز پیش",  color: "#F59E0B" },
+                        { icon: "✓", text: "حساب ساخته شد",           time: fmt(user.createdAt), color: "#10B981" },
+                      ].map((a, i) => (
+                        <div key={i} className="flex items-center gap-3 py-3 relative"
+                          style={{ borderBottom: i < 3 ? "1px solid var(--border)" : "none" }}>
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0"
+                            style={{ background: `${a.color}15`, color: a.color }}>{a.icon}</div>
+                          <p className="flex-1 text-sm c-fg">{a.text}</p>
+                          <span className="text-[10px] c-fg3 flex-shrink-0">{a.time}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Profile info strip */}
+                <div className="rounded-2xl p-5" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-xs font-bold c-fg3 tracking-widest">اطلاعات حساب</p>
+                    <button onClick={() => setTab("settings")} className="text-xs font-bold text-[#4F6EFF] hover:underline">ویرایش</button>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {[
+                      { label: "نام",        value: user.name,          icon: "👤" },
+                      { label: "موبایل",     value: user.phone,         icon: "📱", ltr: true },
+                      { label: "عضویت",      value: fmt(user.createdAt), icon: "📅" },
+                      { label: "وضعیت",      value: "فعال ✓",           icon: "✅" },
+                    ].map(item => (
+                      <div key={item.label} className="rounded-xl px-4 py-3"
+                        style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
+                        <p className="text-[10px] c-fg3 mb-1">{item.label}</p>
+                        <p className="font-bold text-sm c-fg truncate" dir={item.ltr ? "ltr" : "rtl"}>{item.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ─── CHAT ─── */}
+            {tab === "chat" && (
+              <div className="rounded-3xl overflow-hidden flex flex-col" style={{ height: "calc(100vh - 130px)", border: "1px solid var(--border)" }}>
 
                 {/* Chat header */}
-                <div className="flex items-center gap-3 px-5 py-4"
+                <div className="flex items-center gap-3 px-5 py-4 flex-shrink-0"
                   style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)" }}>
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm"
-                    style={{ background: "rgba(0,229,160,0.12)", color: "#00E5A0" }}>M</div>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold"
+                    style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff" }}>M</div>
                   <div>
-                    <p className="font-bold text-sm c-fg">تیم ماهیر</p>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-[#00E5A0] animate-pulse" />
-                      <span className="text-xs" style={{ color: "#00E5A0" }}>آنلاین ۲۴/۷</span>
+                    <p className="font-extrabold text-sm c-fg">تیم ماهیر</p>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-[10px] text-emerald-400">آنلاین ۲۴/۷</span>
                     </div>
                   </div>
                   <button onClick={loadMessages}
-                    className="mr-auto text-xs px-3 py-1.5 rounded-lg transition-all hover:text-[#00E5A0]"
-                    style={{ background: "var(--surface2)", color: "var(--fg3)", border: "1px solid var(--border)" }}>
-                    بارگذاری مجدد
-                  </button>
+                    className="mr-auto text-xs px-3 py-1.5 rounded-lg c-fg3 hover:text-[#4F6EFF] transition-colors"
+                    style={{ background: "var(--surface2)", border: "1px solid var(--border)" }}>↻ بارگذاری</button>
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 flex flex-col gap-3 p-5 overflow-y-auto" style={{ background: "var(--bg)" }}>
+                <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4" style={{ background: "var(--bg)" }}>
                   {messages.length === 0 ? (
-                    <div className="flex-1 flex items-center justify-center py-16 text-center">
-                      <div>
-                        <div className="text-5xl mb-4">💬</div>
-                        <p className="font-bold c-fg mb-1">هنوز پیامی نیست</p>
-                        <p className="text-sm c-fg3">سوال یا درخواستی دارید؟ بنویسید!</p>
-                      </div>
+                    <div className="flex-1 flex flex-col items-center justify-center py-20 text-center">
+                      <div className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl mb-5"
+                        style={{ background: "rgba(79,110,255,0.08)", border: "1px solid rgba(79,110,255,0.15)" }}>💬</div>
+                      <p className="font-extrabold text-lg c-fg mb-2">هنوز پیامی نیست</p>
+                      <p className="text-sm c-fg3">سوال یا درخواستی دارید؟ بنویسید!</p>
                     </div>
                   ) : messages.map(msg => (
-                    <div key={msg.id} className={`flex ${msg.from === "user" ? "justify-start" : "justify-end"}`}>
+                    <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-start" : "justify-end"}`}>
                       {msg.from === "admin" && (
-                        <div className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ml-2 flex-shrink-0 mt-1"
-                          style={{ background: "rgba(0,229,160,0.15)", color: "#00E5A0" }}>M</div>
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold flex-shrink-0 mt-1"
+                          style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff" }}>M</div>
                       )}
-                      <div className="max-w-[72%] rounded-2xl px-4 py-3"
-                        style={{
-                          background: msg.from === "user" ? "var(--surface)" : "rgba(0,229,160,0.1)",
-                          border: msg.from === "user" ? "1px solid var(--border)" : "1px solid rgba(0,229,160,0.25)",
-                          borderBottomRightRadius: msg.from === "admin" ? "4px" : undefined,
-                          borderBottomLeftRadius: msg.from === "user" ? "4px" : undefined,
-                        }}>
-                        <p className="text-xs font-bold mb-1" style={{ color: msg.from === "admin" ? "#00E5A0" : "var(--fg3)" }}>
-                          {msg.from === "admin" ? "تیم ماهیر" : "شما"}
-                        </p>
-                        <p className="text-sm leading-relaxed c-fg">{msg.text}</p>
-                        <p className="text-[10px] mt-1.5 c-fg3 text-left">{formatTime(msg.createdAt)}</p>
+                      <div className="max-w-[70%]">
+                        <div className="rounded-2xl px-4 py-3"
+                          style={msg.from === "admin"
+                            ? { background: "rgba(79,110,255,0.1)", border: "1px solid rgba(79,110,255,0.2)", borderTopRightRadius: "4px" }
+                            : { background: "var(--surface)", border: "1px solid var(--border)", borderTopLeftRadius: "4px" }}>
+                          <p className="text-sm leading-relaxed c-fg">{msg.text}</p>
+                        </div>
+                        <p className="text-[10px] c-fg3 mt-1 px-1">{fmtT(msg.createdAt)}</p>
                       </div>
+                      {msg.from === "user" && (
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center font-extrabold text-sm flex-shrink-0 mt-1"
+                          style={{ background: "var(--surface2)", color: "var(--fg2)" }}>{user.name.charAt(0)}</div>
+                      )}
                     </div>
                   ))}
                   <div ref={bottomRef} />
                 </div>
 
                 {/* Input */}
-                <div className="flex gap-2 p-4" style={{ borderTop: "1px solid var(--border)", background: "var(--surface)" }}>
+                <div className="flex gap-3 p-4 flex-shrink-0"
+                  style={{ background: "var(--surface)", borderTop: "1px solid var(--border)" }}>
                   <input value={input} onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && sendMsg()}
                     placeholder="پیام خود را بنویسید…"
-                    className="flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none"
-                    style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--fg)" }} />
+                    className="flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2"
+                    style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--fg)", outlineColor: "#4F6EFF" }} />
                   <button onClick={sendMsg} disabled={sending || !input.trim()}
-                    className="px-5 rounded-xl font-bold text-sm transition-all hover:scale-105 disabled:opacity-40"
-                    style={{ background: "#00E5A0", color: "#030D0A" }}>
+                    className="px-5 rounded-xl font-bold text-sm transition-all hover:opacity-90 disabled:opacity-40"
+                    style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.3)" }}>
                     {sending ? "..." : "ارسال"}
                   </button>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* ── CONSULTS ── */}
-          {tab === "consults" && (
-            <div className="flex flex-col gap-5">
-              <div className="flex items-center justify-between">
-                <p className="text-sm c-fg2">تاریخچه مشاوره‌های دریافتی شما</p>
-                <Link href="/consult"
-                  className="text-xs font-bold px-4 py-2 rounded-xl transition-all hover:scale-105"
-                  style={{ background: "#00E5A0", color: "#030D0A" }}>
-                  + مشاوره جدید
-                </Link>
-              </div>
-
-              {user.consultCount === 0 ? (
-                <div className="rounded-2xl p-14 text-center" style={{ border: "1px solid var(--border)" }}>
-                  <div className="text-5xl mb-4">🤖</div>
-                  <p className="font-bold c-fg mb-2">هنوز مشاوره‌ای دریافت نکردی</p>
-                  <p className="text-sm c-fg3 mb-6">اولین مشاوره هوشمند رایگانته!</p>
+            {/* ─── CONSULTS ─── */}
+            {tab === "consults" && (
+              <div className="flex flex-col gap-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="font-extrabold text-xl c-fg">مشاوره‌های من</h2>
+                    <p className="text-sm c-fg3 mt-0.5">{user.consultCount} مشاوره دریافتی</p>
+                  </div>
                   <Link href="/consult"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
-                    style={{ background: "#00E5A0", color: "#030D0A" }}>
-                    شروع مشاوره رایگان ←
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm transition-all hover:opacity-90"
+                    style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 16px rgba(79,110,255,0.3)" }}>
+                    + مشاوره جدید
                   </Link>
                 </div>
-              ) : (
-                <div className="flex flex-col gap-3">
-                  {Array.from({ length: user.consultCount }).map((_, i) => (
-                    <div key={i} className="flex items-center gap-4 rounded-2xl p-5 transition-all hover:border-[#00E5A0]/30"
-                      style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-                      <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                        style={{ background: "rgba(0,229,160,0.1)" }}>🤖</div>
-                      <div className="flex-1">
-                        <p className="font-bold text-sm c-fg">مشاوره رشد کسب‌وکار #{i + 1}</p>
-                        <p className="text-xs c-fg3 mt-0.5">پاسخ اختصاصی AI دریافت شد</p>
+
+                {user.consultCount === 0 ? (
+                  <div className="rounded-3xl p-16 flex flex-col items-center text-center"
+                    style={{ background: "var(--card)", border: "1px dashed var(--border2)" }}>
+                    <div className="w-24 h-24 rounded-3xl flex items-center justify-center text-5xl mb-6"
+                      style={{ background: "rgba(79,110,255,0.08)", border: "1px solid rgba(79,110,255,0.15)" }}>◈</div>
+                    <h3 className="font-extrabold text-xl c-fg mb-2">هنوز مشاوره‌ای نگرفتی</h3>
+                    <p className="text-sm c-fg3 mb-6 max-w-xs">اولین مشاوره هوشمندت رایگانه! همین الان امتحان کن.</p>
+                    <Link href="/consult"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:opacity-90"
+                      style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.3)" }}>
+                      شروع مشاوره رایگان ←
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    {Array.from({ length: user.consultCount }).map((_, i) => (
+                      <div key={i} className="flex items-center gap-4 rounded-2xl p-5 transition-all hover:border-[#4F6EFF]/30 group"
+                        style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold flex-shrink-0"
+                          style={{ background: "linear-gradient(135deg,rgba(79,110,255,0.15),rgba(167,139,255,0.1))", color: "#7B93FF" }}>◈</div>
+                        <div className="flex-1">
+                          <p className="font-bold text-sm c-fg">مشاوره رشد کسب‌وکار #{i + 1}</p>
+                          <p className="text-xs c-fg3 mt-0.5">پاسخ اختصاصی هوش مصنوعی دریافت شد</p>
+                        </div>
+                        <span className="text-xs px-3 py-1.5 rounded-full font-bold"
+                          style={{ background: "rgba(16,185,129,0.1)", color: "#10B981", border: "1px solid rgba(16,185,129,0.2)" }}>
+                          ✓ تکمیل‌شده
+                        </span>
                       </div>
-                      <span className="text-xs px-3 py-1.5 rounded-full font-bold"
-                        style={{ background: "rgba(0,229,160,0.1)", color: "#00E5A0", border: "1px solid rgba(0,229,160,0.2)" }}>
-                        ✓ تکمیل‌شده
-                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <div className="rounded-2xl p-6 text-center"
+                  style={{ background: "linear-gradient(135deg,rgba(79,110,255,0.08),rgba(167,139,255,0.05))", border: "1px solid rgba(79,110,255,0.15)" }}>
+                  <p className="font-bold c-fg mb-1">نتیجه بهتر می‌خوای؟</p>
+                  <p className="text-sm c-fg3 mb-4">با تیم ماهیر مستقیم در ارتباط باش</p>
+                  <button onClick={() => setTab("chat")}
+                    className="text-sm font-bold px-5 py-2.5 rounded-xl transition-all hover:opacity-90"
+                    style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff" }}>
+                    ارسال پیام به تیم ←
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* ─── SETTINGS ─── */}
+            {tab === "settings" && (
+              <div className="flex flex-col gap-5 max-w-lg">
+
+                <div>
+                  <h2 className="font-extrabold text-xl c-fg">تنظیمات حساب</h2>
+                  <p className="text-sm c-fg3 mt-0.5">اطلاعات شخصی و امنیت حساب</p>
+                </div>
+
+                {/* Profile */}
+                <div className="rounded-2xl p-6" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold"
+                      style={{ background: "rgba(79,110,255,0.12)", color: "#4F6EFF" }}>👤</div>
+                    <p className="font-bold c-fg">اطلاعات شخصی</p>
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <div>
+                      <label className="text-xs font-bold c-fg2 mb-2 block">نام و نام‌خانوادگی</label>
+                      <input value={editName} onChange={e => setEditName(e.target.value)}
+                        className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition-all"
+                        style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--fg)" }} />
                     </div>
-                  ))}
-                </div>
-              )}
-
-              {/* CTA banner */}
-              <div className="rounded-2xl p-6 text-center"
-                style={{ background: "rgba(0,229,160,0.05)", border: "1px solid rgba(0,229,160,0.15)" }}>
-                <p className="font-bold c-fg mb-1">می‌خوای نتیجه بهتری بگیری؟</p>
-                <p className="text-sm c-fg2 mb-4">با تیم ماهیر مستقیم در تماس باش</p>
-                <button onClick={() => setTab("chat")}
-                  className="text-sm font-bold px-5 py-2.5 rounded-xl transition-all hover:scale-105"
-                  style={{ background: "#00E5A0", color: "#030D0A" }}>
-                  ارسال پیام به تیم
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* ── SETTINGS ── */}
-          {tab === "settings" && (
-            <div className="flex flex-col gap-5 max-w-lg">
-              <div className="rounded-2xl p-6" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-                <h3 className="font-bold text-base c-fg mb-5">اطلاعات شخصی</h3>
-                <div className="flex flex-col gap-4">
-                  <div>
-                    <label className="text-xs font-semibold c-fg2 mb-2 block">نام و نام‌خانوادگی</label>
-                    <input value={editName} onChange={e => setEditName(e.target.value)}
-                      className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none"
-                      style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--fg)" }} />
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold c-fg2 mb-2 block">شماره موبایل</label>
-                    <input value={user.phone} disabled dir="ltr"
-                      className="w-full rounded-xl px-4 py-3 text-sm opacity-50 cursor-not-allowed"
-                      style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--fg)" }} />
-                    <p className="text-xs c-fg3 mt-1">شماره موبایل قابل تغییر نیست</p>
+                    <div>
+                      <label className="text-xs font-bold c-fg2 mb-2 block">شماره موبایل <span className="c-fg3">(غیرقابل تغییر)</span></label>
+                      <input value={user.phone} disabled dir="ltr"
+                        className="w-full rounded-xl px-4 py-3 text-sm opacity-40 cursor-not-allowed"
+                        style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--fg)" }} />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="rounded-2xl p-6" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
-                <h3 className="font-bold text-base c-fg mb-5">تغییر رمز عبور</h3>
-                <div className="flex flex-col gap-4">
+                {/* Security */}
+                <div className="rounded-2xl p-6" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                      style={{ background: "rgba(167,139,255,0.12)", color: "#A78BFF" }}>🔒</div>
+                    <p className="font-bold c-fg">امنیت</p>
+                  </div>
                   <div>
-                    <label className="text-xs font-semibold c-fg2 mb-2 block">رمز عبور جدید</label>
+                    <label className="text-xs font-bold c-fg2 mb-2 block">رمز عبور جدید</label>
                     <input type="password" value={editPass} onChange={e => setEditPass(e.target.value)}
                       placeholder="حداقل ۶ کاراکتر" dir="ltr"
                       className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none"
                       style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--fg)" }} />
                   </div>
                 </div>
-              </div>
 
-              {editMsg && (
-                <div className="rounded-xl px-4 py-3 text-sm font-bold text-center"
-                  style={{ background: "rgba(0,229,160,0.1)", border: "1px solid rgba(0,229,160,0.3)", color: "#00E5A0" }}>
-                  {editMsg}
-                </div>
-              )}
+                {saveMsg && (
+                  <div className="rounded-xl px-4 py-3 text-sm font-bold text-center"
+                    style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)", color: "#10B981" }}>
+                    {saveMsg}
+                  </div>
+                )}
 
-              <button onClick={saveSettings} disabled={savingSettings}
-                className="w-full py-4 rounded-xl font-extrabold text-sm transition-all hover:scale-[1.02] disabled:opacity-50"
-                style={{ background: "#00E5A0", color: "#030D0A", boxShadow: "0 0 30px rgba(0,229,160,0.2)" }}>
-                {savingSettings ? "در حال ذخیره..." : "ذخیره تغییرات ✓"}
-              </button>
-
-              <div className="rounded-2xl p-5" style={{ background: "var(--card)", border: "1px solid rgba(239,68,68,0.2)" }}>
-                <h3 className="font-bold text-sm mb-3" style={{ color: "#ef4444" }}>منطقه خطر</h3>
-                <p className="text-xs c-fg3 mb-4">با خروج از حساب، نشست جاری پایان می‌یابد.</p>
-                <button onClick={logout}
-                  className="w-full py-3 rounded-xl font-bold text-sm transition-all hover:opacity-80"
-                  style={{ background: "rgba(239,68,68,0.1)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.25)" }}>
-                  خروج از حساب
+                <button onClick={saveSettings} disabled={saving}
+                  className="w-full py-4 rounded-xl font-extrabold text-sm transition-all hover:opacity-90 disabled:opacity-50"
+                  style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 24px rgba(79,110,255,0.3)" }}>
+                  {saving ? "در حال ذخیره..." : "ذخیره تغییرات"}
                 </button>
-              </div>
-            </div>
-          )}
 
-        </div>
-      </main>
+                {/* Danger */}
+                <div className="rounded-2xl p-5" style={{ background: "rgba(239,68,68,0.04)", border: "1px solid rgba(239,68,68,0.15)" }}>
+                  <p className="font-bold text-sm mb-1" style={{ color: "#f87171" }}>منطقه خطر</p>
+                  <p className="text-xs c-fg3 mb-4">با خروج، نشست جاری پایان می‌یابد.</p>
+                  <button onClick={logout}
+                    className="w-full py-3 rounded-xl font-bold text-sm transition-all hover:opacity-80"
+                    style={{ background: "rgba(239,68,68,0.08)", color: "#f87171", border: "1px solid rgba(239,68,68,0.2)" }}>
+                    خروج از حساب
+                  </button>
+                </div>
+              </div>
+            )}
+
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

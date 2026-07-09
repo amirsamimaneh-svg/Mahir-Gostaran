@@ -14,7 +14,7 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
+function getClient() { return new Groq({ apiKey: process.env.GROQ_API_KEY }); }
 
 const SYSTEM_FA = `تو یک مشاور ارشد رشد کسب‌وکار در شرکت ماهیر هستی با ۱۰ سال تجربه.
 برای کسب‌وکاری که کاربر معرفی می‌کند، یک ایده رشد کامل و عملی به فارسی ارائه بده.
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const completion = await client.chat.completions.create({
+    const completion = await getClient().chat.completions.create({
       model: "llama-3.3-70b-versatile",
       max_tokens: 300,
       messages: [

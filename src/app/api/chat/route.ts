@@ -10,7 +10,9 @@ function checkRateLimit(ip: string) {
   e.count++; return true;
 }
 
-const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
+function getClient() {
+  return new Groq({ apiKey: process.env.GROQ_API_KEY });
+}
 
 const SYSTEM_FA = `تو دستیار هوشمند شرکت ماهیر هستی — یک شرکت مشاوره رشد کسب‌وکار ایرانی.
 وظایف تو:
@@ -54,7 +56,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const completion = await client.chat.completions.create({
+    const completion = await getClient().chat.completions.create({
       model: "llama-3.3-70b-versatile",
       max_tokens: 800,
       messages: [

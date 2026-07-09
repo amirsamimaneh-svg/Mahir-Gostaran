@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import ParticlesBg from "@/components/ParticlesBg";
 import BottomNav from "@/components/BottomNav";
 import ChatBot from "@/components/ChatBot";
-import WhatsAppBtn from "@/components/WhatsAppBtn";
 import PageLoader from "@/components/PageLoader";
 import "@fontsource/vazirmatn/300.css";
 import "@fontsource/vazirmatn/400.css";
@@ -38,7 +37,6 @@ export default function RootLayout({
         <ParticlesBg />
         {children}
         <BottomNav />
-        <WhatsAppBtn />
         <ChatBot />
       </body>
     </html>

@@ -94,8 +94,8 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
       style={{
         background: "rgba(10,10,25,0.75)",
         backdropFilter: "blur(24px)",
-        border: "1px solid rgba(124,111,255,0.2)",
-        boxShadow: "0 8px 48px rgba(0,0,0,0.5), 0 0 80px rgba(124,111,255,0.06)",
+        border: "1px solid rgba(0,229,160,0.2)",
+        boxShadow: "0 8px 48px rgba(0,0,0,0.5), 0 0 80px rgba(0,229,160,0.06)",
       }}>
 
       {/* Header */}
@@ -107,11 +107,11 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
           <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#7C6FFF] animate-pulse" />
-          <span className="text-xs font-bold text-[#7C6FFF] tracking-widest">{tx.title}</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A0] animate-pulse" />
+          <span className="text-xs font-bold text-[#00E5A0] tracking-widest">{tx.title}</span>
         </div>
         <span className="text-xs px-2 py-0.5 rounded-full font-bold"
-          style={{ background: "rgba(124,111,255,0.12)", color: "#7C6FFF", border: "1px solid rgba(124,111,255,0.2)" }}>
+          style={{ background: "rgba(0,229,160,0.12)", color: "#00E5A0", border: "1px solid rgba(0,229,160,0.2)" }}>
           {tx.badge}
         </span>
       </div>
@@ -129,12 +129,12 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
             onKeyDown={e => e.key === "Enter" && handleSubmit()}
             placeholder={tx.placeholder}
             disabled={loading}
-            className="flex-1 rounded-xl px-4 py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-[#7C6FFF]/50 disabled:opacity-50"
+            className="flex-1 rounded-xl px-4 py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-[#00E5A0]/50 disabled:opacity-50"
             style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", color: "#f0f0f5" }}
           />
           <button onClick={() => handleSubmit()} disabled={loading || !business.trim()}
             className="px-4 py-2.5 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-40 whitespace-nowrap"
-            style={{ background: "#7C6FFF", color: "#111", boxShadow: "0 0 20px rgba(124,111,255,0.3)" }}>
+            style={{ background: "#00E5A0", color: "#111", boxShadow: "0 0 20px rgba(0,229,160,0.3)" }}>
             {tx.btn}
           </button>
         </div>
@@ -146,7 +146,7 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
             {cats.map(cat => (
               <button key={cat} onClick={() => handleSubmit(cat)}
                 disabled={loading}
-                className="text-xs px-3 py-1 rounded-full transition-all hover:border-[#7C6FFF]/60 hover:text-[#7C6FFF] disabled:opacity-40"
+                className="text-xs px-3 py-1 rounded-full transition-all hover:border-[#00E5A0]/60 hover:text-[#00E5A0] disabled:opacity-40"
                 style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,240,245,0.5)", background: "rgba(255,255,255,0.04)" }}>
                 {cat}
               </button>
@@ -158,7 +158,7 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
         <div className="min-h-[90px]">
           {loading && (
             <div className="flex items-center gap-3 py-2">
-              <svg className="animate-spin w-4 h-4 text-[#7C6FFF] flex-shrink-0" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin w-4 h-4 text-[#00E5A0] flex-shrink-0" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
               </svg>
@@ -168,13 +168,13 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
 
           {hasError && !loading && (
             <div className="rounded-2xl p-4"
-              style={{ background: "rgba(124,111,255,0.06)", border: "1px solid rgba(124,111,255,0.2)" }}>
-              <p className="text-xs font-bold text-[#7C6FFF] mb-2">✦ {tx.errorTitle}</p>
+              style={{ background: "rgba(0,229,160,0.06)", border: "1px solid rgba(0,229,160,0.2)" }}>
+              <p className="text-xs font-bold text-[#00E5A0] mb-2">✦ {tx.errorTitle}</p>
               {tx.errorMsg.split("\n").map((line, i) => (
                 <p key={i} className="text-sm leading-relaxed" style={{ color: "rgba(240,240,245,0.65)" }}>{line}</p>
               ))}
               <a href="https://t.me/Mahirofficalll" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-[#7C6FFF] hover:underline">
+                className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-[#00E5A0] hover:underline">
                 ✈ {tx.tg}
               </a>
             </div>
@@ -184,12 +184,12 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" }) {
             <div className={isRtl ? "text-right" : "text-left"} style={{ padding: "4px 0" }}>
               {displayed.split("\n").map((line, idx) =>
                 idx === 0
-                  ? <p key={idx} className="font-extrabold text-[#7C6FFF] text-base mb-2">{line}</p>
+                  ? <p key={idx} className="font-extrabold text-[#00E5A0] text-base mb-2">{line}</p>
                   : line.trim()
                     ? <p key={idx} className="text-sm leading-relaxed mb-1" style={{ color: "rgba(240,240,245,0.8)" }}>{line}</p>
                     : <br key={idx} />
               )}
-              <span className="inline-block w-0.5 h-4 bg-[#7C6FFF] align-middle ml-0.5"
+              <span className="inline-block w-0.5 h-4 bg-[#00E5A0] align-middle ml-0.5"
                 style={{ opacity: cursorOn ? 1 : 0, transition: "opacity 0.1s" }} />
             </div>
           )}

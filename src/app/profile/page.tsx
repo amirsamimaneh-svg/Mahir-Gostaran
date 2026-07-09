@@ -59,7 +59,7 @@ export default function ProfilePage() {
 
   if (!user) return (
     <div style={{ background: "#05050f", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div className="w-8 h-8 rounded-full border-2 border-[#7C6FFF] border-t-transparent animate-spin" />
+      <div className="w-8 h-8 rounded-full border-2 border-[#00E5A0] border-t-transparent animate-spin" />
     </div>
   );
 
@@ -69,7 +69,7 @@ export default function ProfilePage() {
       <nav style={{ background: "rgba(5,5,15,0.9)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
         className="fixed top-0 inset-x-0 z-50">
         <div className="max-w-3xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="text-xl font-extrabold text-[#7C6FFF] tracking-widest">ماهیر</Link>
+          <Link href="/" className="text-xl font-extrabold text-[#00E5A0] tracking-widest">ماهیر</Link>
           <button onClick={logout} className="text-xs px-3 py-2 rounded-lg transition-all hover:text-red-400"
             style={{ color: "rgba(240,240,245,0.4)", border: "1px solid rgba(255,255,255,0.08)" }}>
             خروج
@@ -81,7 +81,7 @@ export default function ProfilePage() {
         {/* Avatar */}
         <div className="text-center mb-8">
           <div className="w-20 h-20 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl font-extrabold"
-            style={{ background: "rgba(124,111,255,0.12)", border: "1px solid rgba(124,111,255,0.3)", color: "#7C6FFF" }}>
+            style={{ background: "rgba(0,229,160,0.12)", border: "1px solid rgba(0,229,160,0.3)", color: "#00E5A0" }}>
             {user.name.charAt(0)}
           </div>
           <h1 className="text-2xl font-extrabold mb-1">{user.name}</h1>
@@ -93,7 +93,7 @@ export default function ProfilePage() {
           {([["info", "اطلاعات من"], ["chat", `پیام‌ها${user.unread > 0 ? ` (${user.unread})` : ""}`]] as const).map(([key, label]) => (
             <button key={key} onClick={() => setTab(key)}
               className="flex-1 py-3 text-sm font-bold transition-all"
-              style={{ background: tab === key ? "#7C6FFF" : "transparent", color: tab === key ? "#111" : "rgba(240,240,245,0.45)" }}>
+              style={{ background: tab === key ? "#00E5A0" : "transparent", color: tab === key ? "#111" : "rgba(240,240,245,0.45)" }}>
               {label}
             </button>
           ))}
@@ -120,7 +120,7 @@ export default function ProfilePage() {
 
             <Link href="/consult"
               className="w-full text-center py-3.5 rounded-xl font-bold text-sm mt-2 transition-all hover:scale-105 block"
-              style={{ background: "#7C6FFF", color: "#111" }}>
+              style={{ background: "#00E5A0", color: "#111" }}>
               دریافت مشاوره جدید ←
             </Link>
           </div>
@@ -130,7 +130,7 @@ export default function ProfilePage() {
         {tab === "chat" && (
           <div className="flex flex-col">
             <div className="rounded-2xl overflow-hidden mb-4" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div className="px-4 py-3 text-xs" style={{ background: "rgba(124,111,255,0.07)", borderBottom: "1px solid rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.5)" }}>
+              <div className="px-4 py-3 text-xs" style={{ background: "rgba(0,229,160,0.07)", borderBottom: "1px solid rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.5)" }}>
                 پیام‌های شما با تیم ماهیر
               </div>
 
@@ -147,10 +147,10 @@ export default function ProfilePage() {
                   <div key={msg.id} className={`flex ${msg.from === "user" ? "justify-start" : "justify-end"}`}>
                     <div className="max-w-[75%] rounded-2xl px-4 py-2.5"
                       style={{
-                        background: msg.from === "user" ? "rgba(255,255,255,0.07)" : "rgba(124,111,255,0.15)",
-                        border: msg.from === "user" ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(124,111,255,0.25)",
+                        background: msg.from === "user" ? "rgba(255,255,255,0.07)" : "rgba(0,229,160,0.15)",
+                        border: msg.from === "user" ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,229,160,0.25)",
                       }}>
-                      <p className="text-xs font-bold mb-1" style={{ color: msg.from === "admin" ? "#7C6FFF" : "rgba(240,240,245,0.5)" }}>
+                      <p className="text-xs font-bold mb-1" style={{ color: msg.from === "admin" ? "#00E5A0" : "rgba(240,240,245,0.5)" }}>
                         {msg.from === "admin" ? "تیم ماهیر" : "شما"}
                       </p>
                       <p className="text-sm leading-relaxed">{msg.text}</p>
@@ -167,11 +167,11 @@ export default function ProfilePage() {
               <input value={input} onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && sendMsg()}
                 placeholder="پیام خود را بنویسید…"
-                className="flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C6FFF]/50"
+                className="flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#00E5A0]/50"
                 style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }} />
               <button onClick={sendMsg} disabled={sending || !input.trim()}
                 className="px-5 rounded-xl font-bold text-sm transition-all hover:scale-105 disabled:opacity-40"
-                style={{ background: "#7C6FFF", color: "#111" }}>
+                style={{ background: "#00E5A0", color: "#111" }}>
                 ارسال
               </button>
             </div>

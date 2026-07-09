@@ -7,30 +7,7 @@
 }
 
 :root {
-  /* === Slate Blue / Light (default) === */
-  --bg: #F0F3F8;
-  --bg2: #E6ECF5;
-  --surface: #FFFFFF;
-  --surface2: #EBF0F8;
-  --fg: #0D1520;
-  --fg2: #4D6082;
-  --fg3: #8FA3C0;
-  --card: rgba(255,255,255,0.95);
-  --border: #D8E2F0;
-  --border2: #C2D0E8;
-  --nav-bg: rgba(240,243,248,0.92);
-  --nav-border: rgba(37,99,235,0.12);
-  /* Brand */
-  --brand: #2563EB;
-  --brand-light: #5B9CF6;
-  --brand-glow: rgba(37,99,235,0.18);
-  /* Accent */
-  --accent: #1D4ED8;
-  --accent-dim: rgba(37,99,235,0.10);
-  --accent-glow: rgba(37,99,235,0.20);
-}
-
-body.dark {
+  /* === Slate Blue / Dark Only === */
   --bg: #080E18;
   --bg2: #0B1320;
   --surface: #0F1825;
@@ -43,9 +20,11 @@ body.dark {
   --border2: #1E2E45;
   --nav-bg: rgba(8,14,24,0.94);
   --nav-border: rgba(91,156,246,0.12);
+  /* Brand */
   --brand: #5B9CF6;
   --brand-light: #93C5FD;
   --brand-glow: rgba(91,156,246,0.28);
+  /* Accent */
   --accent: #3B82F6;
   --accent-dim: rgba(59,130,246,0.12);
   --accent-glow: rgba(59,130,246,0.24);
@@ -126,15 +105,10 @@ body {
 
 .grid-bg {
   background-image:
-    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
-    linear-gradient(90deg,rgba(0,0,0,.04) 1px, transparent 1px);
+    linear-gradient(rgba(91,156,246,.05) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(91,156,246,.05) 1px, transparent 1px);
   background-size: 60px 60px;
   animation: gridMove 10s linear infinite;
-}
-body.dark .grid-bg {
-  background-image:
-    linear-gradient(rgba(79,110,255,.05) 1px, transparent 1px),
-    linear-gradient(90deg,rgba(79,110,255,.05) 1px, transparent 1px);
 }
 
 .card-glow {

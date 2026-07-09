@@ -173,15 +173,6 @@ function go(href: string) {
 }
 
 // ── Theme toggle ──────────────────────────────────────────
-function ThemeToggle({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
-  return (
-    <button onClick={() => setDark(!dark)}
-      className="w-9 h-9 rounded-lg flex items-center justify-center text-base transition-all hover:scale-110 bg-card"
-      title={dark ? "حالت روشن" : "حالت تاریک"}>
-      {dark ? "🌙" : "☀️"}
-    </button>
-  );
-}
 
 // ── Navbar ────────────────────────────────────────────────
 const NAV_FEATURES = {
@@ -201,7 +192,7 @@ const NAV_FEATURES = {
   ],
 };
 
-function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
+function Navbar() {
   const { lang, toggle } = useLang();
   const tx = t[lang];
   const isRtl = lang === "fa";
@@ -274,7 +265,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
 
         {/* Right actions */}
         <div className="flex items-center gap-2">
-          <ThemeToggle dark={dark} setDark={setDark} />
+
           <button onClick={toggle}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#2563EB]"
             style={{ border: "1px solid var(--border)", color: "var(--fg2)" }}>
@@ -847,21 +838,15 @@ function Footer() {
 
 // ── Root ──────────────────────────────────────────────────
 function PageContent() {
-  const [dark, setDark] = useState(false);
   const { setLang } = useLang();
 
-  useEffect(() => {
-    document.body.classList.toggle("dark", dark);
-  }, [dark]);
-
-  function handlePrefs(prefs: { theme: "dark" | "light"; lang: "fa" | "en" }) {
-    setDark(prefs.theme === "dark");
+  function handlePrefs(prefs: { lang: "fa" | "en" }) {
     setLang(prefs.lang);
   }
 
   return (
     <div className="min-h-screen flex flex-col items-center grid-bg" style={{ background: "var(--bg)" }}>
-      <Navbar dark={dark} setDark={setDark} />
+      <Navbar />
       <Hero />
       <Stats />
       <Services />

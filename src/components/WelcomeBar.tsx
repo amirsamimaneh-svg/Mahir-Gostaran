@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 
 interface Prefs {
-  theme: "dark" | "light";
   lang: "fa" | "en";
 }
 
@@ -13,7 +12,6 @@ export default function WelcomeBar({
   onApply: (prefs: Prefs) => void;
 }) {
   const [visible, setVisible] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("light");
   const [lang, setLang] = useState<"fa" | "en">("fa");
 
   useEffect(() => {
@@ -28,7 +26,7 @@ export default function WelcomeBar({
   }, []);
 
   function apply() {
-    const prefs: Prefs = { theme, lang };
+    const prefs: Prefs = { lang };
     localStorage.setItem("mahir-prefs", JSON.stringify(prefs));
     onApply(prefs);
     setVisible(false);
@@ -59,34 +57,11 @@ export default function WelcomeBar({
       `}</style>
 
       {/* Title */}
-      <p className="text-xs font-bold text-[#2563EB] tracking-widest mb-3 text-center">
-        {isRtl ? "⚙️ تنظیمات نمایش" : "⚙️ Display Settings"}
+      <p className="text-xs font-bold text-[#5B9CF6] tracking-widest mb-3 text-center">
+        {isRtl ? "🌐 زبان سایت" : "🌐 Site Language"}
       </p>
 
       <div className="flex flex-col sm:flex-row items-center gap-3">
-
-        {/* Theme */}
-        <div className="flex items-center gap-1.5 rounded-xl p-1"
-          style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <button
-            onClick={() => setTheme("dark")}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-            style={{
-              background: theme === "dark" ? "#2563EB" : "transparent",
-              color: theme === "dark" ? "#111" : "rgba(255,255,255,0.55)",
-            }}>
-            🌙 {isRtl ? "تاریک" : "Dark"}
-          </button>
-          <button
-            onClick={() => setTheme("light")}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-            style={{
-              background: theme === "light" ? "#2563EB" : "transparent",
-              color: theme === "light" ? "#111" : "rgba(255,255,255,0.55)",
-            }}>
-            ☀️ {isRtl ? "روشن" : "Light"}
-          </button>
-        </div>
 
         {/* Language */}
         <div className="flex items-center gap-1.5 rounded-xl p-1"

@@ -239,7 +239,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           </div>
           <div>
             <span className="text-lg font-extrabold text-[#7C6FFF] tracking-widest leading-none block">{tx.brand}</span>
-            <span className="text-xs leading-none" style={{ color: "rgba(240,240,245,0.35)" }}>
+            <span className="text-xs leading-none" style={{ color: "var(--fg3)" }}>
               {isRtl ? "مشاور رشد کسب‌وکار" : "Business Growth Partner"}
             </span>
           </div>
@@ -253,7 +253,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
                 <a href={item.href}
                   onClick={e => { e.preventDefault(); go(item.href); }}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#7C6FFF] group"
-                  style={{ color: "rgba(240,240,245,0.55)" }}>
+                  style={{ color: "var(--fg2)" }}>
                   <span className="text-sm">{item.icon}</span>
                   {item.label}
                   <span className="block h-px w-0 group-hover:w-full transition-all duration-300 mt-0.5" style={{ background: "#7C6FFF" }} />
@@ -261,7 +261,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
               ) : (
                 <Link href={item.href}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#7C6FFF]"
-                  style={{ color: "rgba(240,240,245,0.55)" }}>
+                  style={{ color: "var(--fg2)" }}>
                   <span className="text-sm">{item.icon}</span>
                   {item.label}
                 </Link>
@@ -275,7 +275,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           <ThemeToggle dark={dark} setDark={setDark} />
           <button onClick={toggle}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#7C6FFF]"
-            style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,240,245,0.45)" }}>
+            style={{ border: "1px solid var(--border)", color: "var(--fg2)" }}>
             {tx.langBtn}
           </button>
 
@@ -452,7 +452,7 @@ function Portfolio() {
           <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(124,111,255,0.55)" }}>
             {isRtl ? "✦ PORTFOLIO" : "✦ PORTFOLIO"}
           </p>
-          <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)", color: "#f0f0f5" }}>
+          <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
             {isRtl ? "نمونه‌کارها " : "Selected "}
             <span className="text-shimmer">{isRtl ? "برتر ما" : "Works"}</span>
           </h2>
@@ -473,21 +473,21 @@ function Portfolio() {
             onMouseLeave={() => setHovered(null)}
             className="group relative flex items-center gap-6 py-6 transition-all duration-300 cursor-pointer"
             style={{
-              borderTop: "1px solid rgba(255,255,255,0.07)",
-              borderBottom: i === items.length - 1 ? "1px solid rgba(255,255,255,0.07)" : "none",
+              borderTop: "1px solid var(--border)",
+              borderBottom: i === items.length - 1 ? "1px solid var(--border)" : "none",
             }}>
 
             {/* Number */}
             <span className="text-xs font-mono font-bold w-8 flex-shrink-0 transition-colors duration-300"
-              style={{ color: hovered === i ? p.color : "rgba(240,240,245,0.18)" }}>
+              style={{ color: hovered === i ? p.color : "var(--fg3)" }}>
               0{i + 1}
             </span>
 
             {/* Emoji bubble */}
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 transition-all duration-300"
               style={{
-                background: hovered === i ? `${p.color}22` : "rgba(255,255,255,0.04)",
-                border: `1px solid ${hovered === i ? p.color + "44" : "rgba(255,255,255,0.08)"}`,
+                background: hovered === i ? `${p.color}22` : "var(--surface)",
+                border: `1px solid ${hovered === i ? p.color + "55" : "var(--border)"}`,
                 transform: hovered === i ? "scale(1.1) rotate(-4deg)" : "scale(1)",
               }}>
               {p.emoji}
@@ -495,12 +495,11 @@ function Portfolio() {
 
             {/* Title + category */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-extrabold text-lg md:text-2xl leading-tight transition-colors duration-300"
-                style={{ color: hovered === i ? "#f0f0f5" : "rgba(240,240,245,0.7)" }}>
+              <h3 className="font-extrabold text-lg md:text-2xl leading-tight transition-colors duration-300 c-fg">
                 {isRtl ? p.title_fa : p.title_en}
               </h3>
               <p className="text-xs mt-1 transition-colors duration-300"
-                style={{ color: hovered === i ? p.color : "rgba(240,240,245,0.3)" }}>
+                style={{ color: hovered === i ? p.color : "var(--fg3)" }}>
                 {isRtl ? p.category_fa : p.category_en}
               </p>
             </div>
@@ -517,12 +516,12 @@ function Portfolio() {
             {/* Arrow */}
             <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300"
               style={{
-                background: hovered === i ? p.color : "rgba(255,255,255,0.04)",
-                border: `1px solid ${hovered === i ? p.color : "rgba(255,255,255,0.08)"}`,
+                background: hovered === i ? p.color : "var(--surface)",
+                border: `1px solid ${hovered === i ? p.color : "var(--border)"}`,
                 transform: hovered === i ? "scale(1.1)" : "scale(1)",
               }}>
               <span className="text-sm font-bold transition-colors duration-300"
-                style={{ color: hovered === i ? "#111" : "rgba(240,240,245,0.3)" }}>
+                style={{ color: hovered === i ? "#fff" : "var(--fg3)" }}>
                 {isRtl ? "←" : "→"}
               </span>
             </div>
@@ -588,12 +587,12 @@ function Team() {
       <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(124,111,255,0.55)" }}>✦ TEAM</p>
-          <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)", color: "#f0f0f5" }}>
+          <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
             {isRtl ? "متخصصان " : "The "}
             <span className="text-shimmer">{isRtl ? "تیم ما" : "Specialists"}</span>
           </h2>
         </div>
-        <p className="max-w-xs text-sm leading-relaxed md:text-right" style={{ color: "rgba(240,240,245,0.4)" }}>
+        <p className="max-w-xs text-sm leading-relaxed md:text-right" style={{ color: "var(--fg2)" }}>
           {tx.teamSub}
         </p>
       </div>
@@ -609,7 +608,7 @@ function Team() {
               className={`group relative rounded-3xl p-7 overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl ${isWide ? "sm:col-span-2 lg:col-span-1" : ""}`}
               style={{
                 background: "rgba(255,255,255,0.025)",
-                border: "1px solid rgba(255,255,255,0.07)",
+                border: "1px solid var(--border)",
                 backdropFilter: "blur(20px)",
               }}>
 
@@ -649,8 +648,7 @@ function Team() {
                     {m.icon}
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-base leading-tight transition-colors duration-300 group-hover:text-[#7C6FFF]"
-                      style={{ color: "#f0f0f5" }}>
+                    <h3 className="c-fg font-extrabold text-base leading-tight transition-colors duration-300 group-hover:text-[#7C6FFF]">
                       {m.role}
                     </h3>
                     <div className="flex gap-1 mt-1.5 flex-wrap">
@@ -669,7 +667,7 @@ function Team() {
                   style={{ background: `linear-gradient(90deg, ${color}30, transparent)` }} />
 
                 {/* Desc */}
-                <p className="text-sm leading-relaxed flex-1" style={{ color: "rgba(240,240,245,0.5)" }}>
+                <p className="text-sm leading-relaxed flex-1" style={{ color: "var(--fg2)" }}>
                   {m.desc}
                 </p>
 

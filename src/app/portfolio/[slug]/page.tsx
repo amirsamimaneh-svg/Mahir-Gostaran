@@ -1,12 +1,12 @@
 "use client";
 
-import { use, useState, useEffect } from "react";
+import { use, useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { projects } from "@/data/projects";
 
-export default function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const searchParams = useSearchParams();
   const initLang = (searchParams.get("lang") as "fa" | "en") ?? "fa";
@@ -190,5 +190,13 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
         </div>
       )}
     </div>
+  );
+}
+
+export default function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  return (
+    <Suspense fallback={<div style={{ background: "#07080F", minHeight: "100vh" }} />}>
+      <ProjectPageInner params={params} />
+    </Suspense>
   );
 }

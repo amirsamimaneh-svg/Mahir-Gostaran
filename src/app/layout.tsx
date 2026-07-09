@@ -19,11 +19,13 @@ export const metadata: Metadata = {
     siteName: "ماهیر",
     locale: "fa_IR",
     type: "website",
+    images: [{ url: "/api/og", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "ماهیر | Mahir",
     description: "شریک هوشمند رشد کسب‌وکار شما",
+    images: ["/api/og"],
   },
 };
 

@@ -1,5 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import Groq from "groq-sdk";
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
+
+const CONSULT_PATH = path.join(process.cwd(), "data", "consults.json");
+function saveConsult(data: Record<string, unknown>) {
+  try {
+    if (!fs.existsSync(path.dirname(CONSULT_PATH)))
+      fs.mkdirSync(path.dirname(CONSULT_PATH), { recursive: true });
+    const list = fs.existsSync(CONSULT_PATH)
+      ? JSON.parse(fs.readFileSync(CONSULT_PATH, "utf-8"))
+      : [];
+    list.push({ id: crypto.randomUUID(), createdAt: new Date().toISOString(), ...data });
+    fs.writeFileSync(CONSULT_PATH, JSON.stringify(list, null, 2));
+  } catch { /* non-critical */ }
+}
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 function checkRateLimit(ip: string) {
@@ -103,6 +119,7 @@ export async function POST(req: NextRequest) {
     });
 
     const text = completion.choices[0]?.message?.content ?? "";
+    saveConsult({ business, challenge, goal, lang, advice: text });
     return NextResponse.json({ advice: text });
   } catch (err) {
     console.error(err);

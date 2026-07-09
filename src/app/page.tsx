@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import MahirLogo from "@/components/MahirLogo";
 import { useEffect, useState } from "react";
 import IdeaCard from "@/components/IdeaCard";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -179,15 +180,17 @@ const NAV_FEATURES = {
   fa: [
     { icon: "🤖", label: "مشاوره AI", href: "/consult" },
     { icon: "📁", label: "نمونه‌کارها", href: "#portfolio" },
-    { icon: "🎯", label: "خدمات", href: "#services" },
+    { icon: "📝", label: "بلاگ", href: "/blog" },
     { icon: "💰", label: "قیمت‌ها", href: "/pricing" },
+    { icon: "ℹ️", label: "درباره ما", href: "/about" },
     { icon: "💬", label: "تماس", href: "#contact" },
   ],
   en: [
     { icon: "🤖", label: "AI Consult", href: "/consult" },
     { icon: "📁", label: "Portfolio", href: "#portfolio" },
-    { icon: "🎯", label: "Services", href: "#services" },
+    { icon: "📝", label: "Blog", href: "/blog" },
     { icon: "💰", label: "Pricing", href: "/pricing" },
+    { icon: "ℹ️", label: "About", href: "/about" },
     { icon: "💬", label: "Contact", href: "#contact" },
   ],
 };
@@ -226,10 +229,7 @@ function Navbar() {
 
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-sm"
-            style={{ background: "linear-gradient(135deg,#2563EB,#3D5AE8)", color: "#111" }}>
-            M
-          </div>
+          <MahirLogo size={36} />
           <div>
             <span className="text-lg font-extrabold text-[#2563EB] tracking-widest leading-none block">{tx.brand}</span>
             <span className="text-xs leading-none" style={{ color: "var(--fg3)" }}>
@@ -757,9 +757,16 @@ function ContactForm() {
   async function submit() {
     if (!form.name || !form.phone || !form.msg) return;
     setLoading(true);
-    await new Promise(r => setTimeout(r, 800));
-    setLoading(false);
-    setSent(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: form.name, phone: form.phone, message: form.msg }),
+      });
+      if (res.ok) setSent(true);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

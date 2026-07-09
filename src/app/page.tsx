@@ -234,11 +234,11 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
         {/* Logo */}
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-sm"
-            style={{ background: "linear-gradient(135deg,#6C5CE7,#5A4BD6)", color: "#111" }}>
+            style={{ background: "linear-gradient(135deg,#7C6FFF,#6A5EE8)", color: "#111" }}>
             M
           </div>
           <div>
-            <span className="text-lg font-extrabold text-[#6C5CE7] tracking-widest leading-none block">{tx.brand}</span>
+            <span className="text-lg font-extrabold text-[#7C6FFF] tracking-widest leading-none block">{tx.brand}</span>
             <span className="text-xs leading-none" style={{ color: "rgba(240,240,245,0.35)" }}>
               {isRtl ? "مشاور رشد کسب‌وکار" : "Business Growth Partner"}
             </span>
@@ -252,15 +252,15 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
               {item.href.startsWith("#") ? (
                 <a href={item.href}
                   onClick={e => { e.preventDefault(); go(item.href); }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#6C5CE7] group"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#7C6FFF] group"
                   style={{ color: "rgba(240,240,245,0.55)" }}>
                   <span className="text-sm">{item.icon}</span>
                   {item.label}
-                  <span className="block h-px w-0 group-hover:w-full transition-all duration-300 mt-0.5" style={{ background: "#6C5CE7" }} />
+                  <span className="block h-px w-0 group-hover:w-full transition-all duration-300 mt-0.5" style={{ background: "#7C6FFF" }} />
                 </a>
               ) : (
                 <Link href={item.href}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#6C5CE7]"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#7C6FFF]"
                   style={{ color: "rgba(240,240,245,0.55)" }}>
                   <span className="text-sm">{item.icon}</span>
                   {item.label}
@@ -274,7 +274,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
         <div className="flex items-center gap-2">
           <ThemeToggle dark={dark} setDark={setDark} />
           <button onClick={toggle}
-            className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#6C5CE7]"
+            className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#7C6FFF]"
             style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,240,245,0.45)" }}>
             {tx.langBtn}
           </button>
@@ -282,9 +282,9 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           {user ? (
             <Link href="/profile"
               className="relative flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl transition-all hover:scale-105"
-              style={{ background: "rgba(108,92,231,0.1)", border: "1px solid rgba(108,92,231,0.3)", color: "#6C5CE7" }}>
+              style={{ background: "rgba(124,111,255,0.1)", border: "1px solid rgba(124,111,255,0.3)", color: "#7C6FFF" }}>
               <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold"
-                style={{ background: "rgba(108,92,231,0.25)" }}>{user.name.charAt(0)}</span>
+                style={{ background: "rgba(124,111,255,0.25)" }}>{user.name.charAt(0)}</span>
               <span className="hidden sm:block">{user.name}</span>
               {user.unread > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold"
@@ -294,7 +294,7 @@ function Navbar({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => voi
           ) : (
             <Link href="/login"
               className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl transition-all hover:scale-105"
-              style={{ background: "#6C5CE7", color: "#111", boxShadow: "0 0 20px rgba(108,92,231,0.3)" }}>
+              style={{ background: "#7C6FFF", color: "#111", boxShadow: "0 0 20px rgba(124,111,255,0.3)" }}>
               <span>✦</span>
               {isRtl ? "ورود / ثبت‌نام" : "Login / Sign up"}
             </Link>
@@ -315,9 +315,9 @@ function Hero() {
       {/* blobs */}
       <div className="pointer-events-none absolute inset-0">
         <div className="anim-blob d1 absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full blur-[160px]"
-          style={{ background: "rgba(108,92,231,0.08)" }} />
+          style={{ background: "rgba(124,111,255,0.08)" }} />
         <div className="anim-blob d5 absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full blur-[160px]"
-          style={{ background: "rgba(99,102,241,0.08)" }} />
+          style={{ background: "rgba(124,111,255,0.08)" }} />
         <div className="anim-blob d3 absolute top-1/2 left-1/3 w-[500px] h-[500px] rounded-full blur-[140px]"
           style={{ background: "rgba(139,92,246,0.06)" }} />
       </div>
@@ -327,7 +327,7 @@ function Hero() {
           <span key={i} className="absolute rounded-full anim-blob"
             style={{ width: `${2+(i%4)}px`, height: `${2+(i%4)}px`,
               top: `${5+(i*4.7)%88}%`, left: `${3+(i*5.1)%94}%`,
-              background: "rgba(108,92,231,0.2)",
+              background: "rgba(124,111,255,0.2)",
               animationDelay: `${i*0.4}s`, animationDuration: `${5+(i%5)*1.5}s` }} />
         ))}
       </div>
@@ -335,9 +335,9 @@ function Hero() {
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col items-center">
         {/* badge */}
         <div className="anim-fade-up d1 mb-4 inline-flex items-center gap-2 rounded-full px-5 py-2"
-          style={{ background: "rgba(108,92,231,0.08)", border: "1px solid rgba(108,92,231,0.25)" }}>
-          <span className="w-2 h-2 rounded-full bg-[#6C5CE7] animate-pulse" />
-          <span className="text-xs font-medium text-[#8B7CF8] tracking-widest">{tx.badge}</span>
+          style={{ background: "rgba(124,111,255,0.08)", border: "1px solid rgba(124,111,255,0.25)" }}>
+          <span className="w-2 h-2 rounded-full bg-[#7C6FFF] animate-pulse" />
+          <span className="text-xs font-medium text-[#A89BFF] tracking-widest">{tx.badge}</span>
         </div>
 
         {/* headline */}
@@ -353,12 +353,12 @@ function Hero() {
         <div className="anim-fade-up d4 flex flex-col sm:flex-row gap-3 justify-center mb-8">
           <a href="#services" onClick={e => { e.preventDefault(); go("#services"); }}
             className="px-7 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
-            style={{ background: "#6C5CE7", color: "#111", boxShadow: "0 0 40px rgba(108,92,231,0.3)" }}>
+            style={{ background: "#7C6FFF", color: "#111", boxShadow: "0 0 40px rgba(124,111,255,0.3)" }}>
             {tx.cta1}
           </a>
           <Link href="/consult"
             className="px-7 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105 bg-card"
-            style={{ color: "#6C5CE7", border: "1px solid rgba(108,92,231,0.3)" }}>
+            style={{ color: "#7C6FFF", border: "1px solid rgba(124,111,255,0.3)" }}>
             {tx.cta2}
           </Link>
         </div>
@@ -449,7 +449,7 @@ function Portfolio() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
         <div>
-          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(108,92,231,0.55)" }}>
+          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(124,111,255,0.55)" }}>
             {isRtl ? "✦ PORTFOLIO" : "✦ PORTFOLIO"}
           </p>
           <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)", color: "#f0f0f5" }}>
@@ -459,7 +459,7 @@ function Portfolio() {
         </div>
         <Link href="/portfolio"
           className="group self-start md:self-end inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-all hover:gap-4"
-          style={{ border: "1px solid rgba(108,92,231,0.3)", color: "#6C5CE7" }}>
+          style={{ border: "1px solid rgba(124,111,255,0.3)", color: "#7C6FFF" }}>
           {isRtl ? "همه پروژه‌ها" : "All Projects"}
           <span className="transition-transform group-hover:translate-x-1">{isRtl ? "←" : "→"}</span>
         </Link>
@@ -548,12 +548,12 @@ function ConsultCTA() {
     <section className="py-20 px-6 w-full max-w-5xl mx-auto">
       <div className="relative rounded-3xl overflow-hidden text-center p-12 md:p-20 card-glow">
         <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full blur-[100px]"
-          style={{ background: "rgba(108,92,231,0.1)" }} />
+          style={{ background: "rgba(124,111,255,0.1)" }} />
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6"
-            style={{ background: "rgba(108,92,231,0.1)", border: "1px solid rgba(108,92,231,0.25)" }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#6C5CE7] animate-pulse" />
-            <span className="text-xs text-[#8B7CF8] tracking-widest">AI Powered</span>
+            style={{ background: "rgba(124,111,255,0.1)", border: "1px solid rgba(124,111,255,0.25)" }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#7C6FFF] animate-pulse" />
+            <span className="text-xs text-[#A89BFF] tracking-widest">AI Powered</span>
           </div>
           <h2 className="font-extrabold mb-4" style={{ fontSize: "clamp(1.8rem,4vw,3rem)" }}>
             <span className="c-fg">{tx.consultTitle} </span>
@@ -563,7 +563,7 @@ function ConsultCTA() {
           <Link href="/consult"
             className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-bold text-sm
               transition-all hover:scale-105"
-            style={{ background: "#6C5CE7", color: "#111", boxShadow: "0 0 50px rgba(108,92,231,0.35)" }}>
+            style={{ background: "#7C6FFF", color: "#111", boxShadow: "0 0 50px rgba(124,111,255,0.35)" }}>
             {tx.consultCta}
           </Link>
         </div>
@@ -579,7 +579,7 @@ function Team() {
   const members = TEAM[lang];
   const isRtl = lang === "fa";
 
-  const COLORS = ["#6C5CE7", "#a78bfa", "#34d399", "#60a5fa", "#f87171", "#fb923c"];
+  const COLORS = ["#7C6FFF", "#a78bfa", "#34d399", "#60a5fa", "#f87171", "#fb923c"];
 
   return (
     <section id="team" className="py-24 px-6 w-full max-w-6xl mx-auto">
@@ -587,7 +587,7 @@ function Team() {
       {/* Header */}
       <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(108,92,231,0.55)" }}>✦ TEAM</p>
+          <p className="text-xs font-bold tracking-[0.25em] mb-3" style={{ color: "rgba(124,111,255,0.55)" }}>✦ TEAM</p>
           <h2 className="font-extrabold leading-none whitespace-nowrap" style={{ fontSize: "clamp(1.8rem,4vw,3rem)", color: "#f0f0f5" }}>
             {isRtl ? "متخصصان " : "The "}
             <span className="text-shimmer">{isRtl ? "تیم ما" : "Specialists"}</span>
@@ -649,7 +649,7 @@ function Team() {
                     {m.icon}
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-base leading-tight transition-colors duration-300 group-hover:text-[#6C5CE7]"
+                    <h3 className="font-extrabold text-base leading-tight transition-colors duration-300 group-hover:text-[#7C6FFF]"
                       style={{ color: "#f0f0f5" }}>
                       {m.role}
                     </h3>
@@ -714,11 +714,11 @@ function Footer() {
     <footer id="contact" className="py-10 px-6 w-full max-w-6xl mx-auto"
       style={{ borderTop: "1px solid var(--border)" }}>
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm c-fg3">
-        <span className="font-extrabold text-[#6C5CE7] text-lg tracking-widest">{tx.brand}</span>
+        <span className="font-extrabold text-[#7C6FFF] text-lg tracking-widest">{tx.brand}</span>
         <div className="flex gap-6">
-          <a href="mailto:hello@mahir.ir" className="hover:text-[#6C5CE7] transition-colors">hello@mahir.ir</a>
-          <a href="#" className="hover:text-[#6C5CE7] transition-colors">{tx.footerIg}</a>
-          <a href="#" className="hover:text-[#6C5CE7] transition-colors">{tx.footerLi}</a>
+          <a href="mailto:hello@mahir.ir" className="hover:text-[#7C6FFF] transition-colors">hello@mahir.ir</a>
+          <a href="#" className="hover:text-[#7C6FFF] transition-colors">{tx.footerIg}</a>
+          <a href="#" className="hover:text-[#7C6FFF] transition-colors">{tx.footerLi}</a>
         </div>
         <span>{tx.footerR}</span>
       </div>

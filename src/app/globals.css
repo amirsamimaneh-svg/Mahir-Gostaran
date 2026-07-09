@@ -7,26 +7,26 @@
 }
 
 :root {
-  --bg: #0B0F17;
-  --bg2: #0E1420;
-  --surface: #121826;
-  --surface2: #1A2236;
-  --fg: #E6EAF2;
-  --fg2: #8896B0;
-  --fg3: #4A5568;
-  --card: rgba(18,24,38,0.8);
-  --border: #1E2940;
-  --border2: #2A3755;
-  --nav-bg: rgba(11,15,23,0.85);
-  --nav-border: rgba(30,41,64,0.8);
+  --bg: #07080F;
+  --bg2: #0C0E1A;
+  --surface: #10142A;
+  --surface2: #171C35;
+  --fg: #EEEEF5;
+  --fg2: #9A9FC4;
+  --fg3: #5A6080;
+  --card: rgba(16,20,42,0.85);
+  --border: #252C55;
+  --border2: #2E3966;
+  --nav-bg: rgba(7,8,15,0.9);
+  --nav-border: rgba(37,44,85,0.9);
   /* Brand */
-  --brand: #6C5CE7;
-  --brand-light: #8B7CF8;
-  --brand-glow: rgba(108,92,231,0.22);
+  --brand: #7C6FFF;
+  --brand-light: #A89BFF;
+  --brand-glow: rgba(124,111,255,0.3);
   /* Accent */
-  --accent: #00C2FF;
-  --accent-dim: rgba(0,194,255,0.12);
-  --accent-glow: rgba(0,194,255,0.2);
+  --accent: #00D4FF;
+  --accent-dim: rgba(0,212,255,0.14);
+  --accent-glow: rgba(0,212,255,0.25);
 }
 
 body.light {
@@ -60,7 +60,7 @@ body {
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(124,111,255,0.5); border-radius: 3px; }
 
 /* ── Keyframes ── */
 @keyframes fadeUp {
@@ -109,7 +109,7 @@ body {
 .d7{animation-delay:.7s} .d8{animation-delay:.8s} .d9{animation-delay:.9s}
 
 .text-shimmer {
-  background: linear-gradient(90deg,#6C5CE7,#00C2FF,#8B7CF8,#6C5CE7);
+  background: linear-gradient(90deg,#7C6FFF,#00D4FF,#A89BFF,#7C6FFF);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -119,8 +119,8 @@ body {
 
 .grid-bg {
   background-image:
-    linear-gradient(rgba(108,92,231,.04) 1px, transparent 1px),
-    linear-gradient(90deg,rgba(108,92,231,.04) 1px, transparent 1px);
+    linear-gradient(rgba(124,111,255,.06) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(124,111,255,.06) 1px, transparent 1px);
   background-size: 60px 60px;
   animation: gridMove 10s linear infinite;
 }
@@ -137,8 +137,8 @@ body.light .grid-bg {
 }
 .card-glow:hover {
   transform: translateY(-5px);
-  border-color: rgba(108,92,231,.45);
-  box-shadow: 0 0 28px rgba(108,92,231,.15);
+  border-color: rgba(124,111,255,.55);
+  box-shadow: 0 0 32px rgba(124,111,255,.2);
 }
 
 /* CSS variable helpers */

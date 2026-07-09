@@ -47,13 +47,13 @@ export default function CustomCursor() {
       {/* dot */}
       <div ref={dot}
         className="pointer-events-none fixed top-0 left-0 z-[9999] w-2 h-2
-          rounded-full bg-[#6C5CE7]"
+          rounded-full bg-[#7C6FFF]"
         style={{ willChange: "transform" }}
       />
       {/* ring */}
       <div ref={ring}
         className="pointer-events-none fixed top-0 left-0 z-[9998] w-8 h-8
-          rounded-full border border-[#6C5CE7]/60 transition-transform duration-200"
+          rounded-full border border-[#7C6FFF]/60 transition-transform duration-200"
         style={{ willChange: "transform" }}
       />
     </>

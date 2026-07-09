@@ -13,7 +13,7 @@ export default function WelcomeBar({
   onApply: (prefs: Prefs) => void;
 }) {
   const [visible, setVisible] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">("light");
   const [lang, setLang] = useState<"fa" | "en">("fa");
 
   useEffect(() => {

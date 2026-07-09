@@ -847,11 +847,11 @@ function Footer() {
 
 // ── Root ──────────────────────────────────────────────────
 function PageContent() {
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   const { setLang } = useLang();
 
   useEffect(() => {
-    document.body.classList.toggle("light", !dark);
+    document.body.classList.toggle("dark", dark);
   }, [dark]);
 
   function handlePrefs(prefs: { theme: "dark" | "light"; lang: "fa" | "en" }) {

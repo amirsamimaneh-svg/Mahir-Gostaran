@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type Item = { icon: string; label: string; href: string; isLink?: boolean };
 
@@ -22,14 +22,19 @@ const ITEMS: { fa: Item[]; en: Item[] } = {
   ],
 };
 
-function scrollTo(href: string) {
-  document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-}
-
 export default function BottomNav({ lang = "fa" }: { lang?: "fa" | "en" }) {
   const items = ITEMS[lang];
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === "/";
+
+  function handleAnchor(href: string) {
+    if (isHome) {
+      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      router.push("/" + href);
+    }
+  }
 
   return (
     <nav
@@ -57,7 +62,7 @@ export default function BottomNav({ lang = "fa" }: { lang?: "fa" | "en" }) {
               </span>
               <span
                 className="text-[10px] font-bold truncate"
-                style={{ color: isConsult ? "#7C6FFF" : "rgba(240,240,245,0.5)" }}
+                style={{ color: isConsult ? "#7C6FFF" : "var(--fg2)" }}
               >
                 {item.label}
               </span>
@@ -86,7 +91,7 @@ export default function BottomNav({ lang = "fa" }: { lang?: "fa" | "en" }) {
           return (
             <button
               key={item.href}
-              onClick={() => isHome && scrollTo(item.href)}
+              onClick={() => handleAnchor(item.href)}
               className="relative flex-1 flex items-center justify-center transition-all active:scale-95 hover:bg-white/[0.03]"
               aria-label={item.label}
             >

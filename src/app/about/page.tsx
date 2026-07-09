@@ -47,7 +47,7 @@ export default function AboutPage() {
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-6 pt-32 pb-24">
+      <div className="max-w-4xl mx-auto px-6 pt-20 md:pt-32 pb-24">
 
         {/* Hero */}
         <div className="text-center mb-20">

@@ -228,11 +228,11 @@ function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-10 py-3" dir={isRtl ? "rtl" : "ltr"}>
 
         {/* Logo */}
-        <div className="flex items-center gap-3">
-          <MahirLogo size={36} />
+        <div className="flex items-center gap-2.5">
+          <MahirLogo size={34} />
           <div>
-            <span className="text-lg font-extrabold text-[#2563EB] tracking-widest leading-none block">{tx.brand}</span>
-            <span className="text-xs leading-none" style={{ color: "var(--fg3)" }}>
+            <span className="text-base font-extrabold text-[#5B9CF6] tracking-widest leading-none block">{tx.brand}</span>
+            <span className="text-[10px] leading-none hidden sm:block" style={{ color: "var(--fg3)" }}>
               {isRtl ? "مشاور رشد کسب‌وکار" : "Business Growth Partner"}
             </span>
           </div>

@@ -85,22 +85,54 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div dir="rtl" className="min-h-screen flex" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+    <div dir="rtl" className="min-h-screen flex" style={{ background: "var(--bg)", color: "var(--fg)", paddingBottom: "env(safe-area-inset-bottom)" }}>
 
-      {/* ═══════════ SIDEBAR ═══════════ */}
-      <aside className={`
-        fixed inset-y-0 right-0 z-50 flex flex-col
-        transition-transform duration-300
-        md:static md:translate-x-0
-        ${mobileNav ? "translate-x-0" : "translate-x-full"}
-      `} style={{ width: 256, background: "var(--surface)", borderLeft: "1px solid var(--border)", flexShrink: 0 }}>
+      {/* ═══════ MOBILE BOTTOM TAB BAR ═══════ */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-50 flex"
+        style={{
+          background: "rgba(8,14,24,0.97)",
+          backdropFilter: "blur(24px)",
+          borderTop: "1px solid var(--border)",
+          paddingBottom: "env(safe-area-inset-bottom)",
+        }}>
+        {NAV.map(item => (
+          <button key={item.key}
+            onClick={() => setTab(item.key)}
+            className="relative flex-1 flex flex-col items-center justify-center gap-1 py-3 transition-all active:scale-95"
+          >
+            <span className="text-xl leading-none"
+              style={{ filter: tab === item.key ? "drop-shadow(0 0 6px rgba(91,156,246,0.7))" : "none" }}>
+              {item.icon}
+            </span>
+            <span className="text-[10px] font-bold"
+              style={{ color: tab === item.key ? "#5B9CF6" : "var(--fg3)" }}>
+              {item.label}
+            </span>
+            {(item.badge ?? 0) > 0 && (
+              <span className="absolute top-2 right-[calc(50%-8px)] translate-x-3 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold"
+                style={{ background: "#ef4444", color: "#fff" }}>{item.badge}</span>
+            )}
+            {tab === item.key && (
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[#5B9CF6]" />
+            )}
+          </button>
+        ))}
+        <button onClick={logout}
+          className="flex-shrink-0 flex flex-col items-center justify-center gap-1 px-4 py-3 active:scale-95 transition-all">
+          <span className="text-xl leading-none">🚪</span>
+          <span className="text-[10px] font-bold" style={{ color: "var(--fg3)" }}>خروج</span>
+        </button>
+      </nav>
+
+      {/* ═══════════ SIDEBAR (desktop only) ═══════════ */}
+      <aside className="hidden md:flex flex-col"
+        style={{ width: 256, background: "var(--surface)", borderLeft: "1px solid var(--border)", flexShrink: 0 }}>
 
         {/* Logo row */}
         <div className="flex items-center gap-3 px-5 h-16 flex-shrink-0" style={{ borderBottom: "1px solid var(--border)" }}>
           <div className="w-8 h-8 rounded-lg flex items-center justify-center font-extrabold text-sm"
             style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff" }}>M</div>
           <span className="font-extrabold text-[#2563EB]">ماهیر</span>
-          <button className="md:hidden mr-auto text-lg c-fg3 hover:c-fg transition-colors" onClick={() => setMobileNav(false)}>✕</button>
         </div>
 
         {/* Avatar card */}
@@ -170,8 +202,6 @@ export default function ProfilePage() {
         </div>
       </aside>
 
-      {/* Mobile overlay */}
-      {mobileNav && <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden" onClick={() => setMobileNav(false)} />}
 
       {/* ═══════════ MAIN ═══════════ */}
       <div className="flex-1 flex flex-col min-w-0">
@@ -179,7 +209,6 @@ export default function ProfilePage() {
         {/* Topbar */}
         <header className="sticky top-0 z-30 h-16 flex items-center px-6 gap-4"
           style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--border)" }}>
-          <button className="md:hidden text-xl c-fg2" onClick={() => setMobileNav(true)}>☰</button>
           <div className="flex-1">
             <h1 className="font-extrabold text-base c-fg">
               {tab === "dashboard" && "داشبورد"}
@@ -193,7 +222,7 @@ export default function ProfilePage() {
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto p-5 md:p-8">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8">
           <div className="max-w-4xl mx-auto">
 
             {/* ─── DASHBOARD ─── */}

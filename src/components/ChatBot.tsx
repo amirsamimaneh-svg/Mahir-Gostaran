@@ -88,14 +88,13 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
       {/* Floating button */}
       <button
         onClick={() => { setOpen(v => !v); }}
-        className="fixed z-[60] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95"
+        className="fixed z-[60] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 md:bottom-[90px] bottom-[88px]"
         style={{
-          bottom: "90px",
           right: "20px",
-          width: 56, height: 56,
+          width: 48, height: 48,
           borderRadius: "50%",
-          background: open ? "rgba(30,30,50,0.9)" : "linear-gradient(135deg,#2563EB,#3D5AE8)",
-          boxShadow: open ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 24px rgba(79,110,255,0.5)",
+          background: open ? "rgba(30,30,50,0.9)" : "linear-gradient(135deg,#5B9CF6,#3B82F6)",
+          boxShadow: open ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 24px rgba(91,156,246,0.5)",
           border: open ? "1px solid rgba(255,255,255,0.1)" : "none",
         }}>
         {open
@@ -111,7 +110,7 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
       <div
         className="fixed z-[59] transition-all duration-300"
         style={{
-          bottom: "158px",
+          bottom: "148px",
           right: "16px",
           width: "min(380px, calc(100vw - 32px))",
           height: open ? "500px" : "0px",

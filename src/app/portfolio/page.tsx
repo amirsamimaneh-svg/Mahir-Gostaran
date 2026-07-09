@@ -44,7 +44,7 @@ export default function PortfolioPage() {
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 pt-32 pb-20">
+      <div className="max-w-6xl mx-auto px-6 pt-20 md:pt-32 pb-20">
 
         {/* Header */}
         <div className="text-center mb-14">

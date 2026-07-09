@@ -46,7 +46,7 @@ function BlogPostInner({ params }: { params: Promise<{ slug: string }> }) {
         </div>
       </nav>
 
-      <article className="max-w-3xl mx-auto px-6 pt-32 pb-24">
+      <article className="max-w-3xl mx-auto px-6 pt-20 md:pt-32 pb-24">
 
         {/* Category */}
         <div className="mb-6">

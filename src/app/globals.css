@@ -2,8 +2,12 @@
 
 @media (max-width: 767px) {
   body {
-    padding-bottom: 68px;
+    /* space for bottom tab bar */
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
   }
+
+  /* tighter sections on small screens */
+  .section-py { padding-top: 3.5rem; padding-bottom: 3.5rem; }
 }
 
 :root {

@@ -32,7 +32,7 @@ export default function Counter({ target, suffix = "" }: { target: number; suffi
   }, [target]);
 
   return (
-    <div ref={ref} className="text-2xl md:text-3xl font-extrabold text-[#4F6EFF]">
+    <div ref={ref} className="text-2xl md:text-3xl font-extrabold text-[#2563EB]">
       {count}{suffix}
     </div>
   );

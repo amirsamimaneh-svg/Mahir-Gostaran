@@ -25,7 +25,7 @@ function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
       <div className="text-center">
         <p className="text-6xl mb-4">404</p>
         <p className="mb-6 text-lg" style={{ color: "rgba(240,240,245,0.5)" }}>پروژه پیدا نشد</p>
-        <Link href="/portfolio" className="px-6 py-3 rounded-xl font-bold text-sm" style={{ background: "#4F6EFF", color: "#111" }}>
+        <Link href="/portfolio" className="px-6 py-3 rounded-xl font-bold text-sm" style={{ background: "#2563EB", color: "#111" }}>
           بازگشت
         </Link>
       </div>
@@ -40,17 +40,17 @@ function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
       <nav className="fixed top-0 inset-x-0 z-50"
         style={{ background: "rgba(5,5,15,0.85)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="text-xl font-extrabold text-[#4F6EFF] tracking-widest">
+          <Link href="/" className="text-xl font-extrabold text-[#2563EB] tracking-widest">
             {isRtl ? "ماهیر" : "Mahir"}
           </Link>
           <div className="flex items-center gap-3">
             <button onClick={() => setLang(l => l === "fa" ? "en" : "fa")}
-              className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#4F6EFF]"
+              className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
               style={{ background: "rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.5)" }}>
               {isRtl ? "EN" : "فا"}
             </button>
             <Link href="/portfolio"
-              className="text-sm font-medium px-4 py-2 rounded-xl transition-all hover:text-[#4F6EFF]"
+              className="text-sm font-medium px-4 py-2 rounded-xl transition-all hover:text-[#2563EB]"
               style={{ color: "rgba(240,240,245,0.5)", border: "1px solid rgba(255,255,255,0.08)" }}>
               {isRtl ? "← نمونه‌کارها" : "← Portfolio"}
             </Link>
@@ -93,7 +93,7 @@ function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
         {/* Gallery */}
         {project.images?.length > 0 && (
           <div className="mb-10">
-            <h2 className="font-bold text-lg mb-4 text-[#4F6EFF]">
+            <h2 className="font-bold text-lg mb-4 text-[#2563EB]">
               {isRtl ? "تصاویر پروژه" : "Project Gallery"}
             </h2>
             <div className="grid grid-cols-3 gap-2">
@@ -114,7 +114,7 @@ function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
 
         {/* What we did */}
         <div className="mb-10">
-          <h2 className="font-bold text-lg mb-5 text-[#4F6EFF]">
+          <h2 className="font-bold text-lg mb-5 text-[#2563EB]">
             {isRtl ? "چه کاری انجام دادیم؟" : "What We Did"}
           </h2>
           <ul className="flex flex-col gap-3">
@@ -149,7 +149,7 @@ function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
           </p>
           <Link href="/consult"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
-            style={{ background: "#4F6EFF", color: "#111", boxShadow: "0 0 40px rgba(79,110,255,0.3)" }}>
+            style={{ background: "#2563EB", color: "#111", boxShadow: "0 0 40px rgba(79,110,255,0.3)" }}>
             {isRtl ? "مشاوره رایگان ←" : "Get Free Consultation →"}
           </Link>
         </div>

@@ -71,7 +71,7 @@ export default function ProfilePage() {
   if (!user) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg)" }}>
       <div className="flex flex-col items-center gap-3">
-        <div className="w-12 h-12 rounded-full border-[3px] border-[#4F6EFF] border-t-transparent animate-spin" />
+        <div className="w-12 h-12 rounded-full border-[3px] border-[#2563EB] border-t-transparent animate-spin" />
         <p className="text-sm c-fg3">در حال بارگذاری...</p>
       </div>
     </div>
@@ -98,8 +98,8 @@ export default function ProfilePage() {
         {/* Logo row */}
         <div className="flex items-center gap-3 px-5 h-16 flex-shrink-0" style={{ borderBottom: "1px solid var(--border)" }}>
           <div className="w-8 h-8 rounded-lg flex items-center justify-center font-extrabold text-sm"
-            style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff" }}>M</div>
-          <span className="font-extrabold text-[#4F6EFF]">ماهیر</span>
+            style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff" }}>M</div>
+          <span className="font-extrabold text-[#2563EB]">ماهیر</span>
           <button className="md:hidden mr-auto text-lg c-fg3 hover:c-fg transition-colors" onClick={() => setMobileNav(false)}>✕</button>
         </div>
 
@@ -110,7 +110,7 @@ export default function ProfilePage() {
             style={{ background: "rgba(79,110,255,0.2)" }} />
           <div className="relative flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-extrabold text-xl flex-shrink-0"
-              style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.4)" }}>
+              style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.4)" }}>
               {user.name.charAt(0)}
             </div>
             <div className="min-w-0">
@@ -129,7 +129,7 @@ export default function ProfilePage() {
             </div>
             <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(79,110,255,0.15)" }}>
               <div className="h-full rounded-full transition-all duration-1000"
-                style={{ width: `${score(user.consultCount)}%`, background: "linear-gradient(90deg,#4F6EFF,#A78BFF)" }} />
+                style={{ width: `${score(user.consultCount)}%`, background: "linear-gradient(90deg,#2563EB,#3B82F6)" }} />
             </div>
           </div>
         </div>
@@ -143,7 +143,7 @@ export default function ProfilePage() {
               className="relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all text-right w-full group"
               style={{
                 background: tab === item.key ? "rgba(79,110,255,0.12)" : "transparent",
-                color: tab === item.key ? "#7B93FF" : "var(--fg2)",
+                color: tab === item.key ? "#5B9CF6" : "var(--fg2)",
               }}>
               <span className="text-base w-5 text-center">{item.icon}</span>
               <span className="flex-1">{item.label}</span>
@@ -151,7 +151,7 @@ export default function ProfilePage() {
                 <span className="min-w-5 h-5 px-1.5 rounded-full flex items-center justify-center text-[10px] font-bold"
                   style={{ background: "#ef4444", color: "#fff" }}>{item.badge}</span>
               )}
-              {tab === item.key && <span className="absolute right-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-l bg-[#4F6EFF]" />}
+              {tab === item.key && <span className="absolute right-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-l bg-[#2563EB]" />}
             </button>
           ))}
         </nav>
@@ -160,7 +160,7 @@ export default function ProfilePage() {
         <div className="p-3 flex flex-col gap-2" style={{ borderTop: "1px solid var(--border)" }}>
           <Link href="/consult"
             className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all hover:opacity-90"
-            style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.3)" }}>
+            style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.3)" }}>
             ✦ مشاوره جدید
           </Link>
           <button onClick={logout}
@@ -188,7 +188,7 @@ export default function ProfilePage() {
               {tab === "settings" && "تنظیمات"}
             </h1>
           </div>
-          <Link href="/" className="text-xs font-bold px-3 py-1.5 rounded-lg c-fg3 hover:text-[#4F6EFF] transition-colors"
+          <Link href="/" className="text-xs font-bold px-3 py-1.5 rounded-lg c-fg3 hover:text-[#2563EB] transition-colors"
             style={{ border: "1px solid var(--border)" }}>← خانه</Link>
         </header>
 
@@ -209,11 +209,11 @@ export default function ProfilePage() {
                     style={{ background: "rgba(167,139,255,0.1)" }} />
                   <div className="relative z-10 flex items-center gap-4">
                     <div className="w-16 h-16 rounded-2xl flex items-center justify-center font-extrabold text-3xl flex-shrink-0 hidden sm:flex"
-                      style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 8px 32px rgba(79,110,255,0.4)" }}>
+                      style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff", boxShadow: "0 8px 32px rgba(79,110,255,0.4)" }}>
                       {user.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-xs font-bold tracking-widest mb-1" style={{ color: "#7B93FF" }}>✦ خوش اومدی</p>
+                      <p className="text-xs font-bold tracking-widest mb-1" style={{ color: "#5B9CF6" }}>✦ خوش اومدی</p>
                       <h2 className="text-2xl font-extrabold c-fg">{user.name}</h2>
                       <p className="text-sm c-fg2 mt-0.5">عضو از {fmt(user.createdAt)}</p>
                     </div>
@@ -223,8 +223,8 @@ export default function ProfilePage() {
                 {/* Stats grid */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   {[
-                    { label: "مشاوره دریافتی",       value: user.consultCount, unit: "بار",  icon: "◈", color: "#4F6EFF", bg: "rgba(79,110,255,0.1)" },
-                    { label: "پیام خوانده‌نشده",       value: user.unread,       unit: "پیام", icon: "✉", color: "#A78BFF", bg: "rgba(167,139,255,0.1)" },
+                    { label: "مشاوره دریافتی",       value: user.consultCount, unit: "بار",  icon: "◈", color: "#2563EB", bg: "rgba(79,110,255,0.1)" },
+                    { label: "پیام خوانده‌نشده",       value: user.unread,       unit: "پیام", icon: "✉", color: "#3B82F6", bg: "rgba(167,139,255,0.1)" },
                     { label: "روز عضویت",              value: days(user.createdAt), unit: "روز", icon: "◷", color: "#38BDF8", bg: "rgba(56,189,248,0.1)" },
                     { label: "امتیاز شما",             value: score(user.consultCount), unit: "%", icon: "★", color: "#F59E0B", bg: "rgba(245,158,11,0.1)" },
                   ].map(s => (
@@ -251,8 +251,8 @@ export default function ProfilePage() {
                     <p className="text-xs font-bold c-fg3 tracking-widest mb-4">دسترسی سریع</p>
                     <div className="grid grid-cols-2 gap-3">
                       {[
-                        { icon: "◈", label: "مشاوره جدید", href: "/consult",   color: "#4F6EFF" },
-                        { icon: "📁", label: "نمونه‌کارها", href: "/portfolio", color: "#A78BFF" },
+                        { icon: "◈", label: "مشاوره جدید", href: "/consult",   color: "#2563EB" },
+                        { icon: "📁", label: "نمونه‌کارها", href: "/portfolio", color: "#3B82F6" },
                         { icon: "💰", label: "قیمت‌گذاری", href: "/pricing",   color: "#38BDF8" },
                         { icon: "🏠", label: "صفحه اصلی",  href: "/",          color: "#F59E0B" },
                       ].map(a => (
@@ -271,8 +271,8 @@ export default function ProfilePage() {
                     <p className="text-xs font-bold c-fg3 tracking-widest mb-4">فعالیت اخیر</p>
                     <div className="flex flex-col gap-1">
                       {[
-                        { icon: "◈", text: "مشاوره AI دریافت شد",    time: "۲ ساعت پیش", color: "#4F6EFF" },
-                        { icon: "✉", text: "پیام جدید از تیم",        time: "دیروز",       color: "#A78BFF" },
+                        { icon: "◈", text: "مشاوره AI دریافت شد",    time: "۲ ساعت پیش", color: "#2563EB" },
+                        { icon: "✉", text: "پیام جدید از تیم",        time: "دیروز",       color: "#3B82F6" },
                         { icon: "★", text: "امتیاز به‌روز شد",        time: "۲ روز پیش",  color: "#F59E0B" },
                         { icon: "✓", text: "حساب ساخته شد",           time: fmt(user.createdAt), color: "#10B981" },
                       ].map((a, i) => (
@@ -292,7 +292,7 @@ export default function ProfilePage() {
                 <div className="rounded-2xl p-5" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
                   <div className="flex items-center justify-between mb-4">
                     <p className="text-xs font-bold c-fg3 tracking-widest">اطلاعات حساب</p>
-                    <button onClick={() => setTab("settings")} className="text-xs font-bold text-[#4F6EFF] hover:underline">ویرایش</button>
+                    <button onClick={() => setTab("settings")} className="text-xs font-bold text-[#2563EB] hover:underline">ویرایش</button>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {[
@@ -320,7 +320,7 @@ export default function ProfilePage() {
                 <div className="flex items-center gap-3 px-5 py-4 flex-shrink-0"
                   style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)" }}>
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold"
-                    style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff" }}>M</div>
+                    style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff" }}>M</div>
                   <div>
                     <p className="font-extrabold text-sm c-fg">تیم ماهیر</p>
                     <div className="flex items-center gap-1.5 mt-0.5">
@@ -329,7 +329,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <button onClick={loadMessages}
-                    className="mr-auto text-xs px-3 py-1.5 rounded-lg c-fg3 hover:text-[#4F6EFF] transition-colors"
+                    className="mr-auto text-xs px-3 py-1.5 rounded-lg c-fg3 hover:text-[#2563EB] transition-colors"
                     style={{ background: "var(--surface2)", border: "1px solid var(--border)" }}>↻ بارگذاری</button>
                 </div>
 
@@ -346,7 +346,7 @@ export default function ProfilePage() {
                     <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-start" : "justify-end"}`}>
                       {msg.from === "admin" && (
                         <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold flex-shrink-0 mt-1"
-                          style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff" }}>M</div>
+                          style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff" }}>M</div>
                       )}
                       <div className="max-w-[70%]">
                         <div className="rounded-2xl px-4 py-3"
@@ -373,10 +373,10 @@ export default function ProfilePage() {
                     onKeyDown={e => e.key === "Enter" && sendMsg()}
                     placeholder="پیام خود را بنویسید…"
                     className="flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2"
-                    style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--fg)", outlineColor: "#4F6EFF" }} />
+                    style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--fg)", outlineColor: "#2563EB" }} />
                   <button onClick={sendMsg} disabled={sending || !input.trim()}
                     className="px-5 rounded-xl font-bold text-sm transition-all hover:opacity-90 disabled:opacity-40"
-                    style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.3)" }}>
+                    style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.3)" }}>
                     {sending ? "..." : "ارسال"}
                   </button>
                 </div>
@@ -393,7 +393,7 @@ export default function ProfilePage() {
                   </div>
                   <Link href="/consult"
                     className="flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm transition-all hover:opacity-90"
-                    style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 16px rgba(79,110,255,0.3)" }}>
+                    style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff", boxShadow: "0 4px 16px rgba(79,110,255,0.3)" }}>
                     + مشاوره جدید
                   </Link>
                 </div>
@@ -407,17 +407,17 @@ export default function ProfilePage() {
                     <p className="text-sm c-fg3 mb-6 max-w-xs">اولین مشاوره هوشمندت رایگانه! همین الان امتحان کن.</p>
                     <Link href="/consult"
                       className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all hover:opacity-90"
-                      style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.3)" }}>
+                      style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff", boxShadow: "0 4px 20px rgba(79,110,255,0.3)" }}>
                       شروع مشاوره رایگان ←
                     </Link>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-3">
                     {Array.from({ length: user.consultCount }).map((_, i) => (
-                      <div key={i} className="flex items-center gap-4 rounded-2xl p-5 transition-all hover:border-[#4F6EFF]/30 group"
+                      <div key={i} className="flex items-center gap-4 rounded-2xl p-5 transition-all hover:border-[#2563EB]/30 group"
                         style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
                         <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold flex-shrink-0"
-                          style={{ background: "linear-gradient(135deg,rgba(79,110,255,0.15),rgba(167,139,255,0.1))", color: "#7B93FF" }}>◈</div>
+                          style={{ background: "linear-gradient(135deg,rgba(79,110,255,0.15),rgba(167,139,255,0.1))", color: "#5B9CF6" }}>◈</div>
                         <div className="flex-1">
                           <p className="font-bold text-sm c-fg">مشاوره رشد کسب‌وکار #{i + 1}</p>
                           <p className="text-xs c-fg3 mt-0.5">پاسخ اختصاصی هوش مصنوعی دریافت شد</p>
@@ -437,7 +437,7 @@ export default function ProfilePage() {
                   <p className="text-sm c-fg3 mb-4">با تیم ماهیر مستقیم در ارتباط باش</p>
                   <button onClick={() => setTab("chat")}
                     className="text-sm font-bold px-5 py-2.5 rounded-xl transition-all hover:opacity-90"
-                    style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff" }}>
+                    style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff" }}>
                     ارسال پیام به تیم ←
                   </button>
                 </div>
@@ -457,7 +457,7 @@ export default function ProfilePage() {
                 <div className="rounded-2xl p-6" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
                   <div className="flex items-center gap-3 mb-5">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold"
-                      style={{ background: "rgba(79,110,255,0.12)", color: "#4F6EFF" }}>👤</div>
+                      style={{ background: "rgba(79,110,255,0.12)", color: "#2563EB" }}>👤</div>
                     <p className="font-bold c-fg">اطلاعات شخصی</p>
                   </div>
                   <div className="flex flex-col gap-4">
@@ -480,7 +480,7 @@ export default function ProfilePage() {
                 <div className="rounded-2xl p-6" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
                   <div className="flex items-center gap-3 mb-5">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                      style={{ background: "rgba(167,139,255,0.12)", color: "#A78BFF" }}>🔒</div>
+                      style={{ background: "rgba(167,139,255,0.12)", color: "#3B82F6" }}>🔒</div>
                     <p className="font-bold c-fg">امنیت</p>
                   </div>
                   <div>
@@ -501,7 +501,7 @@ export default function ProfilePage() {
 
                 <button onClick={saveSettings} disabled={saving}
                   className="w-full py-4 rounded-xl font-extrabold text-sm transition-all hover:opacity-90 disabled:opacity-50"
-                  style={{ background: "linear-gradient(135deg,#4F6EFF,#A78BFF)", color: "#fff", boxShadow: "0 4px 24px rgba(79,110,255,0.3)" }}>
+                  style={{ background: "linear-gradient(135deg,#2563EB,#3B82F6)", color: "#fff", boxShadow: "0 4px 24px rgba(79,110,255,0.3)" }}>
                   {saving ? "در حال ذخیره..." : "ذخیره تغییرات"}
                 </button>
 

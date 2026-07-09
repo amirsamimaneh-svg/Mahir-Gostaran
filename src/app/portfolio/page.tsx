@@ -26,18 +26,18 @@ export default function PortfolioPage() {
       <nav className="fixed top-0 inset-x-0 z-50"
         style={{ background: "rgba(5,5,15,0.85)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="text-xl font-extrabold text-[#4F6EFF] tracking-widest">
+          <Link href="/" className="text-xl font-extrabold text-[#2563EB] tracking-widest">
             {isRtl ? "ماهیر" : "Mahir"}
           </Link>
           <div className="flex items-center gap-3">
             <button onClick={() => setLang(l => l === "fa" ? "en" : "fa")}
-              className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#4F6EFF]"
+              className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
               style={{ background: "rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.5)" }}>
               {isRtl ? "EN" : "فا"}
             </button>
             <Link href="/consult"
               className="text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-105"
-              style={{ background: "#4F6EFF", color: "#111" }}>
+              style={{ background: "#2563EB", color: "#111" }}>
               {isRtl ? "مشاوره رایگان" : "Free Consultation"}
             </Link>
           </div>
@@ -50,14 +50,14 @@ export default function PortfolioPage() {
         <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-5"
             style={{ background: "rgba(79,110,255,0.08)", border: "1px solid rgba(79,110,255,0.2)" }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#4F6EFF] animate-pulse" />
-            <span className="text-xs text-[#A78BFF] tracking-widest">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse" />
+            <span className="text-xs text-[#3B82F6] tracking-widest">
               {isRtl ? "نمونه‌کارهای ماهیر" : "Mahir Portfolio"}
             </span>
           </div>
           <h1 className="font-extrabold mb-4" style={{ fontSize: "clamp(2rem,5vw,3.5rem)", color: "#f0f0f5" }}>
             {isRtl ? "پروژه‌هایی که " : "Projects That "}
-            <span style={{ background: "linear-gradient(135deg,#4F6EFF,#3D5AE8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <span style={{ background: "linear-gradient(135deg,#2563EB,#3D5AE8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               {isRtl ? "نتیجه می‌دهند" : "Deliver Results"}
             </span>
           </h1>
@@ -74,7 +74,7 @@ export default function PortfolioPage() {
             onClick={() => setActive(null)}
             className="px-4 py-1.5 rounded-full text-xs font-bold transition-all"
             style={{
-              background: !active ? "#4F6EFF" : "rgba(255,255,255,0.06)",
+              background: !active ? "#2563EB" : "rgba(255,255,255,0.06)",
               color: !active ? "#111" : "rgba(240,240,245,0.5)",
               border: !active ? "none" : "1px solid rgba(255,255,255,0.1)",
             }}>
@@ -84,7 +84,7 @@ export default function PortfolioPage() {
             <button key={cat} onClick={() => setActive(cat)}
               className="px-4 py-1.5 rounded-full text-xs font-bold transition-all"
               style={{
-                background: active === cat ? "#4F6EFF" : "rgba(255,255,255,0.06)",
+                background: active === cat ? "#2563EB" : "rgba(255,255,255,0.06)",
                 color: active === cat ? "#111" : "rgba(240,240,245,0.5)",
                 border: active === cat ? "none" : "1px solid rgba(255,255,255,0.1)",
               }}>
@@ -150,7 +150,7 @@ export default function PortfolioPage() {
           </p>
           <Link href="/consult"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-sm transition-all hover:scale-105"
-            style={{ background: "#4F6EFF", color: "#111", boxShadow: "0 0 40px rgba(79,110,255,0.3)" }}>
+            style={{ background: "#2563EB", color: "#111", boxShadow: "0 0 40px rgba(79,110,255,0.3)" }}>
             {isRtl ? "مشاوره رایگان ←" : "Start Free Consultation →"}
           </Link>
         </div>

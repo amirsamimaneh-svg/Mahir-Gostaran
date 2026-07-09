@@ -94,7 +94,7 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
           right: "20px",
           width: 56, height: 56,
           borderRadius: "50%",
-          background: open ? "rgba(30,30,50,0.9)" : "linear-gradient(135deg,#4F6EFF,#3D5AE8)",
+          background: open ? "rgba(30,30,50,0.9)" : "linear-gradient(135deg,#2563EB,#3D5AE8)",
           boxShadow: open ? "0 4px 20px rgba(0,0,0,0.4)" : "0 4px 24px rgba(79,110,255,0.5)",
           border: open ? "1px solid rgba(255,255,255,0.1)" : "none",
         }}>
@@ -133,11 +133,11 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
           <div className="flex items-center gap-3 px-4 py-3 flex-shrink-0"
             style={{ borderBottom: "1px solid rgba(255,255,255,0.07)", background: "rgba(79,110,255,0.05)" }}>
             <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: "linear-gradient(135deg,#4F6EFF,#3D5AE8)" }}>
+              style={{ background: "linear-gradient(135deg,#2563EB,#3D5AE8)" }}>
               <span className="text-base font-extrabold text-gray-900">M</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-sm text-[#4F6EFF] leading-none">
+              <p className="font-bold text-sm text-[#2563EB] leading-none">
                 {isRtl ? "دستیار ماهیر" : "Mahir Assistant"}
               </p>
               <div className="flex items-center gap-1.5 mt-1">
@@ -177,7 +177,7 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
               <div className="flex flex-col gap-1.5 mt-1">
                 {suggestions.map(s => (
                   <button key={s} onClick={() => send(s)}
-                    className="text-right text-xs px-3 py-2 rounded-xl transition-all hover:border-[#4F6EFF]/40 hover:text-[#4F6EFF] text-start"
+                    className="text-right text-xs px-3 py-2 rounded-xl transition-all hover:border-[#2563EB]/40 hover:text-[#2563EB] text-start"
                     style={{ border: "1px solid rgba(255,255,255,0.08)", color: "rgba(240,240,245,0.5)", background: "rgba(255,255,255,0.03)" }}>
                     {s}
                   </button>
@@ -190,7 +190,7 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
                 <div className="rounded-2xl px-4 py-3 flex gap-1.5 items-center"
                   style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
                   {[0,1,2].map(i => (
-                    <span key={i} className="w-1.5 h-1.5 rounded-full bg-[#4F6EFF]"
+                    <span key={i} className="w-1.5 h-1.5 rounded-full bg-[#2563EB]"
                       style={{ animation: `bounce 1s ${i*0.15}s infinite` }} />
                   ))}
                 </div>
@@ -209,12 +209,12 @@ export default function ChatBot({ lang = "fa" }: { lang?: "fa" | "en" }) {
                 onKeyDown={e => e.key === "Enter" && send()}
                 placeholder={isRtl ? "پیام خود را بنویس…" : "Type your message…"}
                 disabled={loading}
-                className="flex-1 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-[#4F6EFF]/50 disabled:opacity-50"
+                className="flex-1 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:ring-1 focus:ring-[#2563EB]/50 disabled:opacity-50"
                 style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }}
               />
               <button onClick={() => send()} disabled={loading || !input.trim()}
                 className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all hover:scale-105 active:scale-95 disabled:opacity-40"
-                style={{ background: "#4F6EFF" }}>
+                style={{ background: "#2563EB" }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5">
                   <path d={isRtl ? "M5 12h14M12 5l7 7-7 7" : "M5 12h14M12 5l7 7-7 7"} strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>

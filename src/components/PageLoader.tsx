@@ -26,20 +26,20 @@ export default function PageLoader() {
           className="absolute w-20 h-20 rounded-full"
           style={{
             border: "2px solid transparent",
-            borderTopColor: "#4F6EFF",
-            borderRightColor: "#A78BFF",
+            borderTopColor: "#2563EB",
+            borderRightColor: "#3B82F6",
             animation: "spin 0.8s linear infinite",
           }}
         />
         {/* logo */}
         <div
           className="w-12 h-12 rounded-2xl flex items-center justify-center font-extrabold text-xl"
-          style={{ background: "linear-gradient(135deg,#4F6EFF,#3D5AE8)", color: "#03050C" }}
+          style={{ background: "linear-gradient(135deg,#2563EB,#3D5AE8)", color: "#03050C" }}
         >
           M
         </div>
       </div>
-      <p className="text-sm font-bold tracking-widest" style={{ color: "#4F6EFF" }}>
+      <p className="text-sm font-bold tracking-widest" style={{ color: "#2563EB" }}>
         ماهیر
       </p>
       <style>{`

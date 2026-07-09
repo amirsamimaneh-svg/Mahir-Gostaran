@@ -10,7 +10,7 @@ const PLANS = {
       price: "۲,۹۰۰,۰۰۰",
       period: "تومان / ماه",
       desc: "برای کسب‌وکارهای تازه‌کار",
-      color: "#4F6EFF",
+      color: "#2563EB",
       features: [
         "مشاوره استراتژی رشد ماهانه",
         "مدیریت اینستاگرام (۱۲ پست)",
@@ -25,7 +25,7 @@ const PLANS = {
       price: "۶,۵۰۰,۰۰۰",
       period: "تومان / ماه",
       desc: "محبوب‌ترین پلن برای رشد سریع",
-      color: "#4F6EFF",
+      color: "#2563EB",
       features: [
         "همه امکانات استارتر",
         "طراحی هویت برند کامل",
@@ -43,7 +43,7 @@ const PLANS = {
       price: "سفارشی",
       period: "",
       desc: "برای کسب‌وکارهای بزرگ",
-      color: "#A78BFF",
+      color: "#3B82F6",
       features: [
         "همه امکانات حرفه‌ای",
         "پیاده‌سازی هوش مصنوعی اختصاصی",
@@ -63,7 +63,7 @@ const PLANS = {
       price: "$99",
       period: "/ month",
       desc: "For new businesses getting started",
-      color: "#4F6EFF",
+      color: "#2563EB",
       features: [
         "Monthly growth strategy session",
         "Instagram management (12 posts)",
@@ -78,7 +78,7 @@ const PLANS = {
       price: "$249",
       period: "/ month",
       desc: "Most popular plan for rapid growth",
-      color: "#4F6EFF",
+      color: "#2563EB",
       features: [
         "Everything in Starter",
         "Full brand identity design",
@@ -96,7 +96,7 @@ const PLANS = {
       price: "Custom",
       period: "",
       desc: "For large-scale businesses",
-      color: "#A78BFF",
+      color: "#3B82F6",
       features: [
         "Everything in Professional",
         "Custom AI implementation",
@@ -123,16 +123,16 @@ export default function PricingPage() {
       {/* Navbar */}
       <nav className="fixed top-0 inset-x-0 z-50" style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="text-xl font-extrabold text-[#4F6EFF] tracking-widest">
+          <Link href="/" className="text-xl font-extrabold text-[#2563EB] tracking-widest">
             {isRtl ? "ماهیر" : "Mahir"}
           </Link>
           <div className="flex items-center gap-3">
             <button onClick={() => setLang(l => l === "fa" ? "en" : "fa")}
-              className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#4F6EFF]"
+              className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
               style={{ background: "var(--surface)", color: "var(--fg2)", border: "1px solid var(--border)" }}>
               {isRtl ? "EN" : "فا"}
             </button>
-            <Link href="/" className="text-sm font-medium px-4 py-2 rounded-xl c-fg2 hover:text-[#4F6EFF] transition-all"
+            <Link href="/" className="text-sm font-medium px-4 py-2 rounded-xl c-fg2 hover:text-[#2563EB] transition-all"
               style={{ border: "1px solid var(--border)" }}>
               {isRtl ? "← خانه" : "← Home"}
             </Link>
@@ -146,8 +146,8 @@ export default function PricingPage() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 rounded-full px-5 py-2 mb-5"
             style={{ background: "rgba(79,110,255,0.08)", border: "1px solid rgba(79,110,255,0.2)" }}>
-            <span className="w-2 h-2 rounded-full bg-[#4F6EFF] animate-pulse" />
-            <span className="text-xs font-bold text-[#4F6EFF] tracking-widest">
+            <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse" />
+            <span className="text-xs font-bold text-[#2563EB] tracking-widest">
               {isRtl ? "شفاف و بدون هزینه پنهان" : "Transparent Pricing"}
             </span>
           </div>
@@ -176,7 +176,7 @@ export default function PricingPage() {
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <span className="text-xs font-bold px-4 py-1.5 rounded-full"
-                    style={{ background: "#4F6EFF", color: "#03050C" }}>
+                    style={{ background: "#2563EB", color: "#03050C" }}>
                     {isRtl ? "✦ محبوب‌ترین" : "✦ Most Popular"}
                   </span>
                 </div>
@@ -195,7 +195,7 @@ export default function PricingPage() {
               <ul className="flex flex-col gap-3 mb-8 flex-1">
                 {plan.features.map(f => (
                   <li key={f} className="flex items-start gap-2.5 text-sm c-fg2">
-                    <span className="mt-0.5 flex-shrink-0 text-[#4F6EFF] font-bold">✓</span>
+                    <span className="mt-0.5 flex-shrink-0 text-[#2563EB] font-bold">✓</span>
                     {f}
                   </li>
                 ))}
@@ -204,7 +204,7 @@ export default function PricingPage() {
               <Link href="/consult"
                 className="w-full py-3.5 rounded-xl font-bold text-sm text-center transition-all hover:scale-105 block"
                 style={plan.popular
-                  ? { background: "#4F6EFF", color: "#03050C", boxShadow: "0 0 30px rgba(79,110,255,0.3)" }
+                  ? { background: "#2563EB", color: "#03050C", boxShadow: "0 0 30px rgba(79,110,255,0.3)" }
                   : { background: "var(--surface)", color: "var(--fg)", border: "1px solid var(--border)" }
                 }>
                 {plan.cta}
@@ -217,7 +217,7 @@ export default function PricingPage() {
         <div className="mt-16 text-center">
           <p className="text-sm c-fg3">
             {isRtl ? "سوال داری؟ " : "Have questions? "}
-            <Link href="/consult" className="text-[#4F6EFF] font-bold hover:underline">
+            <Link href="/consult" className="text-[#2563EB] font-bold hover:underline">
               {isRtl ? "مشاوره رایگان بگیر" : "Get free consultation"}
             </Link>
           </p>

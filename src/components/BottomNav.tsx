@@ -62,14 +62,14 @@ export default function BottomNav({ lang = "fa" }: { lang?: "fa" | "en" }) {
               </span>
               <span
                 className="text-[10px] font-bold truncate"
-                style={{ color: isConsult ? "#4F6EFF" : "var(--fg2)" }}
+                style={{ color: isConsult ? "#2563EB" : "var(--fg2)" }}
               >
                 {item.label}
               </span>
               {isConsult && (
                 <span
-                  className="absolute -top-1 w-1 h-1 rounded-full bg-[#4F6EFF]"
-                  style={{ boxShadow: "0 0 6px #4F6EFF" }}
+                  className="absolute -top-1 w-1 h-1 rounded-full bg-[#2563EB]"
+                  style={{ boxShadow: "0 0 6px #2563EB" }}
                 />
               )}
             </div>

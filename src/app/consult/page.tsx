@@ -79,7 +79,7 @@ export default function ConsultPage() {
 
   if (!authChecked) return (
     <div style={{ background: "#05050f", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div className="w-8 h-8 rounded-full border-2 border-[#4F6EFF] border-t-transparent animate-spin" />
+      <div className="w-8 h-8 rounded-full border-2 border-[#2563EB] border-t-transparent animate-spin" />
     </div>
   );
 
@@ -193,8 +193,8 @@ export default function ConsultPage() {
         </div>
         <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-5"
           style={{ background: "rgba(79,110,255,0.08)", border: "1px solid rgba(79,110,255,0.2)" }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#4F6EFF] animate-pulse" />
-          <span className="text-xs text-[#A78BFF] tracking-wider">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse" />
+          <span className="text-xs text-[#3B82F6] tracking-wider">
             {isRtl ? "مشاور هوش مصنوعی ماهیر" : "Mahir AI Consultant"}
           </span>
         </div>
@@ -223,7 +223,7 @@ export default function ConsultPage() {
 
         <button onClick={() => setStep(0)}
           className="w-full max-w-xs px-8 py-4 rounded-xl font-bold text-base transition-all hover:scale-105 active:scale-95"
-          style={{ background: "#4F6EFF", color: "#111", boxShadow: "0 0 40px rgba(79,110,255,0.35)" }}>
+          style={{ background: "#2563EB", color: "#111", boxShadow: "0 0 40px rgba(79,110,255,0.35)" }}>
           {isRtl ? "شروع مشاوره رایگان ←" : "Start Free Consultation →"}
         </button>
         <p className="mt-3 text-xs" style={{ color: "var(--fg3)" }}>
@@ -244,7 +244,7 @@ export default function ConsultPage() {
           <div className="flex gap-2 mb-8">
             {STEPS.map((_, i) => (
               <div key={i} className="h-1.5 rounded-full transition-all duration-500"
-                style={{ width: i <= step ? "48px" : "18px", background: i <= step ? "#4F6EFF" : "rgba(255,255,255,0.12)" }} />
+                style={{ width: i <= step ? "48px" : "18px", background: i <= step ? "#2563EB" : "rgba(255,255,255,0.12)" }} />
             ))}
           </div>
 
@@ -253,7 +253,7 @@ export default function ConsultPage() {
             style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
 
             <div className="text-4xl mb-3 text-center">{cur.icon}</div>
-            <p className="text-xs text-[#4F6EFF] tracking-widest text-center mb-2 font-medium">
+            <p className="text-xs text-[#2563EB] tracking-widest text-center mb-2 font-medium">
               {isRtl ? `سوال ${step + 1} از ${STEPS.length}` : `Question ${step + 1} of ${STEPS.length}`}
             </p>
             <h2 className="font-bold text-center mb-5 text-lg" style={{ color: "var(--fg)" }}>
@@ -265,8 +265,8 @@ export default function ConsultPage() {
               className="w-full flex items-center justify-center gap-2 rounded-xl py-3 mb-3 text-sm font-bold transition-all hover:scale-105 active:scale-95"
               style={{
                 background: listening ? "rgba(79,110,255,0.18)" : "rgba(79,110,255,0.08)",
-                border: listening ? "1.5px solid #4F6EFF" : "1.5px solid rgba(79,110,255,0.35)",
-                color: listening ? "#4F6EFF" : "rgba(79,110,255,0.8)",
+                border: listening ? "1.5px solid #2563EB" : "1.5px solid rgba(79,110,255,0.35)",
+                color: listening ? "#2563EB" : "rgba(79,110,255,0.8)",
                 boxShadow: listening ? "0 0 20px rgba(79,110,255,0.2)" : "none",
               }}>
               <span className={listening ? "animate-pulse" : ""} style={{ fontSize: "1.2rem" }}>🎤</span>
@@ -293,7 +293,7 @@ export default function ConsultPage() {
                 onKeyDown={e => e.key === "Enter" && handleNext()}
                 placeholder={isRtl ? cur.ph_fa : cur.ph_en}
                 dir={isRtl ? "rtl" : "ltr"}
-                className="flex-1 rounded-xl px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#4F6EFF]/50"
+                className="flex-1 rounded-xl px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
                 style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", color: "var(--fg)" }}
               />
             </div>
@@ -315,7 +315,7 @@ export default function ConsultPage() {
                   </div>
                 ) : (
                   <button onClick={() => fileRef.current?.click()}
-                    className="w-full h-24 rounded-xl flex flex-col items-center justify-center gap-1 text-sm transition-all hover:border-[#4F6EFF]/50 hover:text-[#4F6EFF]"
+                    className="w-full h-24 rounded-xl flex flex-col items-center justify-center gap-1 text-sm transition-all hover:border-[#2563EB]/50 hover:text-[#2563EB]"
                     style={{ border: "1.5px dashed rgba(255,255,255,0.18)", color: "var(--fg3)" }}>
                     <span className="text-2xl">📸</span>
                     <span className="text-xs">{isRtl ? "عکس کسب‌وکار (اختیاری)" : "Business photo (optional)"}</span>
@@ -330,7 +330,7 @@ export default function ConsultPage() {
 
             <button onClick={handleNext} disabled={!input.trim()}
               className="w-full py-3.5 rounded-xl font-bold text-sm transition-all hover:scale-105 active:scale-95 disabled:opacity-40"
-              style={{ background: "#4F6EFF", color: "#111" }}>
+              style={{ background: "#2563EB", color: "#111" }}>
               {step < STEPS.length - 1
                 ? (isRtl ? "بعدی ←" : "Next →")
                 : (isRtl ? "دریافت مشاوره 🚀" : "Get My Advice 🚀")}
@@ -343,7 +343,7 @@ export default function ConsultPage() {
               {answers.slice(0, step).map((a, i) => a && (
                 <div key={i} className="flex items-start gap-3 rounded-xl px-4 py-3 text-sm"
                   style={{ background: "rgba(79,110,255,0.06)", border: "1px solid rgba(79,110,255,0.15)" }}>
-                  <span className="text-[#4F6EFF] flex-shrink-0">{STEPS[i].icon}</span>
+                  <span className="text-[#2563EB] flex-shrink-0">{STEPS[i].icon}</span>
                   <span style={{ color: "var(--fg2)" }}>{a}</span>
                 </div>
               ))}
@@ -366,7 +366,7 @@ export default function ConsultPage() {
             </div>
             <div className="flex gap-1.5">
               {[0,1,2].map(i => (
-                <span key={i} className="w-2.5 h-2.5 rounded-full bg-[#4F6EFF] animate-bounce"
+                <span key={i} className="w-2.5 h-2.5 rounded-full bg-[#2563EB] animate-bounce"
                   style={{ animationDelay: `${i*0.15}s` }} />
               ))}
             </div>
@@ -377,7 +377,7 @@ export default function ConsultPage() {
         ) : error ? (
           <div className="text-center py-20">
             <p className="text-red-400 mb-4">{error}</p>
-            <button onClick={restart} className="px-6 py-2.5 rounded-xl border border-[#4F6EFF]/30 text-[#4F6EFF] text-sm">
+            <button onClick={restart} className="px-6 py-2.5 rounded-xl border border-[#2563EB]/30 text-[#2563EB] text-sm">
               {isRtl ? "دوباره امتحان" : "Try Again"}
             </button>
           </div>
@@ -404,7 +404,7 @@ export default function ConsultPage() {
               style={{ background: "rgba(79,110,255,0.06)", border: "1px solid rgba(79,110,255,0.2)" }}>
               {result.split("\n").map((line, i) =>
                 i === 0
-                  ? <p key={i} className="font-extrabold text-[#4F6EFF] text-lg mb-3">{line}</p>
+                  ? <p key={i} className="font-extrabold text-[#2563EB] text-lg mb-3">{line}</p>
                   : line.trim()
                     ? <p key={i} className="text-sm leading-relaxed mb-1.5" style={{ color: "var(--fg2)" }}>{line}</p>
                     : <br key={i} />
@@ -414,7 +414,7 @@ export default function ConsultPage() {
             <div className="flex gap-3">
               <button onClick={restart}
                 className="flex-1 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
-                style={{ background: "#4F6EFF", color: "#111" }}>
+                style={{ background: "#2563EB", color: "#111" }}>
                 {isRtl ? "مشاوره جدید" : "New Consultation"}
               </button>
               <Link href="/"
@@ -450,14 +450,14 @@ function Page({ children, lang, setLang, isRtl, userName }: {
 
       <header className="sticky top-0 z-40 flex items-center justify-between px-5 py-3.5"
         style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
-        <Link href="/" className="font-extrabold text-[#4F6EFF] text-lg tracking-widest">
+        <Link href="/" className="font-extrabold text-[#2563EB] text-lg tracking-widest">
           {isRtl ? "ماهیر" : "Mahir"}
         </Link>
         <div className="flex items-center gap-2">
           {userName && (
             <Link href="/profile"
-              className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#4F6EFF]"
-              style={{ border: "1px solid rgba(79,110,255,0.25)", color: "#4F6EFF", background: "rgba(79,110,255,0.07)" }}>
+              className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#2563EB]"
+              style={{ border: "1px solid rgba(79,110,255,0.25)", color: "#2563EB", background: "rgba(79,110,255,0.07)" }}>
               <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
                 style={{ background: "rgba(79,110,255,0.2)" }}>{userName.charAt(0)}</span>
               {userName}

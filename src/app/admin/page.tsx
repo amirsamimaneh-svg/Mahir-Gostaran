@@ -89,19 +89,19 @@ export default function AdminPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="text-5xl mb-3">🔐</div>
-          <h1 className="text-xl font-extrabold text-amber-400">پنل مدیریت ماهیر</h1>
+          <h1 className="text-xl font-extrabold text-[#6C5CE7]">پنل مدیریت ماهیر</h1>
         </div>
         <div className="rounded-2xl p-7" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
           <label className="text-xs font-medium mb-2 block" style={{ color: "rgba(240,240,245,0.5)" }}>رمز عبور ادمین</label>
           <input type="password" value={password} onChange={e => setPassword(e.target.value)}
             onKeyDown={e => e.key === "Enter" && login()}
             placeholder="رمز ادمین" dir="ltr"
-            className="w-full rounded-xl px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+            className="w-full rounded-xl px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]/50"
             style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }} />
           {error && <p className="text-xs text-red-400 mb-3 text-center">{error}</p>}
           <button onClick={login} disabled={loading}
             className="w-full py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
-            style={{ background: "#fbbf24", color: "#111" }}>
+            style={{ background: "#6C5CE7", color: "#111" }}>
             {loading ? "در حال بررسی…" : "ورود به پنل"}
           </button>
         </div>
@@ -114,7 +114,7 @@ export default function AdminPage() {
       <nav style={{ background: "rgba(5,5,15,0.9)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
         className="fixed top-0 inset-x-0 z-50">
         <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
-          <h1 className="text-lg font-extrabold text-amber-400">🔐 پنل ادمین ماهیر</h1>
+          <h1 className="text-lg font-extrabold text-[#6C5CE7]">🔐 پنل ادمین ماهیر</h1>
           <Link href="/" className="text-xs px-3 py-2 rounded-lg" style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,240,245,0.4)" }}>
             سایت
           </Link>
@@ -131,7 +131,7 @@ export default function AdminPage() {
           ].map(s => (
             <div key={s.label} className="rounded-2xl p-5 text-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
               <div className="text-2xl mb-1">{s.icon}</div>
-              <div className="text-2xl font-extrabold text-amber-400">{s.value}</div>
+              <div className="text-2xl font-extrabold text-[#6C5CE7]">{s.value}</div>
               <div className="text-xs mt-1" style={{ color: "rgba(240,240,245,0.4)" }}>{s.label}</div>
             </div>
           ))}
@@ -142,7 +142,7 @@ export default function AdminPage() {
           {([["users", "کاربران"], ["chat", "پیام‌رسانی"]] as const).map(([key, label]) => (
             <button key={key} onClick={() => setTab(key)}
               className="flex-1 py-3 text-sm font-bold transition-all"
-              style={{ background: tab === key ? "#fbbf24" : "transparent", color: tab === key ? "#111" : "rgba(240,240,245,0.45)" }}>
+              style={{ background: tab === key ? "#6C5CE7" : "transparent", color: tab === key ? "#111" : "rgba(240,240,245,0.45)" }}>
               {label}
             </button>
           ))}
@@ -159,7 +159,7 @@ export default function AdminPage() {
                   <div key={u.id} className="flex items-center justify-between px-6 py-4 hover:bg-white/[0.02] transition-colors">
                     <div className="flex items-center gap-4">
                       <span className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
-                        style={{ background: "rgba(251,191,36,0.12)", color: "#fbbf24" }}>{i + 1}</span>
+                        style={{ background: "rgba(108,92,231,0.12)", color: "#6C5CE7" }}>{i + 1}</span>
                       <div>
                         <p className="font-bold text-sm">{u.name}</p>
                         <p className="text-xs font-mono mt-0.5" dir="ltr" style={{ color: "rgba(240,240,245,0.4)" }}>{u.phone}</p>
@@ -167,7 +167,7 @@ export default function AdminPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs px-2 py-1 rounded-full" style={{ background: "rgba(251,191,36,0.1)", color: "#fbbf24" }}>
+                      <span className="text-xs px-2 py-1 rounded-full" style={{ background: "rgba(108,92,231,0.1)", color: "#6C5CE7" }}>
                         {u.consultCount} مشاوره
                       </span>
                       <button onClick={() => openChat(u.phone)}
@@ -191,12 +191,12 @@ export default function AdminPage() {
           <div className="flex gap-4 h-[500px]">
             {/* user list */}
             <div className="w-48 flex-shrink-0 rounded-2xl overflow-hidden flex flex-col" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div className="px-3 py-2.5 text-xs font-bold text-amber-400" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>کاربران</div>
+              <div className="px-3 py-2.5 text-xs font-bold text-[#6C5CE7]" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>کاربران</div>
               <div className="overflow-y-auto flex-1">
                 {users.map(u => (
                   <button key={u.phone} onClick={() => { setSelectedPhone(u.phone); fetchMessages(); }}
                     className="w-full text-right px-3 py-3 text-xs transition-all hover:bg-white/[0.04]"
-                    style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", background: selectedPhone === u.phone ? "rgba(251,191,36,0.08)" : "transparent", color: selectedPhone === u.phone ? "#fbbf24" : "rgba(240,240,245,0.6)" }}>
+                    style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", background: selectedPhone === u.phone ? "rgba(108,92,231,0.08)" : "transparent", color: selectedPhone === u.phone ? "#6C5CE7" : "rgba(240,240,245,0.6)" }}>
                     <p className="font-bold truncate">{u.name}</p>
                     <p className="font-mono mt-0.5 opacity-60 truncate" dir="ltr">{u.phone}</p>
                   </button>
@@ -212,7 +212,7 @@ export default function AdminPage() {
                 </div>
               ) : (
                 <>
-                  <div className="px-4 py-3 flex items-center gap-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)", background: "rgba(251,191,36,0.05)" }}>
+                  <div className="px-4 py-3 flex items-center gap-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)", background: "rgba(108,92,231,0.05)" }}>
                     <span className="font-bold text-sm">{selectedUser?.name}</span>
                     <span className="font-mono text-xs" dir="ltr" style={{ color: "rgba(240,240,245,0.4)" }}>{selectedPhone}</span>
                   </div>
@@ -225,10 +225,10 @@ export default function AdminPage() {
                       <div key={msg.id} className={`flex ${msg.from === "admin" ? "justify-start" : "justify-end"}`}>
                         <div className="max-w-[70%] rounded-2xl px-4 py-2.5"
                           style={{
-                            background: msg.from === "admin" ? "rgba(251,191,36,0.12)" : "rgba(255,255,255,0.07)",
-                            border: msg.from === "admin" ? "1px solid rgba(251,191,36,0.2)" : "1px solid rgba(255,255,255,0.1)",
+                            background: msg.from === "admin" ? "rgba(108,92,231,0.12)" : "rgba(255,255,255,0.07)",
+                            border: msg.from === "admin" ? "1px solid rgba(108,92,231,0.2)" : "1px solid rgba(255,255,255,0.1)",
                           }}>
-                          <p className="text-xs font-bold mb-1" style={{ color: msg.from === "admin" ? "#fbbf24" : "rgba(240,240,245,0.5)" }}>
+                          <p className="text-xs font-bold mb-1" style={{ color: msg.from === "admin" ? "#6C5CE7" : "rgba(240,240,245,0.5)" }}>
                             {msg.from === "admin" ? "شما (ادمین)" : selectedUser?.name}
                           </p>
                           <p className="text-sm">{msg.text}</p>
@@ -241,11 +241,11 @@ export default function AdminPage() {
                     <input value={msgText} onChange={e => setMsgText(e.target.value)}
                       onKeyDown={e => e.key === "Enter" && sendMsg()}
                       placeholder="پیام به کاربر…"
-                      className="flex-1 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+                      className="flex-1 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#6C5CE7]/50"
                       style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }} />
                     <button onClick={sendMsg} disabled={sending || !msgText.trim()}
                       className="px-5 rounded-xl font-bold text-sm transition-all hover:scale-105 disabled:opacity-40"
-                      style={{ background: "#fbbf24", color: "#111" }}>
+                      style={{ background: "#6C5CE7", color: "#111" }}>
                       ارسال
                     </button>
                   </div>

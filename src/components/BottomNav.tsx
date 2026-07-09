@@ -40,7 +40,7 @@ export default function BottomNav({ lang = "fa" }: { lang?: "fa" | "en" }) {
         right: "12px",
         background: "rgba(5,5,20,0.55)",
         backdropFilter: "blur(24px)",
-        border: "1px solid rgba(251,191,36,0.12)",
+        border: "1px solid rgba(108,92,231,0.12)",
         borderRadius: "20px",
         boxShadow: "0 4px 32px rgba(0,0,0,0.35)",
         paddingBottom: "env(safe-area-inset-bottom)",
@@ -57,14 +57,14 @@ export default function BottomNav({ lang = "fa" }: { lang?: "fa" | "en" }) {
               </span>
               <span
                 className="text-[10px] font-bold truncate"
-                style={{ color: isConsult ? "#fbbf24" : "rgba(240,240,245,0.5)" }}
+                style={{ color: isConsult ? "#6C5CE7" : "rgba(240,240,245,0.5)" }}
               >
                 {item.label}
               </span>
               {isConsult && (
                 <span
-                  className="absolute -top-1 w-1 h-1 rounded-full bg-amber-400"
-                  style={{ boxShadow: "0 0 6px #fbbf24" }}
+                  className="absolute -top-1 w-1 h-1 rounded-full bg-[#6C5CE7]"
+                  style={{ boxShadow: "0 0 6px #6C5CE7" }}
                 />
               )}
             </div>
@@ -76,7 +76,7 @@ export default function BottomNav({ lang = "fa" }: { lang?: "fa" | "en" }) {
                 key={item.href}
                 href={item.href}
                 className="relative flex-1 flex items-center justify-center transition-all active:scale-95"
-                style={{ background: "rgba(251,191,36,0.07)" }}
+                style={{ background: "rgba(108,92,231,0.07)" }}
               >
                 {inner}
               </Link>

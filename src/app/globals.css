@@ -7,25 +7,41 @@
 }
 
 :root {
-  --bg: #05050f;
-  --fg: #f0f0f5;
-  --fg2: rgba(240,240,245,0.5);
-  --fg3: rgba(240,240,245,0.35);
-  --card: rgba(255,255,255,0.04);
-  --border: rgba(255,255,255,0.08);
-  --nav-bg: rgba(5,5,15,0.8);
-  --nav-border: rgba(255,255,255,0.05);
+  --bg: #0B0F17;
+  --bg2: #0E1420;
+  --surface: #121826;
+  --surface2: #1A2236;
+  --fg: #E6EAF2;
+  --fg2: #8896B0;
+  --fg3: #4A5568;
+  --card: rgba(18,24,38,0.8);
+  --border: #1E2940;
+  --border2: #2A3755;
+  --nav-bg: rgba(11,15,23,0.85);
+  --nav-border: rgba(30,41,64,0.8);
+  /* Brand */
+  --brand: #6C5CE7;
+  --brand-light: #8B7CF8;
+  --brand-glow: rgba(108,92,231,0.22);
+  /* Accent */
+  --accent: #00C2FF;
+  --accent-dim: rgba(0,194,255,0.12);
+  --accent-glow: rgba(0,194,255,0.2);
 }
 
 body.light {
-  --bg: #f5f4ef;
-  --fg: #0f0f1a;
-  --fg2: rgba(15,15,26,0.55);
-  --fg3: rgba(15,15,26,0.38);
-  --card: rgba(0,0,0,0.04);
-  --border: rgba(0,0,0,0.1);
-  --nav-bg: rgba(245,244,239,0.88);
-  --nav-border: rgba(0,0,0,0.07);
+  --bg: #F0F2F8;
+  --bg2: #E8ECF5;
+  --surface: #FFFFFF;
+  --surface2: #F5F7FC;
+  --fg: #0F1420;
+  --fg2: rgba(15,20,32,0.6);
+  --fg3: rgba(15,20,32,0.38);
+  --card: rgba(255,255,255,0.9);
+  --border: rgba(108,92,231,0.15);
+  --border2: rgba(108,92,231,0.25);
+  --nav-bg: rgba(240,242,248,0.9);
+  --nav-border: rgba(108,92,231,0.1);
 }
 
 @theme inline {
@@ -44,7 +60,7 @@ body {
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(251,191,36,.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: rgba(108,92,231,0.4); border-radius: 3px; }
 
 /* ── Keyframes ── */
 @keyframes fadeUp {
@@ -93,7 +109,7 @@ body {
 .d7{animation-delay:.7s} .d8{animation-delay:.8s} .d9{animation-delay:.9s}
 
 .text-shimmer {
-  background: linear-gradient(90deg,#fbbf24,#fde68a,#f59e0b,#fbbf24);
+  background: linear-gradient(90deg,#6C5CE7,#00C2FF,#8B7CF8,#6C5CE7);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -103,8 +119,8 @@ body {
 
 .grid-bg {
   background-image:
-    linear-gradient(rgba(251,191,36,.04) 1px, transparent 1px),
-    linear-gradient(90deg,rgba(251,191,36,.04) 1px, transparent 1px);
+    linear-gradient(rgba(108,92,231,.04) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(108,92,231,.04) 1px, transparent 1px);
   background-size: 60px 60px;
   animation: gridMove 10s linear infinite;
 }
@@ -121,8 +137,8 @@ body.light .grid-bg {
 }
 .card-glow:hover {
   transform: translateY(-5px);
-  border-color: rgba(251,191,36,.45);
-  box-shadow: 0 0 28px rgba(251,191,36,.12);
+  border-color: rgba(108,92,231,.45);
+  box-shadow: 0 0 28px rgba(108,92,231,.15);
 }
 
 /* CSS variable helpers */

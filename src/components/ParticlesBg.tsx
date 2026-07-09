@@ -39,7 +39,7 @@ export default function ParticlesBg() {
       for (const p of particles) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(251,191,36,${p.alpha})`;
+        ctx.fillStyle = `rgba(108,92,231,${p.alpha})`;
         ctx.fill();
         p.x += p.vx;
         p.y += p.vy;

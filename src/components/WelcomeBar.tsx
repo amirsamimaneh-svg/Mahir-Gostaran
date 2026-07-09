@@ -47,7 +47,7 @@ export default function WelcomeBar({
       style={{
         background: "rgba(15,15,30,0.92)",
         backdropFilter: "blur(20px)",
-        border: "1px solid rgba(251,191,36,0.25)",
+        border: "1px solid rgba(108,92,231,0.25)",
         animation: "slideUpBar 0.5s cubic-bezier(.22,.68,0,1.2) both",
       }}
     >
@@ -59,7 +59,7 @@ export default function WelcomeBar({
       `}</style>
 
       {/* Title */}
-      <p className="text-xs font-bold text-amber-400 tracking-widest mb-3 text-center">
+      <p className="text-xs font-bold text-[#6C5CE7] tracking-widest mb-3 text-center">
         {isRtl ? "⚙️ تنظیمات نمایش" : "⚙️ Display Settings"}
       </p>
 
@@ -72,7 +72,7 @@ export default function WelcomeBar({
             onClick={() => setTheme("dark")}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
             style={{
-              background: theme === "dark" ? "#fbbf24" : "transparent",
+              background: theme === "dark" ? "#6C5CE7" : "transparent",
               color: theme === "dark" ? "#111" : "rgba(255,255,255,0.55)",
             }}>
             🌙 {isRtl ? "تاریک" : "Dark"}
@@ -81,7 +81,7 @@ export default function WelcomeBar({
             onClick={() => setTheme("light")}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
             style={{
-              background: theme === "light" ? "#fbbf24" : "transparent",
+              background: theme === "light" ? "#6C5CE7" : "transparent",
               color: theme === "light" ? "#111" : "rgba(255,255,255,0.55)",
             }}>
             ☀️ {isRtl ? "روشن" : "Light"}
@@ -95,7 +95,7 @@ export default function WelcomeBar({
             onClick={() => setLang("fa")}
             className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
             style={{
-              background: lang === "fa" ? "#fbbf24" : "transparent",
+              background: lang === "fa" ? "#6C5CE7" : "transparent",
               color: lang === "fa" ? "#111" : "rgba(255,255,255,0.55)",
             }}>
             🇮🇷 فارسی
@@ -104,7 +104,7 @@ export default function WelcomeBar({
             onClick={() => setLang("en")}
             className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
             style={{
-              background: lang === "en" ? "#fbbf24" : "transparent",
+              background: lang === "en" ? "#6C5CE7" : "transparent",
               color: lang === "en" ? "#111" : "rgba(255,255,255,0.55)",
             }}>
             🇬🇧 English
@@ -115,7 +115,7 @@ export default function WelcomeBar({
         <button
           onClick={apply}
           className="px-5 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
-          style={{ background: "#fbbf24", color: "#111" }}>
+          style={{ background: "#6C5CE7", color: "#111" }}>
           {isRtl ? "تأیید ✓" : "Confirm ✓"}
         </button>
       </div>
@@ -123,7 +123,7 @@ export default function WelcomeBar({
       {/* skip */}
       <button
         onClick={apply}
-        className="absolute top-3 text-xs transition-colors hover:text-amber-400"
+        className="absolute top-3 text-xs transition-colors hover:text-[#6C5CE7]"
         style={{ [isRtl ? "left" : "right"]: "12px", color: "rgba(255,255,255,0.25)" }}>
         ✕
       </button>

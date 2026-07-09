@@ -27,9 +27,9 @@ export default function ScrollToTop() {
       style={{ bottom: isMobile ? "106px" : "32px" }}
       className={`
         fixed left-6 z-50 w-11 h-11 rounded-full
-        bg-amber-400 text-gray-900 shadow-lg
+        bg-[#6C5CE7] text-gray-900 shadow-lg
         flex items-center justify-center
-        hover:bg-amber-300 active:scale-95
+        hover:bg-[#8B7CF8] active:scale-95
         transition-all duration-300
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 pointer-events-none"}
       `}

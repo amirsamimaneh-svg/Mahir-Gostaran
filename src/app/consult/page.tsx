@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import PageNav from "@/components/PageNav";
 import { useLang } from "@/context/LangContext";
 
 const STEPS = [
@@ -40,7 +41,7 @@ const STEPS = [
 
 export default function ConsultPage() {
   const router = useRouter();
-  const { lang, setLang, isRtl } = useLang();
+  const { lang, isRtl } = useLang();
   const [step, setStep] = useState(-1);
   const [authChecked, setAuthChecked] = useState(false);
   const [userName, setUserName] = useState("");
@@ -186,7 +187,7 @@ export default function ConsultPage() {
 
   // ── Landing ──────────────────────────────────────────────
   if (step === -1) return (
-    <Page lang={lang} setLang={setLang} isRtl={isRtl} userName={userName}>
+    <Page isRtl={isRtl} userName={userName}>
       <div className="flex flex-col items-center text-center max-w-lg mx-auto px-4 py-12 anim-fade-up">
         <div className="w-20 h-20 rounded-2xl mb-6 flex items-center justify-center text-4xl anim-float"
           style={{ background: "rgba(79,110,255,0.12)", border: "1px solid rgba(79,110,255,0.3)" }}>
@@ -238,7 +239,7 @@ export default function ConsultPage() {
   if (step < STEPS.length) {
     const cur = STEPS[step];
     return (
-      <Page lang={lang} setLang={setLang} isRtl={isRtl} userName={userName}>
+      <Page isRtl={isRtl} userName={userName}>
         <div className="w-full max-w-lg mx-auto px-4 py-8 flex flex-col items-center">
 
           {/* progress */}
@@ -357,7 +358,7 @@ export default function ConsultPage() {
 
   // ── Result ────────────────────────────────────────────────
   return (
-    <Page lang={lang} setLang={setLang} isRtl={isRtl} userName={userName}>
+    <Page isRtl={isRtl} userName={userName}>
       <div className="w-full max-w-lg mx-auto px-4 py-8 flex flex-col items-center">
         {loading ? (
           <div className="flex flex-col items-center gap-5 py-20">
@@ -432,10 +433,8 @@ export default function ConsultPage() {
 }
 
 // ── Layout ────────────────────────────────────────────────
-function Page({ children, lang, setLang, isRtl, userName }: {
+function Page({ children, isRtl, userName }: {
   children: React.ReactNode;
-  lang: string;
-  setLang: (l: "fa" | "en") => void;
   isRtl: boolean;
   userName?: string;
 }) {
@@ -449,30 +448,12 @@ function Page({ children, lang, setLang, isRtl, userName }: {
           style={{ background: "rgba(79,110,255,0.07)" }} />
       </div>
 
-      <header className="sticky top-0 z-40 flex items-center justify-between px-5 py-3.5"
-        style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
-        <Link href="/" className="font-extrabold text-[#2563EB] text-lg tracking-widest">
-          {isRtl ? "ماهیر" : "Mahir"}
-        </Link>
-        <div className="flex items-center gap-2">
-          {userName && (
-            <Link href="/profile"
-              className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#2563EB]"
-              style={{ border: "1px solid rgba(79,110,255,0.25)", color: "#2563EB", background: "rgba(79,110,255,0.07)" }}>
-              <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
-                style={{ background: "rgba(79,110,255,0.2)" }}>{userName.charAt(0)}</span>
-              {userName}
-            </Link>
-          )}
-          <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
-            className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
-            style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>
-            {lang === "fa" ? "EN" : "فا"}
-          </button>
-        </div>
-      </header>
+      <PageNav
+        backHref={userName ? "/profile" : "/"}
+        backLabel={userName ? userName : undefined}
+      />
 
-      <main className="relative z-10">{children}</main>
+      <main className="relative z-10 pt-[68px]">{children}</main>
     </div>
   );
 }

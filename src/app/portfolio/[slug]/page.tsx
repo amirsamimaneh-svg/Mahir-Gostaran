@@ -3,12 +3,13 @@
 import { use, useState, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import PageNav from "@/components/PageNav";
 import { projects } from "@/data/projects";
 import { useLang } from "@/context/LangContext";
 
 function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const { lang, setLang, isRtl } = useLang();
+  const { lang, isRtl } = useLang();
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   const project = projects.find(p => p.slug === slug);
@@ -29,27 +30,7 @@ function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
     <div dir={isRtl ? "rtl" : "ltr"} lang={lang}
       style={{ background: "#05050f", minHeight: "100vh", color: "#f0f0f5" }}>
 
-      {/* Navbar */}
-      <nav className="fixed top-0 inset-x-0 z-50"
-        style={{ background: "rgba(5,5,15,0.85)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="text-xl font-extrabold text-[#2563EB] tracking-widest">
-            {isRtl ? "ماهیر" : "Mahir"}
-          </Link>
-          <div className="flex items-center gap-3">
-            <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
-              className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
-              style={{ background: "rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.5)" }}>
-              {lang === "fa" ? "EN" : "فا"}
-            </button>
-            <Link href="/portfolio"
-              className="text-sm font-medium px-4 py-2 rounded-xl transition-all hover:text-[#2563EB]"
-              style={{ color: "rgba(240,240,245,0.5)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              {isRtl ? "← نمونه‌کارها" : "← Portfolio"}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <PageNav backHref="/portfolio" backLabel={isRtl ? "← نمونه‌کارها" : "← Portfolio"} />
 
       <div className="max-w-3xl mx-auto px-6 pt-20 md:pt-32 pb-20">
 

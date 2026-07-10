@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import PageNav from "@/components/PageNav";
 import { useLang } from "@/context/LangContext";
 
 const PLANS = {
@@ -113,31 +114,13 @@ const PLANS = {
 };
 
 export default function PricingPage() {
-  const { lang, setLang, isRtl } = useLang();
+  const { lang, isRtl } = useLang();
   const plans = (PLANS as Record<string, typeof PLANS.fa>)[lang] ?? PLANS.fa;
 
   return (
     <div dir={isRtl ? "rtl" : "ltr"} style={{ background: "var(--bg)", minHeight: "100vh", color: "var(--fg)" }}>
 
-      {/* Navbar */}
-      <nav className="fixed top-0 inset-x-0 z-50" style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="text-xl font-extrabold text-[#2563EB] tracking-widest">
-            {isRtl ? "ماهیر" : "Mahir"}
-          </Link>
-          <div className="flex items-center gap-3">
-            <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
-              className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
-              style={{ background: "var(--surface)", color: "var(--fg2)", border: "1px solid var(--border)" }}>
-              {lang === "fa" ? "EN" : "فا"}
-            </button>
-            <Link href="/" className="text-sm font-medium px-4 py-2 rounded-xl c-fg2 hover:text-[#2563EB] transition-all"
-              style={{ border: "1px solid var(--border)" }}>
-              {isRtl ? "← خانه" : "← Home"}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <PageNav />
 
       <div className="max-w-6xl mx-auto px-6 pt-20 md:pt-32 pb-24">
 

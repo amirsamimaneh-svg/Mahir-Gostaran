@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { projects } from "@/data/projects";
+import PageNav from "@/components/PageNav";
 import { useLang } from "@/context/LangContext";
 
 export default function PortfolioPage() {
-  const { lang, setLang, isRtl } = useLang();
+  const { lang, isRtl } = useLang();
 
   const categories = Array.from(
     new Set(projects.map(p => isRtl ? p.category_fa : p.category_en))
@@ -22,27 +23,7 @@ export default function PortfolioPage() {
       style={{ background: "var(--bg)", minHeight: "100vh" }}
       className="[--bg:#05050f] [--fg:#f0f0f5] [--fg2:rgba(240,240,245,0.5)] [--fg3:rgba(240,240,245,0.35)] [--card:rgba(255,255,255,0.04)] [--border:rgba(255,255,255,0.08)]">
 
-      {/* Navbar */}
-      <nav className="fixed top-0 inset-x-0 z-50"
-        style={{ background: "rgba(5,5,15,0.85)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="text-xl font-extrabold text-[#2563EB] tracking-widest">
-            {isRtl ? "ماهیر" : "Mahir"}
-          </Link>
-          <div className="flex items-center gap-3">
-            <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
-              className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
-              style={{ background: "rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.5)" }}>
-              {lang === "fa" ? "EN" : "فا"}
-            </button>
-            <Link href="/consult"
-              className="text-sm font-bold px-5 py-2 rounded-xl transition-all hover:scale-105"
-              style={{ background: "#2563EB", color: "#111" }}>
-              {isRtl ? "مشاوره رایگان" : "Free Consultation"}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <PageNav backHref="/consult" backLabel={isRtl ? "مشاوره رایگان" : "Free Consult"} />
 
       <div className="max-w-6xl mx-auto px-6 pt-20 md:pt-32 pb-20">
 

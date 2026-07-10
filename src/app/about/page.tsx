@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import MahirLogo from "@/components/MahirLogo";
+import PageNav from "@/components/PageNav";
 import { useLang } from "@/context/LangContext";
 
 const VALUES = [
@@ -20,31 +21,12 @@ const TIMELINE = [
 ];
 
 export default function AboutPage() {
-  const { lang, setLang, isRtl } = useLang();
+  const { isRtl } = useLang();
 
   return (
     <div dir={isRtl ? "rtl" : "ltr"} style={{ background: "var(--bg)", minHeight: "100vh", color: "var(--fg)" }}>
 
-      {/* Navbar */}
-      <nav className="fixed top-0 inset-x-0 z-50" style={{ background: "var(--nav-bg)", backdropFilter: "blur(20px)", borderBottom: "1px solid var(--nav-border)" }}>
-        <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <MahirLogo size={32} />
-            <span className="text-lg font-extrabold text-[#5B9CF6] tracking-widest">{isRtl ? "ماهیر" : "Mahir"}</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
-              className="text-xs font-bold px-3 py-2 rounded-lg hover:text-[#5B9CF6] transition-all"
-              style={{ background: "var(--surface)", color: "var(--fg2)", border: "1px solid var(--border)" }}>
-              {lang === "fa" ? "EN" : "فا"}
-            </button>
-            <Link href="/" className="text-sm px-4 py-2 rounded-xl hover:text-[#5B9CF6] transition-all"
-              style={{ color: "var(--fg2)", border: "1px solid var(--border)" }}>
-              {isRtl ? "← خانه" : "← Home"}
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <PageNav />
 
       <div className="max-w-4xl mx-auto px-6 pt-20 md:pt-32 pb-24">
 

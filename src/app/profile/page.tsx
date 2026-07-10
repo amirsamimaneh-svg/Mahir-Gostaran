@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ChatWindow, { ChatMessage } from "@/components/ChatWindow";
 
 type UserInfo = { phone: string; email?: string; name: string; createdAt: string; consultCount: number; unread: number };
-type Message = { id: string; from: "admin" | "user"; text: string; createdAt: string };
 type Tab = "dashboard" | "chat" | "consults" | "settings";
 
 const BG = "#05050f";
@@ -22,15 +22,13 @@ const score = (c: number) => Math.min(c * 12 + 40, 100);
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<UserInfo | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
-  const [sending, setSending] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
   const [tab, setTab] = useState<Tab>("dashboard");
   const [editName, setEditName] = useState("");
   const [editPass, setEditPass] = useState("");
   const [saveMsg, setSaveMsg] = useState("");
   const [saving, setSaving] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/auth/me").then(r => r.json()).then(d => {
@@ -47,17 +45,17 @@ export default function ProfilePage() {
   async function loadMessages() {
     const res = await fetch("/api/messages");
     const data = await res.json();
-    if (data.messages) {
-      setMessages(data.messages);
-      setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
-    }
+    if (data.messages) setMessages(data.messages);
   }
 
-  async function sendMsg() {
-    if (!input.trim() || sending) return;
-    setSending(true);
-    await fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: input.trim() }) });
-    setInput(""); setSending(false); loadMessages();
+  async function sendText(text: string) {
+    await fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, type: "text" }) });
+    await loadMessages();
+  }
+
+  async function sendMedia(url: string, type: "image" | "voice", duration?: number) {
+    await fetch("/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: "", type, fileUrl: url, duration }) });
+    await loadMessages();
   }
 
   async function logout() {
@@ -355,74 +353,16 @@ export default function ProfilePage() {
 
             {/* ─── CHAT ─── */}
             {tab === "chat" && (
-              <div className="rounded-3xl overflow-hidden flex flex-col" style={{ height: "calc(100vh - 140px)", minHeight: "480px", border: `1px solid ${BORDER}` }}>
-                {/* Header */}
-                <div className="flex items-center gap-3 px-5 py-4 flex-shrink-0"
-                  style={{ background: "rgba(91,156,246,0.04)", borderBottom: `1px solid ${BORDER}` }}>
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black"
-                    style={{ background: `linear-gradient(135deg,${BLUE},${BLUE2})`, color: "#fff" }}>M</div>
-                  <div>
-                    <p className="font-bold text-sm text-white">تیم ماهیر</p>
-                    <div className="flex items-center gap-1.5 mt-0.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-[10px] text-emerald-400 font-bold">آنلاین ۲۴/۷</span>
-                    </div>
-                  </div>
-                  <button onClick={loadMessages}
-                    className="mr-auto text-xs px-3 py-1.5 rounded-xl transition-all hover:text-[#5B9CF6]"
-                    style={{ border: `1px solid ${BORDER}`, color: "rgba(240,240,245,0.3)" }}>
-                    ↻ بارگذاری
-                  </button>
-                </div>
-
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4" style={{ background: BG }}>
-                  {messages.length === 0 ? (
-                    <div className="flex-1 flex flex-col items-center justify-center py-20 text-center">
-                      <div className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl mb-5"
-                        style={{ background: "rgba(91,156,246,0.07)", border: "1px solid rgba(91,156,246,0.15)" }}>💬</div>
-                      <p className="font-bold text-lg text-white mb-2">هنوز پیامی نیست</p>
-                      <p className="text-sm" style={{ color: "rgba(240,240,245,0.35)" }}>سوال یا درخواستی دارید؟ بنویسید!</p>
-                    </div>
-                  ) : messages.map(msg => (
-                    <div key={msg.id} className={`flex gap-3 ${msg.from === "user" ? "justify-start" : "justify-end"}`}>
-                      {msg.from === "admin" && (
-                        <div className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black flex-shrink-0 mt-1"
-                          style={{ background: `linear-gradient(135deg,${BLUE},${BLUE2})`, color: "#fff" }}>M</div>
-                      )}
-                      <div className="max-w-[72%]">
-                        <div className="rounded-2xl px-4 py-3"
-                          style={msg.from === "admin"
-                            ? { background: "rgba(91,156,246,0.1)", border: "1px solid rgba(91,156,246,0.2)", borderTopRightRadius: "4px" }
-                            : { background: "rgba(255,255,255,0.06)", border: `1px solid ${BORDER}`, borderTopLeftRadius: "4px" }}>
-                          <p className="text-sm leading-relaxed text-white">{msg.text}</p>
-                        </div>
-                        <p className="text-[10px] mt-1 px-1" style={{ color: "rgba(240,240,245,0.25)" }}>{fmtT(msg.createdAt)}</p>
-                      </div>
-                      {msg.from === "user" && (
-                        <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0 mt-1"
-                          style={{ background: "rgba(255,255,255,0.08)", color: "rgba(240,240,245,0.6)" }}>
-                          {user.name.charAt(0)}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                  <div ref={bottomRef} />
-                </div>
-
-                {/* Input */}
-                <div className="flex gap-3 p-4 flex-shrink-0" style={{ background: "rgba(5,5,15,0.8)", borderTop: `1px solid ${BORDER}` }}>
-                  <input value={input} onChange={e => setInput(e.target.value)}
-                    onKeyDown={e => e.key === "Enter" && sendMsg()}
-                    placeholder="پیام خود را بنویسید…"
-                    className="flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none transition-all"
-                    style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${BORDER}`, color: "#f0f0f5" }} />
-                  <button onClick={sendMsg} disabled={sending || !input.trim()}
-                    className="px-5 rounded-xl font-bold text-sm transition-all hover:scale-105 disabled:opacity-40"
-                    style={{ background: `linear-gradient(135deg,${BLUE},${BLUE2})`, color: "#fff", boxShadow: `0 4px 20px rgba(91,156,246,0.3)` }}>
-                    {sending ? "…" : "ارسال"}
-                  </button>
-                </div>
+              <div className="rounded-3xl overflow-hidden" style={{ height: "calc(100vh - 140px)", minHeight: "480px", border: `1px solid ${BORDER}` }}>
+                <ChatWindow
+                  messages={messages}
+                  myRole="user"
+                  myName={user.name}
+                  otherName="تیم ماهیر"
+                  onSendText={sendText}
+                  onSendMedia={sendMedia}
+                  onRefresh={loadMessages}
+                />
               </div>
             )}
 

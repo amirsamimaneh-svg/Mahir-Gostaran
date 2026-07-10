@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import ChatWindow, { ChatMessage } from "@/components/ChatWindow";
 
 type User = { id: string; phone: string; name: string; createdAt: string; consultCount: number };
-type Message = { id: string; from: "admin" | "user"; userPhone: string; text: string; createdAt: string };
 type ProjectReq = {
   id: string; name: string; phone: string; business: string; service: string;
   budget: string; timeline: string; goal: string; description: string;
   createdAt: string; status: "new" | "reviewing" | "done";
 };
 type Contact = { id: string; name: string; phone: string; message: string; createdAt: string; read: boolean };
+type RawMessage = { id: string; from: "admin" | "user"; userPhone: string; type: "text" | "image" | "voice"; text: string; fileUrl?: string; duration?: number; createdAt: string; read: boolean };
 
 const PASS = "Am-=1386";
 const STATUS_LABEL: Record<string, string> = { new: "جدید", reviewing: "در بررسی", done: "انجام شد" };
@@ -120,7 +121,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [allMessages, setAllMessages] = useState<RawMessage[]>([]);
   const [projects, setProjects] = useState<ProjectReq[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [tab, setTab] = useState<"projects" | "contacts" | "users" | "chat">("projects");
@@ -148,7 +149,7 @@ export default function AdminPage() {
   async function fetchMessages() {
     const res = await fetch("/api/admin/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password: PASS }) });
     const data = await res.json();
-    if (data.messages) setMessages(data.messages);
+    if (data.messages) setAllMessages(data.messages);
   }
 
   async function sendMsg() {
@@ -156,6 +157,18 @@ export default function AdminPage() {
     setSending(true);
     await fetch("/api/admin/message", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password: PASS, userPhone: selectedPhone, text: msgText.trim() }) });
     setMsgText(""); setSending(false); fetchMessages();
+  }
+
+  async function adminSendText(text: string) {
+    if (!selectedPhone) return;
+    await fetch("/api/admin/message", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password: PASS, userPhone: selectedPhone, text, type: "text" }) });
+    await fetchMessages();
+  }
+
+  async function adminSendMedia(url: string, type: "image" | "voice", duration?: number) {
+    if (!selectedPhone) return;
+    await fetch("/api/admin/message", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password: PASS, userPhone: selectedPhone, text: "", type, fileUrl: url, duration }) });
+    await fetchMessages();
   }
 
   async function updateStatus(id: string, status: string) {
@@ -166,7 +179,9 @@ export default function AdminPage() {
   if (!authed) return <LoginScreen onLogin={login} />;
 
   const newProjects = projects.filter(p => p.status === "new").length;
-  const chatMessages = messages.filter(m => m.userPhone === selectedPhone);
+  const chatMessages: ChatMessage[] = allMessages
+    .filter(m => m.userPhone === selectedPhone)
+    .map(m => ({ id: m.id, from: m.from, type: m.type, text: m.text, fileUrl: m.fileUrl, duration: m.duration, createdAt: m.createdAt }));
   const selectedUser = users.find(u => u.phone === selectedPhone);
 
   const TABS = [
@@ -415,7 +430,7 @@ export default function AdminPage() {
         {tab === "chat" && (
           <div className="flex gap-4" style={{ height: "calc(100vh - 280px)", minHeight: "460px" }}>
             {/* User list */}
-            <div className="w-56 flex-shrink-0 rounded-2xl flex flex-col overflow-hidden" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <div className="w-52 flex-shrink-0 rounded-2xl flex flex-col overflow-hidden" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}>
               <div className="px-4 py-3 text-xs font-black tracking-widest uppercase" style={{ color: "rgba(91,156,246,0.6)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
                 کاربران
               </div>
@@ -435,57 +450,22 @@ export default function AdminPage() {
             </div>
 
             {/* Chat window */}
-            <div className="flex-1 flex flex-col rounded-2xl overflow-hidden" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <div className="flex-1 rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.07)" }}>
               {!selectedPhone ? (
-                <div className="flex-1 flex items-center justify-center flex-col gap-3">
-                  <div className="text-4xl opacity-20">💬</div>
-                  <p className="text-sm" style={{ color: "rgba(240,240,245,0.3)" }}>یک کاربر انتخاب کنید</p>
+                <div className="h-full flex items-center justify-center flex-col gap-3">
+                  <div className="text-5xl opacity-10">💬</div>
+                  <p className="text-sm" style={{ color: "rgba(240,240,245,0.3)" }}>یک کاربر از لیست انتخاب کنید</p>
                 </div>
               ) : (
-                <>
-                  <div className="px-5 py-3.5 flex items-center gap-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(91,156,246,0.04)" }}>
-                    <div className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black" style={{ background: "rgba(91,156,246,0.15)", color: "#5B9CF6" }}>
-                      {selectedUser?.name?.[0]}
-                    </div>
-                    <div>
-                      <p className="font-bold text-sm text-white">{selectedUser?.name}</p>
-                      <p className="font-mono text-xs" dir="ltr" style={{ color: "rgba(240,240,245,0.35)" }}>{selectedPhone}</p>
-                    </div>
-                  </div>
-                  <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
-                    {chatMessages.length === 0 ? (
-                      <div className="flex-1 flex items-center justify-center">
-                        <p className="text-sm" style={{ color: "rgba(240,240,245,0.25)" }}>هنوز پیامی رد و بدل نشده</p>
-                      </div>
-                    ) : chatMessages.map(msg => (
-                      <div key={msg.id} className={`flex ${msg.from === "admin" ? "justify-start" : "justify-end"}`}>
-                        <div className="max-w-[72%] rounded-2xl px-4 py-3"
-                          style={{
-                            background: msg.from === "admin" ? "rgba(91,156,246,0.12)" : "rgba(255,255,255,0.06)",
-                            border: msg.from === "admin" ? "1px solid rgba(91,156,246,0.2)" : "1px solid rgba(255,255,255,0.08)",
-                          }}>
-                          <p className="text-[10px] font-bold mb-1.5" style={{ color: msg.from === "admin" ? "#5B9CF6" : "rgba(240,240,245,0.4)" }}>
-                            {msg.from === "admin" ? "شما" : selectedUser?.name}
-                          </p>
-                          <p className="text-sm leading-relaxed">{msg.text}</p>
-                          <p className="text-[10px] mt-1.5 opacity-40">{fmtTime(msg.createdAt)}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="p-3 flex gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                    <input value={msgText} onChange={e => setMsgText(e.target.value)}
-                      onKeyDown={e => e.key === "Enter" && sendMsg()}
-                      placeholder="پیام به کاربر…"
-                      className="flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none"
-                      style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#f0f0f5" }} />
-                    <button onClick={sendMsg} disabled={sending || !msgText.trim()}
-                      className="px-5 rounded-xl font-bold text-sm transition-all hover:scale-105 disabled:opacity-40"
-                      style={{ background: "linear-gradient(135deg,#5B9CF6,#2563EB)", color: "#fff" }}>
-                      ارسال
-                    </button>
-                  </div>
-                </>
+                <ChatWindow
+                  messages={chatMessages}
+                  myRole="admin"
+                  myName="ادمین"
+                  otherName={selectedUser?.name ?? selectedPhone}
+                  onSendText={adminSendText}
+                  onSendMedia={adminSendMedia}
+                  onRefresh={fetchMessages}
+                />
               )}
             </div>
           </div>

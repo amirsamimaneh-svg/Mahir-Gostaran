@@ -19,7 +19,10 @@ export type Message = {
   id: string;
   from: "admin" | "user";
   userPhone: string;
+  type: "text" | "image" | "voice";
   text: string;
+  fileUrl?: string;
+  duration?: number;
   createdAt: string;
   read: boolean;
 };
@@ -101,11 +104,20 @@ export function incrementConsult(phone: string) {
   if (u) { u.consultCount++; writeDB(users); }
 }
 
-export function sendMessage(from: "admin" | "user", userPhone: string, text: string): Message {
+export function sendMessage(
+  from: "admin" | "user",
+  userPhone: string,
+  text: string,
+  opts?: { type?: Message["type"]; fileUrl?: string; duration?: number }
+): Message {
   const msgs = readMessages();
   const msg: Message = {
     id: crypto.randomUUID(),
-    from, userPhone, text,
+    from, userPhone,
+    type: opts?.type ?? "text",
+    text,
+    ...(opts?.fileUrl ? { fileUrl: opts.fileUrl } : {}),
+    ...(opts?.duration != null ? { duration: opts.duration } : {}),
     createdAt: new Date().toISOString(),
     read: false,
   };

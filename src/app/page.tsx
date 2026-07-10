@@ -825,8 +825,15 @@ function Portfolio() {
     return () => io.disconnect();
   }, []);
 
-  const featured = PORT_ITEMS[0];
-  const rest = PORT_ITEMS.slice(1);
+  // gradient pairs per project
+  const GRADS = [
+    "linear-gradient(135deg,#92400e,#d97706)",
+    "linear-gradient(135deg,#4c1d95,#7c3aed)",
+    "linear-gradient(135deg,#164e63,#0891b2)",
+    "linear-gradient(135deg,#7f1d1d,#dc2626)",
+    "linear-gradient(135deg,#064e3b,#059669)",
+    "linear-gradient(135deg,#7c2d12,#ea580c)",
+  ];
 
   return (
     <section ref={ref} id="portfolio" className="py-24 w-full max-w-6xl mx-auto px-6" dir={isRtl ? "rtl" : "ltr"}>
@@ -849,136 +856,70 @@ function Portfolio() {
         </Link>
       </div>
 
-      {/* Bento grid */}
+      {/* Colorful card grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {PORT_ITEMS.map((p, i) => {
+          const isHov = hovered === i;
+          return (
+            <Link key={p.slug} href={`/portfolio/${p.slug}?lang=${lang}`}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+              className="relative rounded-3xl overflow-hidden cursor-pointer flex flex-col transition-all duration-500"
+              style={{
+                background: GRADS[i],
+                boxShadow: isHov ? `0 28px 70px ${p.color}55` : `0 4px 24px ${p.color}20`,
+                opacity: visible ? 1 : 0,
+                transform: visible
+                  ? isHov ? "translateY(-8px) scale(1.02)" : "translateY(0) scale(1)"
+                  : "translateY(32px) scale(0.95)",
+                transitionDelay: visible ? "0ms" : `${i * 70}ms`,
+                minHeight: 220,
+              }}>
 
-        {/* Featured card — spans 2 cols */}
-        <Link href={`/portfolio/${featured.slug}?lang=${lang}`}
-          onMouseEnter={() => setHovered(-1)}
-          onMouseLeave={() => setHovered(null)}
-          className="sm:col-span-2 relative rounded-3xl overflow-hidden cursor-pointer group transition-all duration-500"
-          style={{
-            background: hovered === -1
-              ? `linear-gradient(145deg, ${featured.color}18, rgba(8,14,32,0.97))`
-              : "rgba(255,255,255,0.04)",
-            border: `1px solid ${hovered === -1 ? featured.color + "50" : "rgba(255,255,255,0.07)"}`,
-            boxShadow: hovered === -1 ? `0 24px 70px ${featured.color}20` : "none",
-            minHeight: 220,
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(24px)",
-            transition: "all 0.5s ease",
-          }}>
+              {/* Radial spotlight */}
+              <div className="absolute inset-0 pointer-events-none transition-opacity duration-500"
+                style={{ background: `radial-gradient(ellipse at ${isRtl ? "80% 15%" : "20% 15%"}, rgba(255,255,255,0.18), transparent 55%)`, opacity: isHov ? 1 : 0.55 }} />
 
-          {/* Color top stripe */}
-          <div className="absolute top-0 left-0 right-0 h-[3px]"
-            style={{ background: `linear-gradient(${isRtl ? "to left" : "to right"}, ${featured.color}, transparent)` }} />
-
-          {/* Glow blob */}
-          <div className="absolute pointer-events-none transition-all duration-700"
-            style={{ width: 300, height: 300, borderRadius: "50%", background: featured.color, filter: "blur(100px)", opacity: hovered === -1 ? 0.12 : 0.04, top: -100, right: isRtl ? "auto" : -100, left: isRtl ? -100 : "auto" }} />
-
-          {/* Big decorative emoji */}
-          <div className="absolute text-[8rem] leading-none select-none pointer-events-none transition-all duration-500"
-            style={{ opacity: hovered === -1 ? 0.12 : 0.06, bottom: "-1rem", left: isRtl ? "auto" : "1.5rem", right: isRtl ? "1.5rem" : "auto", transform: hovered === -1 ? "scale(1.15) rotate(-8deg)" : "scale(1)" }}>
-            {featured.emoji}
-          </div>
-
-          <div className="relative z-10 p-8 flex flex-col h-full gap-3">
-            {/* Category */}
-            <span className="self-start text-xs px-3 py-1 rounded-full font-bold"
-              style={{ background: `${featured.color}18`, color: featured.color, border: `1px solid ${featured.color}35` }}>
-              {isRtl ? featured.category_fa : featured.category_en}
-            </span>
-
-            {/* Title */}
-            <h3 className="font-extrabold transition-colors duration-300" style={{ fontSize: "clamp(1.5rem,3vw,2.2rem)", color: hovered === -1 ? "#fff" : "rgba(216,229,245,0.9)" }}>
-              {isRtl ? featured.title_fa : featured.title_en}
-            </h3>
-
-            {/* Desc */}
-            <p className="text-sm leading-relaxed max-w-sm transition-colors duration-300"
-              style={{ color: hovered === -1 ? "rgba(216,229,245,0.6)" : "rgba(216,229,245,0.38)" }}>
-              {isRtl ? featured.desc_fa : featured.desc_en}
-            </p>
-
-            {/* Result */}
-            <div className="mt-auto flex items-center justify-between pt-5"
-              style={{ borderTop: `1px solid ${hovered === -1 ? featured.color + "28" : "rgba(255,255,255,0.05)"}` }}>
-              <span className="text-sm font-extrabold" style={{ color: featured.color }}>
-                ✦ {isRtl ? featured.result_fa : featured.result_en}
-              </span>
-              <div className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-400"
-                style={{ background: hovered === -1 ? featured.color : "rgba(255,255,255,0.06)", border: `1px solid ${hovered === -1 ? featured.color : "rgba(255,255,255,0.1)"}`, transform: hovered === -1 ? "scale(1.15)" : "scale(1)" }}>
-                <span className="text-sm font-bold" style={{ color: hovered === -1 ? "#fff" : "rgba(255,255,255,0.3)" }}>{isRtl ? "←" : "→"}</span>
+              {/* Big emoji — decorative */}
+              <div className="absolute text-[6rem] leading-none select-none pointer-events-none transition-all duration-500"
+                style={{ top: "-1.2rem", right: isRtl ? "auto" : "-0.8rem", left: isRtl ? "-0.8rem" : "auto", opacity: isHov ? 0.28 : 0.14, transform: isHov ? "scale(1.2) rotate(10deg)" : "rotate(5deg)" }}>
+                {p.emoji}
               </div>
-            </div>
-          </div>
-        </Link>
 
-        {/* Remaining 5 cards */}
-        {rest.map((p, i) => (
-          <Link key={p.slug} href={`/portfolio/${p.slug}?lang=${lang}`}
-            onMouseEnter={() => setHovered(i)}
-            onMouseLeave={() => setHovered(null)}
-            className="relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500"
-            style={{
-              background: hovered === i
-                ? `linear-gradient(145deg, ${p.color}14, rgba(8,14,32,0.97))`
-                : "rgba(255,255,255,0.03)",
-              border: `1px solid ${hovered === i ? p.color + "45" : "rgba(255,255,255,0.06)"}`,
-              boxShadow: hovered === i ? `0 16px 50px ${p.color}1A` : "none",
-              opacity: visible ? 1 : 0,
-              transform: visible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.96)",
-              transitionDelay: `${(i + 1) * 70}ms`,
-            }}>
+              <div className="relative z-10 p-7 flex flex-col h-full gap-3">
 
-            {/* Color top stripe */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] transition-opacity duration-500"
-              style={{ background: `linear-gradient(${isRtl ? "to left" : "to right"}, ${p.color}, transparent)`, opacity: hovered === i ? 0.9 : 0.3 }} />
-
-            {/* Glow */}
-            <div className="absolute pointer-events-none transition-all duration-700"
-              style={{ width: 180, height: 180, borderRadius: "50%", background: p.color, filter: "blur(70px)", opacity: hovered === i ? 0.12 : 0, top: -60, right: isRtl ? "auto" : -60, left: isRtl ? -60 : "auto" }} />
-
-            <div className="relative z-10 p-6 flex flex-col gap-3 h-full">
-              {/* Icon + category */}
-              <div className="flex items-start justify-between">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-400"
-                  style={{ background: hovered === i ? `${p.color}20` : "rgba(255,255,255,0.05)", border: `1px solid ${hovered === i ? p.color + "50" : "rgba(255,255,255,0.08)"}`, transform: hovered === i ? "scale(1.1) rotate(-5deg)" : "scale(1)" }}>
-                  {p.emoji}
-                </div>
-                <span className="text-[10px] px-2.5 py-1 rounded-full font-bold"
-                  style={{ background: `${p.color}12`, color: p.color, border: `1px solid ${p.color}25` }}>
+                {/* Category pill */}
+                <span className="self-start text-[10px] px-3 py-1 rounded-full font-extrabold uppercase tracking-wider"
+                  style={{ background: "rgba(0,0,0,0.28)", color: "rgba(255,255,255,0.9)", backdropFilter: "blur(8px)" }}>
                   {isRtl ? p.category_fa : p.category_en}
                 </span>
-              </div>
 
-              {/* Title */}
-              <h3 className="font-extrabold text-base leading-snug transition-colors duration-300"
-                style={{ color: hovered === i ? "#fff" : "rgba(216,229,245,0.85)" }}>
-                {isRtl ? p.title_fa : p.title_en}
-              </h3>
+                <div className="flex-1" />
 
-              {/* Desc — hidden on mobile, shown md+ */}
-              <p className="hidden md:block text-xs leading-relaxed flex-1 transition-colors duration-300"
-                style={{ color: hovered === i ? "rgba(216,229,245,0.55)" : "rgba(216,229,245,0.32)" }}>
-                {isRtl ? p.desc_fa : p.desc_en}
-              </p>
+                {/* Title */}
+                <h3 className="font-extrabold leading-tight text-white"
+                  style={{ fontSize: "clamp(1.1rem,2.2vw,1.45rem)", textShadow: "0 2px 12px rgba(0,0,0,0.5)" }}>
+                  {isRtl ? p.title_fa : p.title_en}
+                </h3>
 
-              {/* Result */}
-              <div className="flex items-center justify-between pt-3 mt-auto"
-                style={{ borderTop: `1px solid ${hovered === i ? p.color + "28" : "rgba(255,255,255,0.05)"}` }}>
-                <span className="text-xs font-bold transition-colors duration-300" style={{ color: hovered === i ? p.color : "rgba(255,255,255,0.25)" }}>
-                  ✦ {isRtl ? p.result_fa : p.result_en}
-                </span>
-                <div className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300"
-                  style={{ background: hovered === i ? p.color : "transparent", border: `1px solid ${hovered === i ? p.color : "rgba(255,255,255,0.1)"}` }}>
-                  <span className="text-xs font-bold" style={{ color: hovered === i ? "#fff" : "rgba(255,255,255,0.22)" }}>{isRtl ? "←" : "→"}</span>
+                {/* Result + arrow */}
+                <div className="flex items-center justify-between pt-3"
+                  style={{ borderTop: "1px solid rgba(255,255,255,0.22)" }}>
+                  <span className="text-xs font-extrabold" style={{ color: "rgba(255,255,255,0.92)", textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
+                    ✦ {isRtl ? p.result_fa : p.result_en}
+                  </span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-400"
+                    style={{ background: isHov ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.18)", transform: isHov ? "scale(1.18)" : "scale(1)" }}>
+                    <span className="text-xs font-extrabold transition-colors duration-300"
+                      style={{ color: isHov ? p.color : "rgba(255,255,255,0.95)" }}>
+                      {isRtl ? "←" : "→"}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </section>
   );

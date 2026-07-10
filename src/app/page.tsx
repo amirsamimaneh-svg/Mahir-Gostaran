@@ -1482,9 +1482,9 @@ export default function HomePage() {
       <Navbar />
       <Hero />
       <Stats />
+      <ProjectCTA />
       <Services />
       <Portfolio />
-      <ProjectCTA />
       <Testimonials />
       <Team />
       <ConsultCTA />

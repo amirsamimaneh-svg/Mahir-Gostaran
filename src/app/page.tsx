@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import MahirLogo from "@/components/MahirLogo";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import IdeaCard from "@/components/IdeaCard";
 import ScrollToTop from "@/components/ScrollToTop";
 import Marquee from "@/components/Marquee";
@@ -501,17 +501,119 @@ function Hero() {
 }
 
 // ── Stats ─────────────────────────────────────────────────
+const STAT_META = [
+  { icon: "📁", color: "#5B9CF6", accent: "rgba(91,156,246,0.15)", bar: 96 },
+  { icon: "📈", color: "#34d399", accent: "rgba(52,211,153,0.12)", bar: 80 },
+  { icon: "⏱",  color: "#a78bfa", accent: "rgba(167,139,250,0.12)", bar: 60 },
+  { icon: "🏆", color: "#fb923c", accent: "rgba(251,146,60,0.12)",  bar: 50 },
+];
+
+function StatCard({
+  target, suffix, label, icon, color, accent, bar, delay,
+}: {
+  target: number; suffix: string; label: string;
+  icon: string; color: string; accent: string; bar: number; delay: number;
+}) {
+  const [count, setCount] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true;
+        setTimeout(() => {
+          setVisible(true);
+          const duration = 2000;
+          const step = 14;
+          const steps = duration / step;
+          let cur = 0;
+          const inc = target / steps;
+          const timer = setInterval(() => {
+            cur = Math.min(cur + inc, target);
+            setCount(Math.floor(cur));
+            if (cur >= target) clearInterval(timer);
+          }, step);
+        }, delay);
+      }
+    }, { threshold: 0.3 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [target, delay]);
+
+  return (
+    <div ref={ref}
+      className="relative rounded-3xl p-6 overflow-hidden transition-all duration-700 group"
+      style={{
+        background: `linear-gradient(145deg, ${accent} 0%, rgba(8,14,24,0.9) 100%)`,
+        border: `1px solid ${color}28`,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0) scale(1)" : "translateY(24px) scale(0.96)",
+        transitionDelay: `${delay}ms`,
+        boxShadow: `0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)`,
+      }}>
+
+      {/* Ambient glow */}
+      <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full pointer-events-none transition-all duration-500 group-hover:scale-150"
+        style={{ background: color, filter: "blur(40px)", opacity: 0.12 }} />
+
+      {/* Progress bar — top */}
+      <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-3xl overflow-hidden">
+        <div className="h-full transition-all duration-[2000ms] ease-out rounded-full"
+          style={{
+            background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
+            width: visible ? `${bar}%` : "0%",
+            transitionDelay: `${delay + 200}ms`,
+          }} />
+      </div>
+
+      {/* Icon */}
+      <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+        style={{ background: `${color}18`, border: `1px solid ${color}30` }}>
+        {icon}
+      </div>
+
+      {/* Number */}
+      <div className="font-black mb-1 leading-none"
+        style={{ fontSize: "clamp(2rem,5vw,2.8rem)", color, textShadow: `0 0 30px ${color}60` }}>
+        {count}{suffix}
+      </div>
+
+      {/* Label */}
+      <p className="text-xs font-semibold tracking-wide" style={{ color: "rgba(216,229,245,0.45)" }}>
+        {label}
+      </p>
+
+      {/* Decorative corner number */}
+      <div className="absolute bottom-4 right-4 font-black select-none pointer-events-none transition-all duration-300 group-hover:opacity-30"
+        style={{ fontSize: "4rem", lineHeight: 1, color, opacity: 0.05 }}>
+        {count}{suffix}
+      </div>
+    </div>
+  );
+}
+
 function Stats() {
   const { lang } = useLang();
   const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
   return (
-    <section className="py-20 px-6 w-full max-w-6xl mx-auto">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {tx.stats.map(s => (
-          <div key={s.label} className="card-glow rounded-2xl p-7 text-center">
-            <Counter target={s.target} suffix={s.suffix} />
-            <p className="text-xs mt-2 c-fg3">{s.label}</p>
-          </div>
+    <section className="py-16 px-6 w-full max-w-6xl mx-auto">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {tx.stats.map((s, i) => (
+          <StatCard
+            key={s.label}
+            target={s.target}
+            suffix={s.suffix}
+            label={s.label}
+            icon={STAT_META[i].icon}
+            color={STAT_META[i].color}
+            accent={STAT_META[i].accent}
+            bar={STAT_META[i].bar}
+            delay={i * 120}
+          />
         ))}
       </div>
     </section>

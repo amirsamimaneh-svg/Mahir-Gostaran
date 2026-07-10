@@ -660,25 +660,23 @@ function Services() {
   }, []);
 
   return (
-    <section ref={ref} id="services" className="py-28 px-6 w-full max-w-6xl mx-auto">
+    <section ref={ref} id="services" className="py-28 px-6 w-full max-w-6xl mx-auto" dir={isRtl ? "rtl" : "ltr"}>
 
       {/* Header */}
-      <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4 transition-all duration-700"
+      <div className="mb-16 text-center transition-all duration-700"
         style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)" }}>
-        <div>
-          <p className="text-xs font-extrabold tracking-[0.3em] mb-4" style={{ color: "rgba(91,156,246,0.5)" }}>
-            ✦ {isRtl ? "خدمات" : "SERVICES"}
-          </p>
-          <h2 className="font-extrabold leading-none" style={{ fontSize: "clamp(2.2rem,5vw,4rem)" }}>
-            <span className="c-fg">{tx.servTitle} </span>
-            <span className="text-shimmer">{tx.servBrand}</span>
-          </h2>
-        </div>
-        <p className="max-w-xs text-sm leading-relaxed c-fg3">{tx.servSub}</p>
+        <p className="text-xs font-extrabold tracking-[0.3em] mb-4" style={{ color: "rgba(91,156,246,0.5)" }}>
+          ✦ {isRtl ? "خدمات" : "SERVICES"}
+        </p>
+        <h2 className="font-extrabold leading-none" style={{ fontSize: "clamp(2.2rem,5vw,4rem)" }}>
+          <span className="c-fg">{tx.servTitle} </span>
+          <span className="text-shimmer">{tx.servBrand}</span>
+        </h2>
+        <p className="mt-4 max-w-md mx-auto text-sm leading-relaxed c-fg3">{tx.servSub}</p>
       </div>
 
-      {/* Service rows */}
-      <div className="flex flex-col">
+      {/* 2×2 glass cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {tx.services.map((s, i) => {
           const color = SVC_COLORS[i];
           const isHov = hovered === i;
@@ -687,76 +685,113 @@ function Services() {
               key={s.title}
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
-              className="relative group flex items-center gap-6 py-7 md:py-9 cursor-default transition-all duration-400"
+              className="relative rounded-3xl p-8 overflow-hidden cursor-default transition-all duration-500"
               style={{
-                borderTop: "1px solid rgba(255,255,255,0.06)",
-                borderBottom: i === tx.services.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                background: isHov
+                  ? `linear-gradient(145deg, ${color}14 0%, rgba(8,14,32,0.97) 100%)`
+                  : "rgba(255,255,255,0.03)",
+                border: `1px solid ${isHov ? color + "45" : "rgba(255,255,255,0.07)"}`,
+                boxShadow: isHov ? `0 24px 64px ${color}1A, 0 0 0 1px ${color}18` : "none",
                 opacity: visible ? 1 : 0,
-                transform: visible ? "translateX(0)" : isRtl ? "translateX(32px)" : "translateX(-32px)",
-                transitionDelay: `${i * 90 + 80}ms`,
-              }}
-              dir={isRtl ? "rtl" : "ltr"}>
+                transform: visible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.96)",
+                transitionDelay: `${i * 75}ms`,
+              }}>
 
-              {/* Full-row hover bg */}
-              <div className="absolute inset-0 transition-opacity duration-400 pointer-events-none"
+              {/* Decorative big number */}
+              <span className="absolute font-black select-none pointer-events-none leading-none"
                 style={{
-                  opacity: isHov ? 1 : 0,
-                  background: `radial-gradient(ellipse at ${isRtl ? "90% 50%" : "10% 50%"}, ${color}0E 0%, transparent 65%)`,
-                }} />
-
-              {/* Number */}
-              <span className="flex-shrink-0 font-black text-xs md:text-sm tabular-nums w-8 text-center transition-colors duration-300"
-                style={{ color: isHov ? color : "rgba(255,255,255,0.15)", fontVariantNumeric: "tabular-nums" }}>
-                0{i + 1}
+                  fontSize: "10rem",
+                  color,
+                  opacity: isHov ? 0.08 : 0.03,
+                  top: "-2rem",
+                  right: isRtl ? "auto" : "-1.5rem",
+                  left: isRtl ? "-1.5rem" : "auto",
+                  transition: "opacity 0.5s",
+                  lineHeight: 1,
+                }}>
+                {i + 1}
               </span>
 
-              {/* Icon bubble */}
-              <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center text-2xl transition-all duration-400"
+              {/* Color glow blob */}
+              <div className="absolute pointer-events-none transition-all duration-700"
                 style={{
-                  background: isHov ? `${color}18` : "rgba(255,255,255,0.04)",
-                  border: `1px solid ${isHov ? color + "40" : "rgba(255,255,255,0.08)"}`,
-                  transform: isHov ? "scale(1.1) rotate(-4deg)" : "scale(1)",
-                }}>
-                {s.icon}
-              </div>
+                  width: 240, height: 240,
+                  borderRadius: "50%",
+                  background: color,
+                  filter: "blur(90px)",
+                  opacity: isHov ? 0.13 : 0,
+                  top: -80,
+                  right: isRtl ? "auto" : -80,
+                  left: isRtl ? -80 : "auto",
+                }} />
 
-              {/* Title + desc */}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-extrabold leading-tight transition-colors duration-300 mb-1"
+              {/* Top color stripe */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] transition-opacity duration-500"
+                style={{
+                  background: `linear-gradient(${isRtl ? "to left" : "to right"}, ${color}, transparent)`,
+                  opacity: isHov ? 0.8 : 0.25,
+                }} />
+
+              <div className="relative z-10 flex flex-col h-full">
+
+                {/* Icon */}
+                <div className="mb-6 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl transition-all duration-500"
                   style={{
-                    fontSize: "clamp(1.1rem,2.5vw,1.5rem)",
-                    color: isHov ? "#fff" : "rgba(216,229,245,0.85)",
+                    background: isHov ? `${color}22` : "rgba(255,255,255,0.05)",
+                    border: `1.5px solid ${isHov ? color + "55" : "rgba(255,255,255,0.1)"}`,
+                    boxShadow: isHov ? `0 0 28px ${color}50` : "none",
+                    transform: isHov ? "scale(1.12) rotate(-6deg)" : "scale(1)",
+                  }}>
+                  {s.icon}
+                </div>
+
+                {/* Title */}
+                <h3 className="font-extrabold mb-3 leading-tight transition-colors duration-300"
+                  style={{
+                    fontSize: "clamp(1.2rem,2.5vw,1.55rem)",
+                    color: isHov ? "#fff" : "rgba(216,229,245,0.88)",
                   }}>
                   {s.title}
                 </h3>
-                <p className="text-sm leading-relaxed hidden md:block transition-colors duration-300"
-                  style={{ color: isHov ? "rgba(216,229,245,0.6)" : "rgba(216,229,245,0.35)" }}>
+
+                {/* Desc */}
+                <p className="text-sm leading-relaxed mb-6 transition-colors duration-300 flex-1"
+                  style={{ color: isHov ? "rgba(216,229,245,0.65)" : "rgba(216,229,245,0.38)" }}>
                   {s.desc}
                 </p>
-              </div>
 
-              {/* Tags — desktop hover */}
-              <div className="hidden md:flex items-center gap-2 flex-shrink-0 transition-all duration-400"
-                style={{ opacity: isHov ? 1 : 0, transform: isHov ? "translateY(0)" : "translateY(6px)" }}>
-                {tags[i].map(tag => (
-                  <span key={tag} className="text-xs px-3 py-1 rounded-full font-bold"
-                    style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}>
-                    {tag}
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {tags[i].map(tag => (
+                    <span key={tag} className="text-xs px-3 py-1 rounded-full font-bold transition-all duration-400"
+                      style={{
+                        background: isHov ? `${color}18` : "rgba(255,255,255,0.05)",
+                        color: isHov ? color : "rgba(216,229,245,0.32)",
+                        border: `1px solid ${isHov ? color + "38" : "rgba(255,255,255,0.07)"}`,
+                      }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-4 transition-all duration-300"
+                  style={{ borderTop: `1px solid ${isHov ? color + "28" : "rgba(255,255,255,0.05)"}` }}>
+                  <span className="text-xs font-bold transition-colors duration-300"
+                    style={{ color: isHov ? color : "rgba(255,255,255,0.2)" }}>
+                    {isRtl ? "بیشتر بدانید" : "Learn more"}
                   </span>
-                ))}
-              </div>
-
-              {/* Arrow */}
-              <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-400"
-                style={{
-                  background: isHov ? color : "transparent",
-                  border: `1px solid ${isHov ? color : "rgba(255,255,255,0.1)"}`,
-                  transform: isHov ? "scale(1.1)" : "scale(1)",
-                }}>
-                <span className="text-sm font-bold transition-colors duration-300"
-                  style={{ color: isHov ? "#fff" : "rgba(255,255,255,0.2)" }}>
-                  {isRtl ? "←" : "→"}
-                </span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-400"
+                    style={{
+                      background: isHov ? color : "rgba(255,255,255,0.05)",
+                      border: `1px solid ${isHov ? color : "rgba(255,255,255,0.08)"}`,
+                      transform: isHov ? "scale(1.15)" : "scale(1)",
+                    }}>
+                    <span className="text-xs font-bold" style={{ color: isHov ? "#fff" : "rgba(255,255,255,0.22)" }}>
+                      {isRtl ? "←" : "→"}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           );

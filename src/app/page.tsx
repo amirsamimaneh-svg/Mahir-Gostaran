@@ -210,180 +210,215 @@ function Navbar() {
   }, []);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 30);
+    const fn = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", fn);
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
   return (
     <>
       <nav
-        className="fixed top-0 inset-x-0 z-50 anim-slide-down"
+        className="fixed top-0 inset-x-0 z-50"
         style={{
-          background: scrolled ? "rgba(8,14,24,0.92)" : "rgba(8,14,24,0.5)",
-          backdropFilter: "blur(28px)",
-          borderBottom: "1px solid " + (scrolled ? "rgba(91,156,246,0.12)" : "transparent"),
-          boxShadow: scrolled ? "0 2px 40px rgba(0,0,0,0.4)" : "none",
-          transition: "all 0.3s ease",
+          background: scrolled ? "rgba(6,10,20,0.96)" : "transparent",
+          backdropFilter: scrolled ? "blur(24px)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(91,156,246,0.1)" : "1px solid transparent",
+          transition: "background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease",
         }}>
 
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-10 h-16" dir={isRtl ? "rtl" : "ltr"}>
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-10 h-[72px]" dir={isRtl ? "rtl" : "ltr"}>
 
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-            <div className="relative">
-              <MahirLogo size={36} />
-              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ background: "rgba(91,156,246,0.15)", filter: "blur(8px)" }} />
+          {/* ── LOGO ── */}
+          <Link href="/" className="group flex items-center gap-3 flex-shrink-0">
+            {/* Icon box */}
+            <div className="relative w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110"
+              style={{
+                background: "linear-gradient(135deg,rgba(91,156,246,0.25),rgba(59,130,246,0.12))",
+                border: "1.5px solid rgba(91,156,246,0.4)",
+                boxShadow: "0 0 20px rgba(91,156,246,0.2), inset 0 1px 0 rgba(255,255,255,0.08)",
+              }}>
+              <MahirLogo size={26} />
+              {/* glow on hover */}
+              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: "rgba(91,156,246,0.15)", filter: "blur(12px)" }} />
             </div>
+
+            {/* Brand text */}
             <div className="leading-none">
-              <span className="text-base font-extrabold tracking-widest block" style={{ color: "#5B9CF6" }}>
+              <span className="block font-black tracking-widest transition-colors duration-200"
+                style={{ fontSize: "1.35rem", color: "#5B9CF6", letterSpacing: "0.12em" }}>
                 {tx.brand}
               </span>
-              <span className="text-[9px] font-medium tracking-wider hidden sm:block mt-0.5" style={{ color: "var(--fg3)" }}>
-                {isRtl ? "مشاور رشد کسب‌وکار" : "Business Growth Partner"}
+              <span className="hidden sm:block text-[10px] font-semibold tracking-widest mt-0.5 uppercase"
+                style={{ color: "rgba(91,156,246,0.5)" }}>
+                {isRtl ? "مشاوره رشد" : "Growth Partner"}
               </span>
             </div>
           </Link>
 
-          {/* Desktop nav */}
-          <ul className="hidden md:flex items-center gap-0.5">
+          {/* ── Desktop nav links ── */}
+          <ul className="hidden md:flex items-center gap-1">
             {features.map(item => (
               <li key={item.label}>
                 {item.href.startsWith("#") ? (
-                  <button
-                    onClick={() => go(item.href)}
-                    className="relative flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium transition-all duration-200 group rounded-lg hover:text-[#5B9CF6]"
-                    style={{ color: "var(--fg2)" }}>
-                    <span className="text-sm opacity-70 group-hover:opacity-100">{item.icon}</span>
-                    <span>{item.label}</span>
-                    <span className="absolute bottom-0.5 inset-x-3.5 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center rounded-full"
-                      style={{ background: "linear-gradient(90deg,transparent,#5B9CF6,transparent)" }} />
+                  <button onClick={() => go(item.href)}
+                    className="group relative px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 hover:text-[#5B9CF6]"
+                    style={{ color: "rgba(216,229,245,0.6)" }}>
+                    <span className="relative z-10">{item.label}</span>
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+                      style={{ background: "rgba(91,156,246,0.07)" }} />
                   </button>
                 ) : (
                   <Link href={item.href}
-                    className="relative flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium transition-all duration-200 group rounded-lg hover:text-[#5B9CF6]"
-                    style={{ color: "var(--fg2)" }}>
-                    <span className="text-sm opacity-70 group-hover:opacity-100">{item.icon}</span>
-                    <span>{item.label}</span>
-                    <span className="absolute bottom-0.5 inset-x-3.5 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center rounded-full"
-                      style={{ background: "linear-gradient(90deg,transparent,#5B9CF6,transparent)" }} />
+                    className="group relative px-4 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 hover:text-[#5B9CF6] inline-block"
+                    style={{ color: "rgba(216,229,245,0.6)" }}>
+                    <span className="relative z-10">{item.label}</span>
+                    <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+                      style={{ background: "rgba(91,156,246,0.07)" }} />
                   </Link>
                 )}
               </li>
             ))}
           </ul>
 
-          {/* Actions */}
+          {/* ── Right actions ── */}
           <div className="flex items-center gap-2 flex-shrink-0">
-
-            {/* Lang toggle */}
-            <button
-              onClick={cycle}
-              className="hidden sm:flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#5B9CF6] hover:border-[#5B9CF6]/40"
-              style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>
-              <span>{lang === "fa" ? "🇬🇧" : "🇮🇷"}</span>
+            {/* Lang pill */}
+            <button onClick={cycle}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all duration-200 hover:border-[rgba(91,156,246,0.4)] hover:text-[#5B9CF6]"
+              style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(216,229,245,0.45)" }}>
+              <span className="text-sm">{lang === "fa" ? "🇬🇧" : "🇮🇷"}</span>
               <span>{lang === "fa" ? "EN" : "فا"}</span>
             </button>
 
-            {/* CTA / User */}
+            {/* CTA */}
             {user ? (
               <Link href="/profile"
-                className="relative flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl transition-all hover:scale-105"
-                style={{ background: "rgba(91,156,246,0.1)", border: "1px solid rgba(91,156,246,0.25)", color: "#5B9CF6" }}>
+                className="relative hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105"
+                style={{ background: "rgba(91,156,246,0.12)", border: "1px solid rgba(91,156,246,0.3)", color: "#5B9CF6" }}>
                 <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold"
-                  style={{ background: "rgba(91,156,246,0.2)" }}>{user.name.charAt(0)}</span>
-                <span className="hidden sm:block">{user.name}</span>
+                  style={{ background: "rgba(91,156,246,0.25)" }}>{user.name.charAt(0)}</span>
+                <span>{user.name}</span>
                 {user.unread > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold"
+                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold"
                     style={{ background: "#ef4444", color: "#fff" }}>{user.unread}</span>
                 )}
               </Link>
             ) : (
               <Link href="/consult"
-                className="hidden sm:flex items-center gap-1.5 text-xs font-extrabold px-4 py-2 rounded-xl transition-all hover:scale-105 hover:shadow-[0_0_28px_rgba(91,156,246,0.5)]"
-                style={{ background: "linear-gradient(135deg,#5B9CF6,#3B82F6)", color: "#03080F", boxShadow: "0 0 20px rgba(91,156,246,0.25)" }}>
-                {isRtl ? "مشاوره رایگان ←" : "Free Consult →"}
+                className="hidden sm:flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-extrabold transition-all hover:scale-105 hover:shadow-[0_0_32px_rgba(91,156,246,0.55)]"
+                style={{ background: "linear-gradient(135deg,#5B9CF6,#2563EB)", color: "#fff", boxShadow: "0 0 20px rgba(91,156,246,0.3)" }}>
+                {isRtl ? "مشاوره رایگان" : "Free Consult"}
+                <span className="font-black">{isRtl ? "←" : "→"}</span>
               </Link>
             )}
 
-            {/* Mobile hamburger */}
+            {/* Hamburger */}
             <button
-              className="md:hidden flex flex-col items-center justify-center gap-1.5 w-9 h-9 rounded-xl transition-all"
-              style={{ border: "1px solid var(--border)" }}
-              onClick={() => setMenuOpen(v => !v)}>
-              <span className="block w-5 h-px rounded-full transition-all duration-300"
-                style={{ background: "var(--fg2)", transform: menuOpen ? "translateY(4px) rotate(45deg)" : "none" }} />
-              <span className="block w-5 h-px rounded-full transition-all duration-300"
-                style={{ background: "var(--fg2)", opacity: menuOpen ? 0 : 1 }} />
-              <span className="block w-5 h-px rounded-full transition-all duration-300"
-                style={{ background: "var(--fg2)", transform: menuOpen ? "translateY(-4px) rotate(-45deg)" : "none" }} />
+              aria-label="Toggle menu"
+              onClick={() => setMenuOpen(v => !v)}
+              className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-[5px] rounded-xl transition-all"
+              style={{ border: "1px solid rgba(91,156,246,0.2)", background: menuOpen ? "rgba(91,156,246,0.1)" : "transparent" }}>
+              <span className="w-5 h-[2px] rounded-full transition-all duration-300"
+                style={{ background: "#5B9CF6", transform: menuOpen ? "translateY(7px) rotate(45deg)" : "none" }} />
+              <span className="w-5 h-[2px] rounded-full transition-all duration-300"
+                style={{ background: "#5B9CF6", opacity: menuOpen ? 0 : 1, transform: menuOpen ? "scaleX(0)" : "scaleX(1)" }} />
+              <span className="w-5 h-[2px] rounded-full transition-all duration-300"
+                style={{ background: "#5B9CF6", transform: menuOpen ? "translateY(-7px) rotate(-45deg)" : "none" }} />
             </button>
           </div>
         </div>
-
-        {/* Mobile menu — full-screen overlay style */}
-        {menuOpen && (
-          <div
-            className="md:hidden fixed inset-0 top-16 z-40"
-            style={{ background: "rgba(8,14,24,0.98)", backdropFilter: "blur(20px)" }}
-            dir={isRtl ? "rtl" : "ltr"}>
-            <div className="flex flex-col h-full px-6 pt-6 pb-32 overflow-y-auto">
-
-              {/* Links */}
-              <div className="flex flex-col gap-1 mb-6">
-                {features.map((item, i) => (
-                  item.href.startsWith("#") ? (
-                    <button key={item.label}
-                      onClick={() => { go(item.href); setMenuOpen(false); }}
-                      className="flex items-center gap-4 px-4 py-4 rounded-2xl text-base font-semibold transition-all active:scale-95 text-start"
-                      style={{
-                        color: "var(--fg)",
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.06)",
-                        animationDelay: `${i * 40}ms`,
-                      }}>
-                      <span className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                        style={{ background: "rgba(91,156,246,0.1)" }}>{item.icon}</span>
-                      {item.label}
-                    </button>
-                  ) : (
-                    <Link key={item.label} href={item.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-4 px-4 py-4 rounded-2xl text-base font-semibold transition-all active:scale-95"
-                      style={{
-                        color: "var(--fg)",
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.06)",
-                      }}>
-                      <span className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                        style={{ background: "rgba(91,156,246,0.1)" }}>{item.icon}</span>
-                      {item.label}
-                    </Link>
-                  )
-                ))}
-              </div>
-
-              {/* Bottom actions */}
-              <div className="flex flex-col gap-3 mt-auto">
-                {!user && (
-                  <Link href="/consult" onClick={() => setMenuOpen(false)}
-                    className="w-full text-center font-extrabold py-4 rounded-2xl text-base transition-all active:scale-95"
-                    style={{ background: "linear-gradient(135deg,#5B9CF6,#3B82F6)", color: "#03080F", boxShadow: "0 0 30px rgba(91,156,246,0.3)" }}>
-                    {isRtl ? "✦ مشاوره رایگان" : "✦ Free Consult"}
-                  </Link>
-                )}
-                <button onClick={() => { cycle(); }}
-                  className="w-full flex items-center justify-center gap-2 font-bold py-3.5 rounded-2xl text-sm transition-all active:scale-95"
-                  style={{ border: "1px solid rgba(91,156,246,0.2)", color: "var(--fg2)", background: "rgba(91,156,246,0.05)" }}>
-                  <span>{lang === "fa" ? "🇬🇧" : "🇮🇷"}</span>
-                  <span>{lang === "fa" ? "Switch to English" : "تغییر به فارسی"}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
+
+      {/* ── Mobile menu overlay ── */}
+      <div
+        className="md:hidden fixed inset-0 z-40 transition-all duration-300"
+        style={{
+          pointerEvents: menuOpen ? "auto" : "none",
+          opacity: menuOpen ? 1 : 0,
+          background: "rgba(4,8,16,0.98)",
+          backdropFilter: "blur(24px)",
+        }}
+        dir={isRtl ? "rtl" : "ltr"}>
+
+        {/* Top bar with logo + close */}
+        <div className="flex items-center justify-between px-6 h-[72px]">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg,rgba(91,156,246,0.25),rgba(59,130,246,0.12))", border: "1.5px solid rgba(91,156,246,0.4)" }}>
+              <MahirLogo size={26} />
+            </div>
+            <span className="font-black tracking-widest text-xl" style={{ color: "#5B9CF6" }}>{tx.brand}</span>
+          </div>
+          <button onClick={() => setMenuOpen(false)}
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-lg font-bold transition-all active:scale-90"
+            style={{ border: "1px solid rgba(91,156,246,0.2)", color: "#5B9CF6" }}>
+            ✕
+          </button>
+        </div>
+
+        {/* Links list */}
+        <div className="px-5 pt-4 flex flex-col gap-2 overflow-y-auto"
+          style={{ maxHeight: "calc(100dvh - 72px - 160px)" }}>
+          {features.map((item, i) => (
+            item.href.startsWith("#") ? (
+              <button key={item.label}
+                onClick={() => { go(item.href); setMenuOpen(false); }}
+                className="flex items-center gap-4 px-5 py-4 rounded-2xl w-full text-start font-semibold text-base transition-all active:scale-[0.97]"
+                style={{
+                  background: "rgba(91,156,246,0.04)",
+                  border: "1px solid rgba(91,156,246,0.1)",
+                  color: "rgba(216,229,245,0.85)",
+                  transitionDelay: menuOpen ? `${i * 35}ms` : "0ms",
+                }}>
+                <span className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+                  style={{ background: "rgba(91,156,246,0.1)" }}>{item.icon}</span>
+                {item.label}
+                <span className="mr-auto ml-auto" />
+                <span className="text-xs opacity-30">{isRtl ? "←" : "→"}</span>
+              </button>
+            ) : (
+              <Link key={item.label} href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-4 px-5 py-4 rounded-2xl font-semibold text-base transition-all active:scale-[0.97]"
+                style={{
+                  background: "rgba(91,156,246,0.04)",
+                  border: "1px solid rgba(91,156,246,0.1)",
+                  color: "rgba(216,229,245,0.85)",
+                }}>
+                <span className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+                  style={{ background: "rgba(91,156,246,0.1)" }}>{item.icon}</span>
+                {item.label}
+                <span className="mr-auto ml-auto" />
+                <span className="text-xs opacity-30">{isRtl ? "←" : "→"}</span>
+              </Link>
+            )
+          ))}
+        </div>
+
+        {/* Bottom CTA area */}
+        <div className="absolute bottom-0 inset-x-0 px-5 pb-10 flex flex-col gap-3"
+          style={{ background: "linear-gradient(to top,rgba(4,8,16,1) 60%,transparent)" }}>
+          {!user && (
+            <Link href="/consult" onClick={() => setMenuOpen(false)}
+              className="w-full text-center font-extrabold py-4 rounded-2xl text-base transition-all active:scale-[0.97]"
+              style={{ background: "linear-gradient(135deg,#5B9CF6,#2563EB)", color: "#fff", boxShadow: "0 0 40px rgba(91,156,246,0.4)" }}>
+              {isRtl ? "✦ مشاوره رایگان" : "✦ Free Consultation"}
+            </Link>
+          )}
+          <button onClick={() => { cycle(); }}
+            className="w-full flex items-center justify-center gap-2.5 font-bold py-3.5 rounded-2xl text-sm transition-all active:scale-[0.97]"
+            style={{ border: "1px solid rgba(91,156,246,0.2)", color: "rgba(216,229,245,0.6)", background: "rgba(91,156,246,0.05)" }}>
+            <span className="text-base">{lang === "fa" ? "🇬🇧" : "🇮🇷"}</span>
+            <span>{lang === "fa" ? "Switch to English" : "تغییر به فارسی"}</span>
+          </button>
+        </div>
+      </div>
     </>
   );
 }
@@ -913,96 +948,160 @@ function Footer() {
   const { lang, isRtl } = useLang();
   const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
 
-  const links = isRtl
+  const cols = isRtl
     ? [
-        { label: "خدمات", href: "#services" },
-        { label: "نمونه‌کارها", href: "#portfolio" },
-        { label: "بلاگ", href: "/blog" },
-        { label: "قیمت‌ها", href: "/pricing" },
-        { label: "درباره ما", href: "/about" },
-        { label: "تماس", href: "#contact" },
+        {
+          title: "خدمات",
+          items: [
+            { label: "استراتژی رشد", href: "#services" },
+            { label: "هویت برند", href: "#services" },
+            { label: "بازاریابی دیجیتال", href: "#services" },
+            { label: "هوش مصنوعی", href: "#services" },
+          ],
+        },
+        {
+          title: "شرکت",
+          items: [
+            { label: "درباره ما", href: "/about" },
+            { label: "نمونه‌کارها", href: "/portfolio" },
+            { label: "بلاگ", href: "/blog" },
+            { label: "قیمت‌ها", href: "/pricing" },
+          ],
+        },
+        {
+          title: "تماس",
+          items: [
+            { label: "hello@mahir.ir", href: "mailto:hello@mahir.ir" },
+            { label: "اینستاگرام", href: "#" },
+            { label: "لینکدین", href: "#" },
+            { label: "مشاوره رایگان", href: "/consult" },
+          ],
+        },
       ]
     : [
-        { label: "Services", href: "#services" },
-        { label: "Portfolio", href: "#portfolio" },
-        { label: "Blog", href: "/blog" },
-        { label: "Pricing", href: "/pricing" },
-        { label: "About", href: "/about" },
-        { label: "Contact", href: "#contact" },
+        {
+          title: "Services",
+          items: [
+            { label: "Growth Strategy", href: "#services" },
+            { label: "Brand Identity", href: "#services" },
+            { label: "Digital Marketing", href: "#services" },
+            { label: "AI Solutions", href: "#services" },
+          ],
+        },
+        {
+          title: "Company",
+          items: [
+            { label: "About Us", href: "/about" },
+            { label: "Portfolio", href: "/portfolio" },
+            { label: "Blog", href: "/blog" },
+            { label: "Pricing", href: "/pricing" },
+          ],
+        },
+        {
+          title: "Contact",
+          items: [
+            { label: "hello@mahir.ir", href: "mailto:hello@mahir.ir" },
+            { label: "Instagram", href: "#" },
+            { label: "LinkedIn", href: "#" },
+            { label: "Free Consult", href: "/consult" },
+          ],
+        },
       ];
 
   return (
-    <footer className="w-full" dir={isRtl ? "rtl" : "ltr"}
-      style={{ borderTop: "1px solid rgba(91,156,246,0.08)", background: "rgba(8,14,24,0.6)" }}>
+    <footer className="w-full relative overflow-hidden" dir={isRtl ? "rtl" : "ltr"}
+      style={{ background: "#040810" }}>
 
-      <div className="max-w-5xl mx-auto px-6 py-12 md:py-16">
+      {/* Big watermark text */}
+      <div className="pointer-events-none absolute inset-0 flex items-end justify-center overflow-hidden select-none"
+        aria-hidden>
+        <span className="font-black leading-none"
+          style={{
+            fontSize: "clamp(6rem,22vw,18rem)",
+            color: "rgba(91,156,246,0.025)",
+            letterSpacing: "-0.04em",
+            marginBottom: "-0.15em",
+            fontFamily: "inherit",
+          }}>
+          {isRtl ? "ماهیر" : "MAHIR"}
+        </span>
+      </div>
 
-        {/* Top row */}
-        <div className="flex flex-col md:flex-row items-start justify-between gap-10 mb-10">
-
-          {/* Brand */}
-          <div className="flex-shrink-0">
-            <div className="flex items-center gap-2.5 mb-3">
-              <MahirLogo size={36} />
-              <span className="text-xl font-extrabold tracking-widest" style={{ color: "#5B9CF6" }}>{tx.brand}</span>
+      {/* Top CTA band */}
+      <div className="relative border-b" style={{ borderColor: "rgba(91,156,246,0.08)" }}>
+        <div className="max-w-6xl mx-auto px-6 py-14 flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Brand mark */}
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+              style={{
+                background: "linear-gradient(135deg,rgba(91,156,246,0.2),rgba(37,99,235,0.1))",
+                border: "1.5px solid rgba(91,156,246,0.35)",
+                boxShadow: "0 0 30px rgba(91,156,246,0.15)",
+              }}>
+              <MahirLogo size={32} />
             </div>
-            <p className="text-sm leading-relaxed max-w-xs" style={{ color: "var(--fg3)" }}>
-              {isRtl
-                ? "شریک هوشمند رشد کسب‌وکار شما — از استراتژی تا اجرا."
-                : "Your smart business growth partner — from strategy to execution."}
+            <div>
+              <div className="text-3xl font-black tracking-widest leading-none" style={{ color: "#5B9CF6" }}>
+                {tx.brand}
+              </div>
+              <div className="text-xs font-semibold tracking-widest mt-1" style={{ color: "rgba(91,156,246,0.45)" }}>
+                {isRtl ? "شریک رشد کسب‌وکار" : "Business Growth Partner"}
+              </div>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="flex flex-col items-center md:items-end gap-3">
+            <p className="text-sm font-medium text-center md:text-end" style={{ color: "rgba(216,229,245,0.4)" }}>
+              {isRtl ? "آماده شروع هستید؟" : "Ready to grow?"}
             </p>
-          </div>
-
-          {/* Links */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-10 gap-y-3">
-            {links.map(l => (
-              l.href.startsWith("#") ? (
-                <a key={l.label} href={l.href}
-                  onClick={e => { e.preventDefault(); document.querySelector(l.href)?.scrollIntoView({ behavior: "smooth" }); }}
-                  className="text-sm transition-colors hover:text-[#5B9CF6] cursor-pointer"
-                  style={{ color: "var(--fg3)" }}>
-                  {l.label}
-                </a>
-              ) : (
-                <Link key={l.label} href={l.href}
-                  className="text-sm transition-colors hover:text-[#5B9CF6]"
-                  style={{ color: "var(--fg3)" }}>
-                  {l.label}
-                </Link>
-              )
-            ))}
-          </div>
-
-          {/* Contact */}
-          <div className="flex flex-col gap-2 text-sm flex-shrink-0">
-            <a href="mailto:hello@mahir.ir"
-              className="flex items-center gap-2 transition-colors hover:text-[#5B9CF6]"
-              style={{ color: "var(--fg3)" }}>
-              <span>✉</span> hello@mahir.ir
-            </a>
-            <a href="#"
-              className="flex items-center gap-2 transition-colors hover:text-[#5B9CF6]"
-              style={{ color: "var(--fg3)" }}>
-              <span>📸</span> {tx.footerIg}
-            </a>
-            <a href="#"
-              className="flex items-center gap-2 transition-colors hover:text-[#5B9CF6]"
-              style={{ color: "var(--fg3)" }}>
-              <span>💼</span> {tx.footerLi}
-            </a>
+            <Link href="/consult"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl font-extrabold text-sm transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(91,156,246,0.5)]"
+              style={{ background: "linear-gradient(135deg,#5B9CF6,#2563EB)", color: "#fff", boxShadow: "0 0 24px rgba(91,156,246,0.3)" }}>
+              {isRtl ? "مشاوره رایگان ←" : "Start Free Consultation →"}
+            </Link>
           </div>
         </div>
+      </div>
 
-        {/* Divider */}
-        <div className="h-px mb-6" style={{ background: "rgba(91,156,246,0.08)" }} />
+      {/* Link columns */}
+      <div className="relative max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-3 gap-10 border-b"
+        style={{ borderColor: "rgba(91,156,246,0.06)" }}>
+        {cols.map(col => (
+          <div key={col.title}>
+            <h3 className="text-xs font-extrabold tracking-[0.2em] uppercase mb-5"
+              style={{ color: "rgba(91,156,246,0.6)" }}>
+              {col.title}
+            </h3>
+            <ul className="flex flex-col gap-3">
+              {col.items.map(item => (
+                <li key={item.label}>
+                  {item.href.startsWith("#") ? (
+                    <a href={item.href}
+                      onClick={e => { e.preventDefault(); document.querySelector(item.href)?.scrollIntoView({ behavior: "smooth" }); }}
+                      className="text-sm transition-colors duration-200 hover:text-[#5B9CF6] cursor-pointer"
+                      style={{ color: "rgba(216,229,245,0.4)" }}>
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link href={item.href}
+                      className="text-sm transition-colors duration-200 hover:text-[#5B9CF6]"
+                      style={{ color: "rgba(216,229,245,0.4)" }}>
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
 
-        {/* Bottom */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style={{ color: "var(--fg3)" }}>
-          <span>{tx.footerR}</span>
-          <span className="opacity-40">
-            {isRtl ? "ساخته شده با ❤ در ایران" : "Made with ❤ in Iran"}
-          </span>
-        </div>
+      {/* Bottom bar */}
+      <div className="relative max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs"
+        style={{ color: "rgba(216,229,245,0.22)" }}>
+        <span>{tx.footerR}</span>
+        <span>{isRtl ? "ساخته شده با ❤ در ایران" : "Made with ❤ in Iran"}</span>
       </div>
     </footer>
   );

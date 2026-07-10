@@ -19,17 +19,9 @@ const SUGGESTIONS_EN = [
   "How to attract more customers?",
 ];
 
-const SUGGESTIONS_AR = [
-  "كيف أزيد مبيعاتي؟",
-  "من أين أبدأ في بناء العلامة التجارية؟",
-  "كيف يساعد الذكاء الاصطناعي عملي؟",
-  "كيف أجذب المزيد من العملاء؟",
-];
-
 const GREETING: Record<string, string> = {
   fa: "سلام! 👋 من دستیار هوشمند ماهیر هستم. هر سوالی درباره رشد کسب‌وکارت داری، اینجام — ۲۴ ساعته، ۷ روز هفته! 🚀",
   en: "Hi! 👋 I'm Mahir's AI assistant. Any questions about growing your business? I'm here 24/7! 🚀",
-  ar: "مرحباً! 👋 أنا المساعد الذكي لماهير. هل لديك أي سؤال حول تنمية عملك؟ أنا هنا ٢٤/٧! 🚀",
 };
 
 export default function ChatBot() {
@@ -43,7 +35,7 @@ export default function ChatBot() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const suggestions = lang === "fa" ? SUGGESTIONS_FA : lang === "ar" ? SUGGESTIONS_AR : SUGGESTIONS_EN;
+  const suggestions = lang === "fa" ? SUGGESTIONS_FA : SUGGESTIONS_EN;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -88,7 +80,7 @@ export default function ChatBot() {
       const data = await res.json();
       setMsgs(prev => [...prev, { role: "assistant", content: data.reply ?? "خطا در پاسخ." }]);
     } catch {
-      const errMsg = lang === "en" ? "Connection error. Please try again." : lang === "ar" ? "خطأ في الاتصال. حاول مجدداً." : "خطا در اتصال. دوباره تلاش کن.";
+      const errMsg = lang === "en" ? "Connection error. Please try again." : "خطا در اتصال. دوباره تلاش کن.";
       setMsgs(prev => [...prev, { role: "assistant", content: errMsg }]);
     } finally {
       setLoading(false);
@@ -103,10 +95,10 @@ export default function ChatBot() {
     });
   }
 
-  const headerLabel = lang === "fa" ? "دستیار ماهیر" : lang === "ar" ? "مساعد ماهير" : "Mahir Assistant";
-  const onlineLabel = lang === "fa" ? "آنلاین — ۲۴/۷" : lang === "ar" ? "متصل — ٢٤/٧" : "Online — 24/7";
-  const clearLabel = lang === "fa" ? "پاک" : lang === "ar" ? "مسح" : "Clear";
-  const placeholder = lang === "fa" ? "پیام خود را بنویس…" : lang === "ar" ? "اكتب رسالتك…" : "Type your message…";
+  const headerLabel = lang === "fa" ? "دستیار ماهیر" : "Mahir Assistant";
+  const onlineLabel = lang === "fa" ? "آنلاین — ۲۴/۷" : "Online — 24/7";
+  const clearLabel = lang === "fa" ? "پاک" : "Clear";
+  const placeholder = lang === "fa" ? "پیام خود را بنویس…" : "Type your message…";
 
   return (
     <>

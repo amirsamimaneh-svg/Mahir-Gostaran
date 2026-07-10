@@ -86,14 +86,6 @@ const TEAM = {
       tags: ["Management", "Tracking", "Team"],
     },
   ],
-  ar: [
-    { role: "استراتيجي النمو",        desc: "تحليل السوق وتعريف مسار النمو وتصميم خارطة طريق الأعمال", icon: "🎯", tags: ["استراتيجية", "السوق", "نمو"] },
-    { role: "مصمم هوية العلامة",      desc: "إنشاء هوية بصرية متماسكة من الشعار إلى نظام الألوان",    icon: "✦",  tags: ["شعار", "UI/UX", "علامة تجارية"] },
-    { role: "متخصص التسويق الرقمي",   desc: "إدارة حملات مستهدفة على وسائل التواصل والإعلانات",       icon: "📱", tags: ["إنستاغرام", "SEO", "إعلانات"] },
-    { role: "مطور الذكاء الاصطناعي",  desc: "تطبيق أدوات AI للأتمتة وتخصيص تجربة العملاء",           icon: "🤖", tags: ["AI", "أتمتة", "تشات بوت"] },
-    { role: "متخصص المحتوى والسيو",   desc: "إنتاج محتوى متخصص وتحسين محركات البحث للنمو العضوي",    icon: "📝", tags: ["محتوى", "SEO", "كتابة"] },
-    { role: "مدير المشروع",           desc: "تنسيق الفريق وتتبع الأهداف وضمان التسليم في الوقت المحدد",icon: "📊", tags: ["إدارة", "تتبع", "فريق"] },
-  ],
 };
 
 const t = {
@@ -175,45 +167,6 @@ const t = {
     footerR: "© 2025 Mahir. All rights reserved.",
     langBtn: "فا",
   },
-  ar: {
-    brand: "ماهير",
-    nav: [
-      { label: "الخدمات",  href: "#services" },
-      { label: "أعمالنا",  href: "#portfolio" },
-      { label: "عن ماهير", href: "#about" },
-      { label: "تواصل",    href: "#contact" },
-    ],
-    consultBtn: "استشارة مجانية",
-    badge: "شريكك الذكي لنمو الأعمال",
-    h1: "من الفكرة إلى",
-    h1b: "النمو الحقيقي",
-    sub: "ماهير بجانبك — من استراتيجية النمو وهوية العلامة التجارية إلى التسويق الرقمي وتطبيقات الذكاء الاصطناعي. نحلل عملك ونبني خارطة طريق حقيقية للنمو.",
-    cta1: "خدماتنا", cta2: "استشارة ذكية",
-    servTitle: "خدمات", servBrand: "ماهير",
-    servSub: "حلول شاملة لكل مرحلة من مراحل النمو",
-    services: [
-      { icon: "🎯", title: "استراتيجية النمو",      desc: "تحليل السوق، دراسة المنافسين، وتصميم خارطة طريق النمو." },
-      { icon: "✦",  title: "هوية العلامة التجارية", desc: "هوية بصرية ولفظية متماسكة تبقى في ذاكرة جمهورك." },
-      { icon: "📱", title: "التسويق الرقمي",         desc: "حملات مستهدفة على وسائل التواصل الاجتماعي وSEO والإعلانات." },
-      { icon: "🤖", title: "الذكاء الاصطناعي",       desc: "تطبيق أدوات الذكاء الاصطناعي لأتمتة العمليات وتخصيص تجربة العملاء." },
-    ],
-    stats: [
-      { target: 50,  suffix: "+",  label: "عمل ناجح" },
-      { target: 80,  suffix: "%+", label: "متوسط النمو" },
-      { target: 3,   suffix: "",   label: "سنوات خبرة" },
-      { target: 120, suffix: "+",  label: "مشروع مُسلَّم" },
-    ],
-    consultTitle: "استشارة", consultBrand: "مخصصة",
-    consultDesc: "أجب على ٣ أسئلة قصيرة واحصل على استراتيجية نمو مخصصة تماماً.",
-    consultCta: "ابدأ الاستشارة المجانية ←",
-    teamTitle: "فريق", teamBrand: "ماهير",
-    teamSub: "متخصصون يعملون كل يوم من أجل نمو عملك",
-    aboutTitle: "لماذا", aboutBrand: "ماهير؟",
-    aboutDesc: "يساعد فريق ماهير من خبراء الاستراتيجية والتصميم والتقنية الأعمال على التميز في السوق التنافسي بهوية قوية واستراتيجية ذكية.",
-    footerIg: "إنستاغرام", footerLi: "لينكدإن",
-    footerR: "© ٢٠٢٥ ماهير. جميع الحقوق محفوظة.",
-    langBtn: "فا",
-  },
 };
 
 function go(href: string) {
@@ -240,22 +193,15 @@ const NAV_FEATURES = {
     { icon: "ℹ️", label: "About", href: "/about" },
     { icon: "💬", label: "Contact", href: "#contact" },
   ],
-  ar: [
-    { icon: "🤖", label: "استشارة AI", href: "/consult" },
-    { icon: "📁", label: "أعمالنا",    href: "#portfolio" },
-    { icon: "📝", label: "المدونة",    href: "/blog" },
-    { icon: "💰", label: "الأسعار",    href: "/pricing" },
-    { icon: "ℹ️", label: "عن ماهير",  href: "/about" },
-    { icon: "💬", label: "تواصل",      href: "#contact" },
-  ],
 };
 
 function Navbar() {
   const { lang, cycle, isRtl } = useLang();
   const tx = t[lang as keyof typeof t] ?? t.fa;
-  const features = (NAV_FEATURES as Record<string, typeof NAV_FEATURES.fa>)[lang] ?? NAV_FEATURES.fa;
+  const features = NAV_FEATURES[lang as keyof typeof NAV_FEATURES] ?? NAV_FEATURES.fa;
   const [user, setUser] = useState<{ name: string; unread: number } | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me").then(r => r.json()).then(d => {
@@ -270,85 +216,153 @@ function Navbar() {
   }, []);
 
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 anim-slide-down transition-all duration-300"
-      style={{
-        background: scrolled ? "var(--nav-bg)" : "rgba(5,5,15,0.6)",
-        backdropFilter: "blur(24px)",
-        borderBottom: scrolled ? "1px solid var(--nav-border)" : "1px solid transparent",
-        boxShadow: scrolled ? "0 4px 30px rgba(0,0,0,0.3)" : "none",
-      }}>
+    <>
+      <nav
+        className="fixed top-0 inset-x-0 z-50 anim-slide-down"
+        style={{
+          background: scrolled ? "rgba(8,14,24,0.92)" : "rgba(8,14,24,0.5)",
+          backdropFilter: "blur(28px)",
+          borderBottom: "1px solid " + (scrolled ? "rgba(91,156,246,0.12)" : "transparent"),
+          boxShadow: scrolled ? "0 2px 40px rgba(0,0,0,0.4)" : "none",
+          transition: "all 0.3s ease",
+        }}>
 
-      {/* main bar */}
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-10 py-3" dir={isRtl ? "rtl" : "ltr"}>
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-10 h-16" dir={isRtl ? "rtl" : "ltr"}>
 
-        {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          <MahirLogo size={34} />
-          <div>
-            <span className="text-base font-extrabold text-[#5B9CF6] tracking-widest leading-none block">{tx.brand}</span>
-            <span className="text-[10px] leading-none hidden sm:block" style={{ color: "var(--fg3)" }}>
-              {isRtl ? "مشاور رشد کسب‌وکار" : "Business Growth Partner"}
-            </span>
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
+            <div className="relative">
+              <MahirLogo size={36} />
+              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ background: "rgba(91,156,246,0.15)", filter: "blur(8px)" }} />
+            </div>
+            <div className="leading-none">
+              <span className="text-base font-extrabold tracking-widest block" style={{ color: "#5B9CF6" }}>
+                {tx.brand}
+              </span>
+              <span className="text-[9px] font-medium tracking-wider hidden sm:block mt-0.5" style={{ color: "var(--fg3)" }}>
+                {isRtl ? "مشاور رشد کسب‌وکار" : "Business Growth Partner"}
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop nav */}
+          <ul className="hidden md:flex items-center gap-0.5">
+            {features.map(item => (
+              <li key={item.label}>
+                {item.href.startsWith("#") ? (
+                  <button
+                    onClick={() => go(item.href)}
+                    className="relative flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium transition-all duration-200 group rounded-lg hover:text-[#5B9CF6]"
+                    style={{ color: "var(--fg2)" }}>
+                    <span className="text-sm opacity-70 group-hover:opacity-100">{item.icon}</span>
+                    <span>{item.label}</span>
+                    <span className="absolute bottom-0.5 inset-x-3.5 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center rounded-full"
+                      style={{ background: "linear-gradient(90deg,transparent,#5B9CF6,transparent)" }} />
+                  </button>
+                ) : (
+                  <Link href={item.href}
+                    className="relative flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium transition-all duration-200 group rounded-lg hover:text-[#5B9CF6]"
+                    style={{ color: "var(--fg2)" }}>
+                    <span className="text-sm opacity-70 group-hover:opacity-100">{item.icon}</span>
+                    <span>{item.label}</span>
+                    <span className="absolute bottom-0.5 inset-x-3.5 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center rounded-full"
+                      style={{ background: "linear-gradient(90deg,transparent,#5B9CF6,transparent)" }} />
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+
+            {/* Lang toggle */}
+            <button
+              onClick={cycle}
+              className="hidden sm:flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#5B9CF6] hover:border-[#5B9CF6]/40"
+              style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>
+              <span>{lang === "fa" ? "🇬🇧" : "🇮🇷"}</span>
+              <span>{lang === "fa" ? "EN" : "فا"}</span>
+            </button>
+
+            {/* CTA / User */}
+            {user ? (
+              <Link href="/profile"
+                className="relative flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl transition-all hover:scale-105"
+                style={{ background: "rgba(91,156,246,0.1)", border: "1px solid rgba(91,156,246,0.25)", color: "#5B9CF6" }}>
+                <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold"
+                  style={{ background: "rgba(91,156,246,0.2)" }}>{user.name.charAt(0)}</span>
+                <span className="hidden sm:block">{user.name}</span>
+                {user.unread > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold"
+                    style={{ background: "#ef4444", color: "#fff" }}>{user.unread}</span>
+                )}
+              </Link>
+            ) : (
+              <Link href="/consult"
+                className="hidden sm:flex items-center gap-1.5 text-xs font-extrabold px-4 py-2 rounded-xl transition-all hover:scale-105 hover:shadow-[0_0_28px_rgba(91,156,246,0.5)]"
+                style={{ background: "linear-gradient(135deg,#5B9CF6,#3B82F6)", color: "#03080F", boxShadow: "0 0 20px rgba(91,156,246,0.25)" }}>
+                {isRtl ? "مشاوره رایگان ←" : "Free Consult →"}
+              </Link>
+            )}
+
+            {/* Mobile hamburger */}
+            <button
+              className="md:hidden flex flex-col items-center justify-center gap-1.5 w-9 h-9 rounded-xl transition-all"
+              style={{ border: "1px solid var(--border)" }}
+              onClick={() => setMenuOpen(v => !v)}>
+              <span className="block w-5 h-px rounded-full transition-all duration-300"
+                style={{ background: "var(--fg2)", transform: menuOpen ? "translateY(4px) rotate(45deg)" : "none" }} />
+              <span className="block w-5 h-px rounded-full transition-all duration-300"
+                style={{ background: "var(--fg2)", opacity: menuOpen ? 0 : 1 }} />
+              <span className="block w-5 h-px rounded-full transition-all duration-300"
+                style={{ background: "var(--fg2)", transform: menuOpen ? "translateY(-4px) rotate(-45deg)" : "none" }} />
+            </button>
           </div>
         </div>
 
-        {/* Feature nav pills */}
-        <ul className="hidden md:flex items-center gap-1">
-          {features.map(item => (
-            <li key={item.label}>
-              {item.href.startsWith("#") ? (
-                <a href={item.href}
-                  onClick={e => { e.preventDefault(); go(item.href); }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#2563EB] group"
+        {/* Mobile menu */}
+        <div
+          className="md:hidden overflow-hidden transition-all duration-300"
+          style={{ maxHeight: menuOpen ? "400px" : "0", borderTop: menuOpen ? "1px solid rgba(91,156,246,0.1)" : "none" }}>
+          <div className="px-5 py-4 flex flex-col gap-1" dir={isRtl ? "rtl" : "ltr"}>
+            {features.map(item => (
+              item.href.startsWith("#") ? (
+                <button key={item.label}
+                  onClick={() => { go(item.href); setMenuOpen(false); }}
+                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-medium transition-all text-start hover:text-[#5B9CF6]"
                   style={{ color: "var(--fg2)" }}>
-                  <span className="text-sm">{item.icon}</span>
-                  {item.label}
-                  <span className="block h-px w-0 group-hover:w-full transition-all duration-300 mt-0.5" style={{ background: "#2563EB" }} />
-                </a>
+                  <span>{item.icon}</span>{item.label}
+                </button>
               ) : (
-                <Link href={item.href}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all hover:text-[#2563EB]"
+                <Link key={item.label} href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-medium transition-all hover:text-[#5B9CF6]"
                   style={{ color: "var(--fg2)" }}>
-                  <span className="text-sm">{item.icon}</span>
-                  {item.label}
+                  <span>{item.icon}</span>{item.label}
+                </Link>
+              )
+            ))}
+            <div className="flex items-center gap-2 mt-2 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+              <button onClick={cycle}
+                className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-lg"
+                style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>
+                <span>{lang === "fa" ? "🇬🇧" : "🇮🇷"}</span>
+                <span>{lang === "fa" ? "English" : "فارسی"}</span>
+              </button>
+              {!user && (
+                <Link href="/consult" onClick={() => setMenuOpen(false)}
+                  className="flex-1 text-center text-xs font-extrabold px-4 py-2 rounded-xl"
+                  style={{ background: "linear-gradient(135deg,#5B9CF6,#3B82F6)", color: "#03080F" }}>
+                  {isRtl ? "مشاوره رایگان" : "Free Consult"}
                 </Link>
               )}
-            </li>
-          ))}
-        </ul>
-
-        {/* Right actions */}
-        <div className="flex items-center gap-2">
-
-          <button onClick={cycle}
-            className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:text-[#2563EB]"
-            style={{ border: "1px solid var(--border)", color: "var(--fg2)" }}>
-            {tx.langBtn}
-          </button>
-
-          {user ? (
-            <Link href="/profile"
-              className="relative flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl transition-all hover:scale-105"
-              style={{ background: "rgba(79,110,255,0.1)", border: "1px solid rgba(79,110,255,0.3)", color: "#2563EB" }}>
-              <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold"
-                style={{ background: "rgba(79,110,255,0.25)" }}>{user.name.charAt(0)}</span>
-              <span className="hidden sm:block">{user.name}</span>
-              {user.unread > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold"
-                  style={{ background: "#ef4444", color: "#fff" }}>{user.unread}</span>
-              )}
-            </Link>
-          ) : (
-            <Link href="/login"
-              className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl transition-all hover:scale-105"
-              style={{ background: "#2563EB", color: "#111", boxShadow: "0 0 20px rgba(79,110,255,0.3)" }}>
-              <span>✦</span>
-              {isRtl ? "ورود / ثبت‌نام" : "Login / Sign up"}
-            </Link>
-          )}
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }
 

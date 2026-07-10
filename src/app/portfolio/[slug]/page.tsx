@@ -37,10 +37,10 @@ function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
             {isRtl ? "ماهیر" : "Mahir"}
           </Link>
           <div className="flex items-center gap-3">
-            <button onClick={() => setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa")}
+            <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
               className="text-xs font-bold px-3 py-2 rounded-lg transition-all hover:text-[#2563EB]"
               style={{ background: "rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.5)" }}>
-              {lang === "fa" ? "EN" : lang === "en" ? "عر" : "فا"}
+              {lang === "fa" ? "EN" : "فا"}
             </button>
             <Link href="/portfolio"
               className="text-sm font-medium px-4 py-2 rounded-xl transition-all hover:text-[#2563EB]"

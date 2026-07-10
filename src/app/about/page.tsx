@@ -33,10 +33,10 @@ export default function AboutPage() {
             <span className="text-lg font-extrabold text-[#5B9CF6] tracking-widest">{isRtl ? "ماهیر" : "Mahir"}</span>
           </Link>
           <div className="flex items-center gap-3">
-            <button onClick={() => setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa")}
+            <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
               className="text-xs font-bold px-3 py-2 rounded-lg hover:text-[#5B9CF6] transition-all"
               style={{ background: "var(--surface)", color: "var(--fg2)", border: "1px solid var(--border)" }}>
-              {lang === "fa" ? "EN" : lang === "en" ? "عر" : "فا"}
+              {lang === "fa" ? "EN" : "فا"}
             </button>
             <Link href="/" className="text-sm px-4 py-2 rounded-xl hover:text-[#5B9CF6] transition-all"
               style={{ color: "var(--fg2)", border: "1px solid var(--border)" }}>

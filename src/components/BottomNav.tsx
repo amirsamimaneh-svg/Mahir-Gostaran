@@ -5,22 +5,22 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useLang } from "@/context/LangContext";
 
-type Item = { icon: string; label_fa: string; label_en: string; label_ar: string; href: string; isLink?: boolean };
+type Item = { icon: string; label_fa: string; label_en: string; href: string; isLink?: boolean };
 
 const MAIN: Item[] = [
-  { icon: "🏠", label_fa: "خانه",    label_en: "Home",      label_ar: "الرئيسية", href: "#hero" },
-  { icon: "🎯", label_fa: "خدمات",   label_en: "Services",  label_ar: "الخدمات",  href: "#services" },
-  { icon: "🤖", label_fa: "مشاوره",  label_en: "Consult",   label_ar: "استشارة",  href: "/consult",   isLink: true },
-  { icon: "📁", label_fa: "نمونه‌کار", label_en: "Portfolio", label_ar: "أعمالنا",  href: "/portfolio", isLink: true },
-  { icon: "☰",  label_fa: "بیشتر",   label_en: "More",      label_ar: "المزيد",   href: "#more" },
+  { icon: "🏠", label_fa: "خانه",     label_en: "Home",      href: "#hero" },
+  { icon: "🎯", label_fa: "خدمات",    label_en: "Services",  href: "#services" },
+  { icon: "🤖", label_fa: "مشاوره",   label_en: "Consult",   href: "/consult",   isLink: true },
+  { icon: "📁", label_fa: "نمونه‌کار", label_en: "Portfolio", href: "/portfolio", isLink: true },
+  { icon: "☰",  label_fa: "بیشتر",    label_en: "More",      href: "#more" },
 ];
 
 const MORE: Item[] = [
-  { icon: "📝", label_fa: "بلاگ",      label_en: "Blog",    label_ar: "المدونة",   href: "/blog",    isLink: true },
-  { icon: "💰", label_fa: "قیمت‌ها",   label_en: "Pricing", label_ar: "الأسعار",   href: "/pricing", isLink: true },
-  { icon: "ℹ️", label_fa: "درباره ما", label_en: "About",   label_ar: "عن ماهير",  href: "/about",   isLink: true },
-  { icon: "👤", label_fa: "پروفایل",   label_en: "Profile", label_ar: "الملف",     href: "/profile", isLink: true },
-  { icon: "💬", label_fa: "تماس",      label_en: "Contact", label_ar: "تواصل",     href: "#contact" },
+  { icon: "📝", label_fa: "بلاگ",      label_en: "Blog",    href: "/blog",    isLink: true },
+  { icon: "💰", label_fa: "قیمت‌ها",   label_en: "Pricing", href: "/pricing", isLink: true },
+  { icon: "ℹ️", label_fa: "درباره ما", label_en: "About",   href: "/about",   isLink: true },
+  { icon: "👤", label_fa: "پروفایل",   label_en: "Profile", href: "/profile", isLink: true },
+  { icon: "💬", label_fa: "تماس",      label_en: "Contact", href: "#contact" },
 ];
 
 export default function BottomNav() {
@@ -58,7 +58,7 @@ export default function BottomNav() {
     return false;
   }
 
-  const label = (item: Item) => lang === "fa" ? item.label_fa : lang === "ar" ? item.label_ar : item.label_en;
+  const label = (item: Item) => lang === "fa" ? item.label_fa : item.label_en;
 
   return (
     <>

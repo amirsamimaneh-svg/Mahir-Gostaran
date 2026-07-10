@@ -435,7 +435,7 @@ export default function ConsultPage() {
 function Page({ children, lang, setLang, isRtl, userName }: {
   children: React.ReactNode;
   lang: string;
-  setLang: (l: "fa" | "en" | "ar") => void;
+  setLang: (l: "fa" | "en") => void;
   isRtl: boolean;
   userName?: string;
 }) {
@@ -464,10 +464,10 @@ function Page({ children, lang, setLang, isRtl, userName }: {
               {userName}
             </Link>
           )}
-          <button onClick={() => setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa")}
+          <button onClick={() => setLang(lang === "fa" ? "en" : "fa")}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all"
             style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>
-            {lang === "fa" ? "EN" : lang === "en" ? "عر" : "فا"}
+            {lang === "fa" ? "EN" : "فا"}
           </button>
         </div>
       </header>

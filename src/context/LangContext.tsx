@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-export type Lang = "fa" | "en" | "ar";
+export type Lang = "fa" | "en";
 
 interface LangContextType {
   lang: Lang;
@@ -21,7 +21,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem("mahir-lang") as Lang | null;
-    if (saved && ["fa", "en", "ar"].includes(saved)) setLangState(saved);
+    if (saved && ["fa", "en"].includes(saved)) setLangState(saved);
     setReady(true);
   }, []);
 
@@ -31,10 +31,10 @@ export function LangProvider({ children }: { children: ReactNode }) {
   }
 
   function cycle() {
-    setLang(lang === "fa" ? "en" : lang === "en" ? "ar" : "fa");
+    setLang(lang === "fa" ? "en" : "fa");
   }
 
-  const isRtl = lang !== "en";
+  const isRtl = lang === "fa";
 
   if (!ready) return null;
 

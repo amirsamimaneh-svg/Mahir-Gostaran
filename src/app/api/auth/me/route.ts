@@ -1,19 +1,21 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
-import { findUserByPhone, getUnreadCount } from "@/lib/db";
+import { findUserByIdentifier, getUnreadCount } from "@/lib/db";
 
 export async function GET() {
-  const phone = await getSession();
-  if (!phone) return NextResponse.json({ user: null });
-  const user = findUserByPhone(phone);
-  if (!user) return NextResponse.json({ user: null });
+  const identifier = await getSession();
+  if (!identifier) return NextResponse.json({ user: null });
+  const result = findUserByIdentifier(identifier);
+  if (!result) return NextResponse.json({ user: null });
+  const { user } = result;
   return NextResponse.json({
     user: {
       phone: user.phone,
+      email: user.email,
       name: user.name,
       createdAt: user.createdAt,
       consultCount: user.consultCount,
-      unread: getUnreadCount(phone),
+      unread: getUnreadCount(identifier),
     }
   });
 }

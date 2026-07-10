@@ -8,6 +8,7 @@ const MSG_PATH = path.join(process.cwd(), "data", "messages.json");
 export type User = {
   id: string;
   phone: string;
+  email?: string;
   name: string;
   passwordHash: string;
   createdAt: string;
@@ -54,11 +55,27 @@ export function findUserByPhone(phone: string): User | undefined {
   return readDB().find(u => u.phone === phone);
 }
 
-export function createUser(phone: string, name: string, password: string): User {
+export function findUserByEmail(email: string): User | undefined {
+  return readDB().find(u => u.email?.toLowerCase() === email.toLowerCase());
+}
+
+/** Find by phone or email — returns user + the identifier used for session */
+export function findUserByIdentifier(identifier: string): { user: User; sessionKey: string } | undefined {
+  const isEmail = identifier.includes("@");
+  const user = isEmail
+    ? readDB().find(u => u.email?.toLowerCase() === identifier.toLowerCase())
+    : readDB().find(u => u.phone === identifier);
+  if (!user) return undefined;
+  return { user, sessionKey: isEmail ? user.email! : user.phone };
+}
+
+export function createUser(phone: string, name: string, password: string, email?: string): User {
   const users = readDB();
   const user: User = {
     id: crypto.randomUUID(),
-    phone, name,
+    phone,
+    ...(email ? { email: email.toLowerCase() } : {}),
+    name,
     passwordHash: hashPassword(password),
     createdAt: new Date().toISOString(),
     consultCount: 0,

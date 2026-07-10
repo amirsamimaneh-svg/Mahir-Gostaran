@@ -627,28 +627,158 @@ function Stats() {
 }
 
 // ── Services ──────────────────────────────────────────────
+const SERVICE_META = [
+  {
+    color: "#5B9CF6",
+    bg: "rgba(91,156,246,0.06)",
+    border: "rgba(91,156,246,0.18)",
+    svgPath: "M12 2a10 10 0 0110 10c0 5.5-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 4v6l4 2",
+    // target icon
+    svg: (
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+        <line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/>
+        <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/>
+      </svg>
+    ),
+    wide: true,
+  },
+  {
+    color: "#a78bfa",
+    bg: "rgba(167,139,250,0.06)",
+    border: "rgba(167,139,250,0.18)",
+    svg: (
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+      </svg>
+    ),
+    wide: false,
+  },
+  {
+    color: "#34d399",
+    bg: "rgba(52,211,153,0.06)",
+    border: "rgba(52,211,153,0.18)",
+    svg: (
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+      </svg>
+    ),
+    wide: false,
+  },
+  {
+    color: "#fb923c",
+    bg: "rgba(251,146,60,0.06)",
+    border: "rgba(251,146,60,0.18)",
+    svg: (
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="8" width="18" height="12" rx="2"/>
+        <path d="M12 8V4"/><circle cx="12" cy="4" r="1.5"/>
+        <line x1="8" y1="13" x2="9" y2="13"/><line x1="15" y1="13" x2="16" y2="13"/><path d="M9 17h6"/>
+      </svg>
+    ),
+    wide: true,
+  },
+];
+
 function Services() {
-  const { lang } = useLang();
+  const { lang, isRtl } = useLang();
   const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
+  const ref = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.1 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <section id="services" className="py-24 px-6 w-full max-w-6xl mx-auto">
-      <div className="text-center mb-16">
-        <h2 className="font-extrabold mb-3" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-          <span className="c-fg">{tx.servTitle} </span>
-          <span className="text-shimmer">{tx.servBrand}</span>
-        </h2>
-        <p className="max-w-sm mx-auto text-sm c-fg3">{tx.servSub}</p>
+    <section ref={ref} id="services" className="py-28 px-6 w-full max-w-6xl mx-auto">
+
+      {/* Header */}
+      <div className="mb-16 transition-all duration-700"
+        style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)" }}>
+        <p className="text-xs font-extrabold tracking-[0.3em] mb-4" style={{ color: "rgba(91,156,246,0.5)" }}>
+          ✦ {isRtl ? "خدمات" : "SERVICES"}
+        </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <h2 className="font-extrabold leading-none" style={{ fontSize: "clamp(2.2rem,5vw,4rem)" }}>
+            <span className="c-fg">{tx.servTitle} </span>
+            <span className="text-shimmer">{tx.servBrand}</span>
+          </h2>
+          <p className="max-w-xs text-sm leading-relaxed md:text-right c-fg3">{tx.servSub}</p>
+        </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {tx.services.map(s => (
-          <div key={s.title} className="card-glow rounded-2xl p-8 text-center group">
-            <div className="text-4xl mb-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
-              {s.icon}
+
+      {/* Bento grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {tx.services.map((s, i) => {
+          const meta = SERVICE_META[i];
+          return (
+            <div key={s.title}
+              className="group relative rounded-3xl overflow-hidden cursor-default transition-all duration-500 hover:-translate-y-2"
+              style={{
+                background: meta.bg,
+                border: `1px solid ${meta.border}`,
+                boxShadow: "0 4px 24px rgba(0,0,0,0.25)",
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.97)",
+                transitionDelay: `${i * 100 + 100}ms`,
+                transitionProperty: "opacity, transform, box-shadow",
+              }}>
+
+              {/* Top accent line */}
+              <div className="absolute top-0 inset-x-0 h-[2px] transition-all duration-500"
+                style={{
+                  background: `linear-gradient(90deg, transparent, ${meta.color}, transparent)`,
+                  opacity: 0.6,
+                }} />
+
+              {/* Hover glow */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{ background: `radial-gradient(ellipse at 30% 40%, ${meta.color}0D 0%, transparent 65%)` }} />
+
+              <div className="relative p-8 md:p-10 flex flex-col h-full min-h-[220px]">
+
+                {/* Number + icon row */}
+                <div className="flex items-start justify-between mb-6">
+                  <span className="font-black text-5xl leading-none select-none transition-colors duration-300"
+                    style={{ color: `${meta.color}20` }}>
+                    0{i + 1}
+                  </span>
+                  <div className="transition-all duration-500 group-hover:scale-110 group-hover:rotate-[-6deg]"
+                    style={{ color: meta.color, opacity: 0.7 }}>
+                    {meta.svg}
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h3 className="font-extrabold text-xl md:text-2xl mb-3 leading-tight transition-colors duration-300 c-fg group-hover:text-white">
+                  {s.title}
+                </h3>
+
+                {/* Desc */}
+                <p className="text-sm leading-relaxed flex-1" style={{ color: "rgba(216,229,245,0.5)" }}>
+                  {s.desc}
+                </p>
+
+                {/* Bottom arrow */}
+                <div className="mt-6 flex items-center gap-2 transition-all duration-300"
+                  style={{ color: meta.color, opacity: 0 }}
+                  ref={el => { if (el) el.style.opacity = "0"; }}>
+                </div>
+                <div className="mt-5 inline-flex items-center gap-2 text-xs font-bold transition-all duration-300 opacity-0 group-hover:opacity-100"
+                  style={{ color: meta.color }}>
+                  <span className="w-6 h-px rounded-full" style={{ background: meta.color }} />
+                  {isRtl ? "بیشتر بدانید" : "Learn more"}
+                  <span>{isRtl ? "←" : "→"}</span>
+                </div>
+              </div>
             </div>
-            <h3 className="font-bold mb-2 c-fg">{s.title}</h3>
-            <p className="text-sm leading-relaxed c-fg2">{s.desc}</p>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

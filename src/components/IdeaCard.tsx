@@ -3,32 +3,32 @@
 import { useState, useEffect, useRef } from "react";
 
 const CATEGORIES = {
-  fa: ["کافه / رستوران", "فروشگاه آنلاین", "آموزشگاه", "کلینیک / پزشکی", "استارتاپ", "خدمات", "دیگر…"],
-  en: ["Café / Restaurant", "Online Store", "Training Center", "Clinic / Medical", "Startup", "Services", "Other…"],
+  fa: ["کافه / رستوران", "فروشگاه آنلاین", "آموزشگاه", "کلینیک / پزشکی", "استارتاپ", "خدمات"],
+  en: ["Café / Restaurant", "Online Store", "Training Center", "Clinic / Medical", "Startup", "Services"],
 };
 
 const labels = {
   fa: {
     title: "هوش رشد ماهیر",
-    subtitle: "کسب‌وکارت را بنویس، ایده رشد بگیر",
-    placeholder: "مثلاً: کافه محلی، فروشگاه لباس آنلاین…",
-    categoryLabel: "یا از دسته‌بندی انتخاب کن:",
-    btn: "دریافت ایده رشد ✦",
-    thinking: "در حال تحلیل کسب‌وکار شما…",
+    subtitle: "کسب‌وکارت را بنویس",
+    placeholder: "مثلاً: کافه محلی، فروشگاه لباس…",
+    categoryLabel: "یا سریع انتخاب کن",
+    btn: "دریافت ایده ✦",
+    thinking: "در حال تحلیل…",
     errorTitle: "پیام ماهیر",
-    errorMsg: "در زودترین فرصت به شما پاسخ می‌دهیم.\nاگر می‌خواهید سریع‌تر با ما در ارتباط باشید، به آیدی تلگرام ما پیام بدید:",
+    errorMsg: "به زودی پاسخ می‌دهیم. برای تماس سریع‌تر:",
     tg: "@Mahirofficalll",
     badge: "AI Powered",
   },
   en: {
     title: "Mahir Growth AI",
-    subtitle: "Enter your business and get a growth idea",
-    placeholder: "e.g. Local café, online clothing store…",
-    categoryLabel: "Or pick a category:",
-    btn: "Get Growth Idea ✦",
-    thinking: "Analyzing your business…",
-    errorTitle: "Mahir Message",
-    errorMsg: "We'll get back to you as soon as possible.\nFor faster support, message us on Telegram:",
+    subtitle: "Describe your business",
+    placeholder: "e.g. Local café, online store…",
+    categoryLabel: "Or pick one",
+    btn: "Get Idea ✦",
+    thinking: "Analyzing…",
+    errorTitle: "Mahir Note",
+    errorMsg: "We'll reply soon. For faster support:",
     tg: "@Mahirofficalll",
     badge: "AI Powered",
   },
@@ -43,11 +43,12 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" | "ar" })
   const [fullText, setFullText] = useState("");
   const [hasError, setHasError] = useState(false);
   const [cursorOn, setCursorOn] = useState(false);
+  const [focused, setFocused] = useState(false);
   const typeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isRtl = lang === "fa";
 
   useEffect(() => {
-    const id = setInterval(() => setCursorOn((v) => !v), 530);
+    const id = setInterval(() => setCursorOn(v => !v), 530);
     return () => clearInterval(id);
   }, []);
 
@@ -58,9 +59,9 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" | "ar" })
     function tick() {
       i++;
       setDisplayed(fullText.slice(0, i));
-      if (i < fullText.length) typeRef.current = setTimeout(tick, 22);
+      if (i < fullText.length) typeRef.current = setTimeout(tick, 20);
     }
-    typeRef.current = setTimeout(tick, 22);
+    typeRef.current = setTimeout(tick, 20);
     return () => { if (typeRef.current) clearTimeout(typeRef.current); };
   }, [fullText]);
 
@@ -88,112 +89,164 @@ export default function IdeaCard({ lang = "fa" }: { lang?: "fa" | "en" | "ar" })
     }
   }
 
+  const hasOutput = loading || hasError || displayed;
+
   return (
-    <div dir={isRtl ? "rtl" : "ltr"}
+    <div
+      dir={isRtl ? "rtl" : "ltr"}
       className="relative w-full max-w-lg mx-auto rounded-3xl overflow-hidden"
       style={{
-        background: "rgba(10,10,25,0.75)",
-        backdropFilter: "blur(24px)",
-        border: "1px solid rgba(79,110,255,0.2)",
-        boxShadow: "0 8px 48px rgba(0,0,0,0.5), 0 0 80px rgba(79,110,255,0.06)",
+        background: "linear-gradient(160deg, rgba(14,20,40,0.95) 0%, rgba(8,12,28,0.98) 100%)",
+        border: "1px solid rgba(91,156,246,0.18)",
+        boxShadow: "0 24px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05)",
+        backdropFilter: "blur(32px)",
       }}>
 
-      {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3.5"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.03)" }}>
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
-          <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-          <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse" />
-          <span className="text-xs font-bold text-[#2563EB] tracking-widest">{tx.title}</span>
-        </div>
-        <span className="text-xs px-2 py-0.5 rounded-full font-bold"
-          style={{ background: "rgba(79,110,255,0.12)", color: "#2563EB", border: "1px solid rgba(79,110,255,0.2)" }}>
-          {tx.badge}
-        </span>
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+        <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full"
+          style={{ background: "rgba(91,156,246,0.08)", filter: "blur(40px)" }} />
+        <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full"
+          style={{ background: "rgba(59,130,246,0.06)", filter: "blur(32px)" }} />
       </div>
 
-      <div className="p-5 space-y-4">
-        {/* Subtitle */}
-        <p className="text-xs" style={{ color: "rgba(240,240,245,0.45)" }}>{tx.subtitle}</p>
+      {/* Header strip */}
+      <div className="relative flex items-center justify-between px-5 pt-5 pb-4">
+        {/* Left: icon + title */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: "rgba(91,156,246,0.15)", border: "1px solid rgba(91,156,246,0.25)" }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B9CF6" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2a10 10 0 0110 10c0 4-2.5 7.5-6 9.3V22H8v-.7A10 10 0 0112 2z" />
+              <line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-sm font-extrabold leading-none tracking-wide" style={{ color: "#D8E5F5" }}>
+              {tx.title}
+            </p>
+            <p className="text-[10px] mt-0.5 font-medium" style={{ color: "rgba(91,156,246,0.55)" }}>
+              {tx.subtitle}
+            </p>
+          </div>
+        </div>
 
-        {/* Input row */}
+        {/* Right: AI Powered badge */}
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+          style={{ background: "rgba(91,156,246,0.08)", border: "1px solid rgba(91,156,246,0.2)" }}>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#5B9CF6] animate-pulse" />
+          <span className="text-[10px] font-bold text-[#5B9CF6] tracking-widest">{tx.badge}</span>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="mx-5 h-px" style={{ background: "rgba(255,255,255,0.05)" }} />
+
+      <div className="relative px-5 py-4 space-y-3">
+
+        {/* Input + button */}
         <div className="flex gap-2">
-          <input
-            type="text"
-            value={business}
-            onChange={e => setBusiness(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && handleSubmit()}
-            placeholder={tx.placeholder}
-            disabled={loading}
-            className="flex-1 rounded-xl px-4 py-2.5 text-sm transition focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50 disabled:opacity-50"
-            style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", color: "#f0f0f5" }}
-          />
-          <button onClick={() => handleSubmit()} disabled={loading || !business.trim()}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-40 whitespace-nowrap"
-            style={{ background: "#2563EB", color: "#111", boxShadow: "0 0 20px rgba(79,110,255,0.3)" }}>
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={business}
+              onChange={e => setBusiness(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleSubmit()}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder={tx.placeholder}
+              disabled={loading}
+              className="w-full rounded-2xl px-4 py-3 text-sm transition-all duration-200 focus:outline-none disabled:opacity-50"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: focused ? "1px solid rgba(91,156,246,0.5)" : "1px solid rgba(255,255,255,0.08)",
+                color: "#D8E5F5",
+                boxShadow: focused ? "0 0 0 3px rgba(91,156,246,0.08)" : "none",
+              }}
+            />
+          </div>
+          <button
+            onClick={() => handleSubmit()}
+            disabled={loading || !business.trim()}
+            className="px-4 py-3 rounded-2xl text-xs font-extrabold transition-all hover:scale-105 active:scale-95 disabled:opacity-35 flex-shrink-0"
+            style={{
+              background: business.trim() && !loading
+                ? "linear-gradient(135deg,#5B9CF6,#2563EB)"
+                : "rgba(91,156,246,0.15)",
+              color: business.trim() && !loading ? "#fff" : "rgba(91,156,246,0.5)",
+              boxShadow: business.trim() ? "0 0 20px rgba(91,156,246,0.3)" : "none",
+              border: "1px solid rgba(91,156,246,0.2)",
+            }}>
             {tx.btn}
           </button>
         </div>
 
         {/* Category chips */}
         <div>
-          <p className="text-xs mb-2" style={{ color: "rgba(240,240,245,0.35)" }}>{tx.categoryLabel}</p>
+          <p className="text-[10px] mb-2 font-semibold tracking-wide" style={{ color: "rgba(216,229,245,0.3)" }}>
+            {tx.categoryLabel}
+          </p>
           <div className="flex flex-wrap gap-1.5">
             {cats.map(cat => (
-              <button key={cat} onClick={() => handleSubmit(cat)}
-                disabled={loading}
-                className="text-xs px-3 py-1 rounded-full transition-all hover:border-[#2563EB]/60 hover:text-[#2563EB] disabled:opacity-40"
-                style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,240,245,0.5)", background: "rgba(255,255,255,0.04)" }}>
+              <button key={cat} onClick={() => handleSubmit(cat)} disabled={loading}
+                className="text-[11px] px-3 py-1.5 rounded-xl font-medium transition-all hover:scale-105 active:scale-95 disabled:opacity-40"
+                style={{
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  color: "rgba(216,229,245,0.55)",
+                }}>
                 {cat}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Output */}
-        <div className="min-h-[90px]">
-          {loading && (
-            <div className="flex items-center gap-3 py-2">
-              <svg className="animate-spin w-4 h-4 text-[#2563EB] flex-shrink-0" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-              </svg>
-              <span className="text-sm animate-pulse" style={{ color: "rgba(240,240,245,0.5)" }}>{tx.thinking}</span>
-            </div>
-          )}
+        {/* Output area */}
+        {hasOutput && (
+          <div className="rounded-2xl overflow-hidden transition-all"
+            style={{
+              background: "rgba(91,156,246,0.05)",
+              border: "1px solid rgba(91,156,246,0.15)",
+            }}>
 
-          {hasError && !loading && (
-            <div className="rounded-2xl p-4"
-              style={{ background: "rgba(79,110,255,0.06)", border: "1px solid rgba(79,110,255,0.2)" }}>
-              <p className="text-xs font-bold text-[#2563EB] mb-2">✦ {tx.errorTitle}</p>
-              {tx.errorMsg.split("\n").map((line, i) => (
-                <p key={i} className="text-sm leading-relaxed" style={{ color: "rgba(240,240,245,0.65)" }}>{line}</p>
-              ))}
-              <a href="https://t.me/Mahirofficalll" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-[#2563EB] hover:underline">
-                ✈ {tx.tg}
-              </a>
-            </div>
-          )}
+            {loading && (
+              <div className="flex items-center gap-3 px-4 py-4">
+                <div className="flex gap-1">
+                  {[0, 1, 2].map(i => (
+                    <span key={i} className="w-1.5 h-1.5 rounded-full bg-[#5B9CF6]"
+                      style={{ animation: `bounce 1.2s ease infinite`, animationDelay: `${i * 0.2}s`, opacity: 0.7 }} />
+                  ))}
+                </div>
+                <span className="text-xs font-medium" style={{ color: "rgba(91,156,246,0.7)" }}>{tx.thinking}</span>
+              </div>
+            )}
 
-          {!loading && !hasError && displayed && (
-            <div className={isRtl ? "text-right" : "text-left"} style={{ padding: "4px 0" }}>
-              {displayed.split("\n").map((line, idx) =>
-                idx === 0
-                  ? <p key={idx} className="font-extrabold text-[#2563EB] text-base mb-2">{line}</p>
-                  : line.trim()
-                    ? <p key={idx} className="text-sm leading-relaxed mb-1" style={{ color: "rgba(240,240,245,0.8)" }}>{line}</p>
-                    : <br key={idx} />
-              )}
-              <span className="inline-block w-0.5 h-4 bg-[#2563EB] align-middle ml-0.5"
-                style={{ opacity: cursorOn ? 1 : 0, transition: "opacity 0.1s" }} />
-            </div>
-          )}
-        </div>
+            {hasError && !loading && (
+              <div className="px-4 py-4">
+                <p className="text-xs font-extrabold text-[#5B9CF6] mb-2">✦ {tx.errorTitle}</p>
+                <p className="text-sm leading-relaxed mb-3" style={{ color: "rgba(216,229,245,0.65)" }}>{tx.errorMsg}</p>
+                <a href="https://t.me/Mahirofficalll" target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-bold text-[#5B9CF6] hover:underline">
+                  ✈ {tx.tg}
+                </a>
+              </div>
+            )}
+
+            {!loading && !hasError && displayed && (
+              <div className={`px-4 py-4 ${isRtl ? "text-right" : "text-left"}`}>
+                {displayed.split("\n").map((line, idx) =>
+                  idx === 0
+                    ? <p key={idx} className="font-extrabold text-sm text-[#5B9CF6] mb-2 leading-snug">{line}</p>
+                    : line.trim()
+                      ? <p key={idx} className="text-sm leading-relaxed mb-1" style={{ color: "rgba(216,229,245,0.78)" }}>{line}</p>
+                      : <br key={idx} />
+                )}
+                <span className="inline-block w-px h-4 bg-[#5B9CF6] align-middle ml-0.5"
+                  style={{ opacity: cursorOn ? 1 : 0, transition: "opacity 0.1s" }} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

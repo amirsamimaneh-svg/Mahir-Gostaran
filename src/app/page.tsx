@@ -501,168 +501,127 @@ function Hero() {
 }
 
 // ── Stats ─────────────────────────────────────────────────
-const STAT_META = [
-  { color: "#5B9CF6", glow: "rgba(91,156,246,0.6)",  track: "rgba(91,156,246,0.08)",  pct: 96 },
-  { color: "#34d399", glow: "rgba(52,211,153,0.6)",  track: "rgba(52,211,153,0.08)",  pct: 80 },
-  { color: "#a78bfa", glow: "rgba(167,139,250,0.6)", track: "rgba(167,139,250,0.08)", pct: 55 },
-  { color: "#fb923c", glow: "rgba(251,146,60,0.6)",  track: "rgba(251,146,60,0.08)",  pct: 42 },
-];
+const STAT_COLORS = ["#5B9CF6", "#34d399", "#a78bfa", "#fb923c"];
+const STAT_BAR_PCT = [96, 80, 55, 42];
 
-const R = 54;
-const CIRC = 2 * Math.PI * R;
-
-function RingCard({
-  target, suffix, label, color, glow, track, pct, delay,
-}: {
-  target: number; suffix: string; label: string;
-  color: string; glow: string; track: string; pct: number; delay: number;
-}) {
-  const [count, setCount]     = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [visible, setVisible] = useState(false);
-  const ref     = useRef<HTMLDivElement>(null);
-  const started = useRef(false);
-
+function useCountUp(target: number, started: boolean, delay: number) {
+  const [count, setCount] = useState(0);
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !started.current) {
-        started.current = true;
-        setTimeout(() => {
-          setVisible(true);
-          // count up
-          const dur = 2200, step = 14, steps = dur / step;
-          let cur = 0; const inc = target / steps;
-          const t1 = setInterval(() => {
-            cur = Math.min(cur + inc, target);
-            setCount(Math.floor(cur));
-            if (cur >= target) clearInterval(t1);
-          }, step);
-          // ring fill
-          let p = 0; const pInc = pct / steps;
-          const t2 = setInterval(() => {
-            p = Math.min(p + pInc, pct);
-            setProgress(p);
-            if (p >= pct) clearInterval(t2);
-          }, step);
-        }, delay);
-      }
-    }, { threshold: 0.25 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [target, pct, delay]);
-
-  const dash   = (progress / 100) * CIRC;
-  const gap    = CIRC - dash;
-  const rotate = -90; // start at top
-
-  return (
-    <div ref={ref}
-      className="group relative flex flex-col items-center transition-all duration-700"
-      style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transitionDelay: `${delay}ms` }}>
-
-      {/* Ring SVG */}
-      <div className="relative w-36 h-36 md:w-44 md:h-44 flex-shrink-0">
-        <svg className="w-full h-full" viewBox="0 0 128 128" style={{ transform: `rotate(${rotate}deg)` }}>
-          {/* Track */}
-          <circle cx="64" cy="64" r={R} fill="none" strokeWidth="8"
-            stroke={track} strokeLinecap="round" />
-          {/* Filled arc */}
-          <circle cx="64" cy="64" r={R} fill="none" strokeWidth="8"
-            stroke={color} strokeLinecap="round"
-            strokeDasharray={`${dash} ${gap}`}
-            style={{
-              filter: `drop-shadow(0 0 8px ${glow}) drop-shadow(0 0 16px ${color}40)`,
-              transition: "stroke-dasharray 0.05s linear",
-            }} />
-        </svg>
-
-        {/* Center text */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-black leading-none"
-            style={{ fontSize: "clamp(1.6rem,4vw,2.2rem)", color, textShadow: `0 0 24px ${glow}` }}>
-            {count}{suffix}
-          </span>
-        </div>
-
-        {/* Dot at arc tip */}
-        {progress > 2 && (
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 128 128"
-            style={{ transform: `rotate(${rotate + (progress / 100) * 360}deg)` }}>
-            <circle cx="64" cy={64 - R} r="5" fill={color}
-              style={{ filter: `drop-shadow(0 0 6px ${color})` }} />
-          </svg>
-        )}
-      </div>
-
-      {/* Label + pct */}
-      <div className="mt-4 text-center px-2">
-        <p className="text-sm font-bold" style={{ color: "rgba(216,229,245,0.8)" }}>{label}</p>
-        <p className="text-xs mt-1 font-semibold" style={{ color }}>
-          {Math.round(progress)}%
-        </p>
-      </div>
-    </div>
-  );
+    if (!started) return;
+    const t = setTimeout(() => {
+      const dur = 2400, step = 12, steps = dur / step;
+      let cur = 0; const inc = target / steps;
+      const id = setInterval(() => {
+        cur = Math.min(cur + inc, target);
+        setCount(Math.floor(cur));
+        if (cur >= target) clearInterval(id);
+      }, step);
+      return () => clearInterval(id);
+    }, delay);
+    return () => clearTimeout(t);
+  }, [started, target, delay]);
+  return count;
 }
 
 function Stats() {
   const { lang, isRtl } = useLang();
   const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
-  const sectionRef = useRef<HTMLElement>(null);
-  const [bgVisible, setBgVisible] = useState(false);
+  const ref = useRef<HTMLElement>(null);
+  const [started, setStarted] = useState(false);
+  const [barPcts, setBarPcts] = useState(STAT_BAR_PCT.map(() => 0));
 
   useEffect(() => {
-    const el = sectionRef.current;
+    const el = ref.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) setBgVisible(true); }, { threshold: 0.1 });
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        setStarted(true);
+        STAT_BAR_PCT.forEach((target, i) => {
+          setTimeout(() => {
+            const dur = 1800, step = 12, steps = dur / step;
+            let cur = 0; const inc = target / steps;
+            const id = setInterval(() => {
+              cur = Math.min(cur + inc, target);
+              setBarPcts(prev => { const n = [...prev]; n[i] = cur; return n; });
+              if (cur >= target) clearInterval(id);
+            }, step);
+          }, 200 + i * 120);
+        });
+      }
+    }, { threshold: 0.2 });
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-20 px-6 w-full max-w-6xl mx-auto overflow-hidden">
+    <section ref={ref} className="relative w-full overflow-hidden py-4">
+      {/* full-bleed dark band */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(180deg, transparent 0%, rgba(6,10,20,0.6) 30%, rgba(6,10,20,0.6) 70%, transparent 100%)" }} />
 
-      {/* Background glow when visible */}
-      <div className="absolute inset-0 pointer-events-none transition-opacity duration-1000"
-        style={{ opacity: bgVisible ? 1 : 0 }}>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full"
-          style={{ background: "radial-gradient(ellipse,rgba(91,156,246,0.06) 0%,transparent 70%)", filter: "blur(40px)" }} />
+      {/* Grid lines decoration */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{ backgroundImage: "repeating-linear-gradient(90deg,#5B9CF6 0,#5B9CF6 1px,transparent 0,transparent 25%)", backgroundSize: "25% 100%" }} />
+
+      <div className="relative max-w-6xl mx-auto px-6">
+        {/* 4 stat rows */}
+        <div className="flex flex-col gap-0">
+          {tx.stats.map((s, i) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const count = useCountUp(s.target, started, 150 + i * 130);
+            const color = STAT_COLORS[i];
+            const bar   = barPcts[i];
+
+            return (
+              <div key={s.label}
+                className="group relative flex items-center gap-5 py-6 md:py-8 transition-all duration-500 cursor-default"
+                style={{
+                  opacity: started ? 1 : 0,
+                  transform: started ? "translateX(0)" : isRtl ? "translateX(40px)" : "translateX(-40px)",
+                  transitionDelay: `${i * 100}ms`,
+                  borderTop: i === 0 ? "1px solid rgba(255,255,255,0.05)" : undefined,
+                  borderBottom: "1px solid rgba(255,255,255,0.05)",
+                }}>
+
+                {/* Left: big number */}
+                <div className="flex-shrink-0 w-28 md:w-40 text-right" dir="ltr">
+                  <span className="font-black tabular-nums leading-none transition-all duration-300"
+                    style={{
+                      fontSize: "clamp(2.4rem,6vw,4rem)",
+                      color,
+                      textShadow: `0 0 40px ${color}80, 0 0 80px ${color}30`,
+                      letterSpacing: "-0.02em",
+                    }}>
+                    {count}{s.suffix}
+                  </span>
+                </div>
+
+                {/* Right: label + bar */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm md:text-base font-semibold mb-3 transition-colors duration-300"
+                    style={{ color: "rgba(216,229,245,0.55)" }}>
+                    {s.label}
+                  </p>
+                  {/* Animated bar */}
+                  <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.05)" }}>
+                    <div className="h-full rounded-full transition-all duration-[1800ms] ease-out"
+                      style={{
+                        width: `${bar}%`,
+                        background: `linear-gradient(90deg, ${color}80, ${color})`,
+                        boxShadow: `0 0 12px ${color}80`,
+                        transitionDelay: `${200 + i * 120}ms`,
+                      }} />
+                  </div>
+                </div>
+
+                {/* Hover glow bg */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+                  style={{ background: `radial-gradient(ellipse at ${isRtl ? "right" : "left"} center, ${color}06, transparent 60%)` }} />
+              </div>
+            );
+          })}
+        </div>
       </div>
-
-      {/* Section title */}
-      <div className="text-center mb-14 transition-all duration-700"
-        style={{ opacity: bgVisible ? 1 : 0, transform: bgVisible ? "translateY(0)" : "translateY(-16px)" }}>
-        <p className="text-xs font-extrabold tracking-[0.3em] mb-3" style={{ color: "rgba(91,156,246,0.5)" }}>
-          ✦ {isRtl ? "عملکرد ما" : "OUR IMPACT"}
-        </p>
-        <h2 className="font-extrabold" style={{ fontSize: "clamp(1.6rem,4vw,2.8rem)" }}>
-          <span className="c-fg">{isRtl ? "اعداد " : "Numbers "}</span>
-          <span className="text-shimmer">{isRtl ? "واقعی" : "That Speak"}</span>
-        </h2>
-      </div>
-
-      {/* Rings grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4">
-        {tx.stats.map((s, i) => (
-          <RingCard
-            key={s.label}
-            target={s.target}
-            suffix={s.suffix}
-            label={s.label}
-            color={STAT_META[i].color}
-            glow={STAT_META[i].glow}
-            track={STAT_META[i].track}
-            pct={STAT_META[i].pct}
-            delay={i * 150}
-          />
-        ))}
-      </div>
-
-      {/* Bottom divider glow */}
-      <div className="absolute bottom-0 inset-x-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(91,156,246,0.15),transparent)" }} />
     </section>
   );
 }

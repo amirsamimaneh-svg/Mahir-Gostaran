@@ -945,8 +945,8 @@ function ProjectCTA() {
   const steps = (STEPS as Record<string, typeof STEPS.fa>)[lang] ?? STEPS.fa;
 
   return (
-    <section className="py-20 px-6 w-full max-w-5xl mx-auto" dir={isRtl ? "rtl" : "ltr"}>
-      <div className="relative rounded-3xl overflow-hidden p-10 md:p-14"
+    <section className="py-14 px-4 w-full max-w-5xl mx-auto" dir={isRtl ? "rtl" : "ltr"}>
+      <div className="relative rounded-3xl overflow-hidden px-6 py-10 md:px-14 md:py-14"
         style={{
           background: "linear-gradient(145deg, rgba(91,156,246,0.1) 0%, rgba(8,14,32,0.97) 60%)",
           border: "1px solid rgba(91,156,246,0.25)",
@@ -954,69 +954,61 @@ function ProjectCTA() {
         }}>
 
         {/* Glow blobs */}
-        <div className="absolute pointer-events-none" style={{ top: -80, right: isRtl ? "auto" : -80, left: isRtl ? -80 : "auto", width: 300, height: 300, borderRadius: "50%", background: "#5B9CF6", filter: "blur(120px)", opacity: 0.1 }} />
-        <div className="absolute pointer-events-none" style={{ bottom: -60, left: isRtl ? "auto" : -60, right: isRtl ? -60 : "auto", width: 200, height: 200, borderRadius: "50%", background: "#2563EB", filter: "blur(90px)", opacity: 0.08 }} />
+        <div className="absolute pointer-events-none" style={{ top: -80, right: isRtl ? "auto" : -80, left: isRtl ? -80 : "auto", width: 260, height: 260, borderRadius: "50%", background: "#5B9CF6", filter: "blur(120px)", opacity: 0.1 }} />
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-10">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-8">
 
-          {/* Left: text */}
-          <div className="flex-1">
-            <p className="text-xs font-extrabold tracking-[0.3em] mb-4" style={{ color: "rgba(91,156,246,0.6)" }}>
+          {/* Text side */}
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-extrabold tracking-[0.25em] mb-3" style={{ color: "rgba(91,156,246,0.6)" }}>
               ✦ {isRtl ? "پروژه خودت رو ثبت کن" : "SUBMIT YOUR PROJECT"}
             </p>
-            <h2 className="font-extrabold leading-tight mb-4" style={{ fontSize: "clamp(1.6rem,4vw,2.6rem)", color: "#f0f0f5" }}>
-              {isRtl ? (
-                <>آماده‌ای <span style={{ color: "#5B9CF6" }}>شروع کنیم؟</span></>
-              ) : (
-                <>Ready to <span style={{ color: "#5B9CF6" }}>get started?</span></>
-              )}
-            </h2>
-            <p className="text-sm leading-relaxed mb-8" style={{ color: "rgba(240,240,245,0.5)" }}>
+            <h2 className="font-extrabold leading-tight mb-3" style={{ fontSize: "clamp(1.4rem,4vw,2.4rem)", color: "#f0f0f5" }}>
               {isRtl
-                ? "اطلاعات پروژه‌ات رو پر کن — تیم ماهیر ظرف ۲۴ ساعت با پیشنهاد اختصاصی باهات تماس می‌گیره."
-                : "Fill in your project details — the Mahir team will contact you with a custom proposal within 24 hours."}
+                ? <>آماده‌ای <span style={{ color: "#5B9CF6" }}>شروع کنیم؟</span></>
+                : <>Ready to <span style={{ color: "#5B9CF6" }}>get started?</span></>}
+            </h2>
+            <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(240,240,245,0.5)" }}>
+              {isRtl
+                ? "اطلاعات پروژه‌ات رو پر کن — ظرف ۲۴ ساعت با پیشنهاد اختصاصی باهات تماس می‌گیریم."
+                : "Fill in your project details — we'll contact you with a custom proposal within 24 hours."}
             </p>
 
-            {/* Steps */}
-            <div className="flex flex-col gap-3 mb-8">
+            {/* Steps — horizontal on mobile */}
+            <div className="grid grid-cols-3 gap-3 mb-7">
               {steps.map((s) => (
-                <div key={s.n} className="flex items-start gap-4">
-                  <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-extrabold flex-shrink-0 mt-0.5"
-                    style={{ background: "rgba(91,156,246,0.15)", color: "#5B9CF6", border: "1px solid rgba(91,156,246,0.3)" }}>
+                <div key={s.n} className="flex flex-col items-center text-center gap-2 px-2 py-3 rounded-2xl"
+                  style={{ background: "rgba(91,156,246,0.06)", border: "1px solid rgba(91,156,246,0.12)" }}>
+                  <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-extrabold flex-shrink-0"
+                    style={{ background: "rgba(91,156,246,0.18)", color: "#5B9CF6", border: "1px solid rgba(91,156,246,0.35)" }}>
                     {s.n}
                   </span>
-                  <div>
-                    <p className="text-sm font-bold" style={{ color: "#f0f0f5" }}>{s.label}</p>
-                    <p className="text-xs mt-0.5" style={{ color: "rgba(240,240,245,0.4)" }}>{s.desc}</p>
-                  </div>
+                  <p className="text-xs font-bold leading-tight" style={{ color: "#f0f0f5" }}>{s.label}</p>
                 </div>
               ))}
             </div>
 
             <Link href="/project"
-              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-extrabold text-sm transition-all hover:scale-105 hover:shadow-[0_0_50px_rgba(91,156,246,0.5)]"
-              style={{ background: "linear-gradient(135deg,#5B9CF6,#2563EB)", color: "#fff", boxShadow: "0 0 30px rgba(91,156,246,0.3)" }}>
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-extrabold text-sm transition-all hover:scale-105 w-full sm:w-auto justify-center"
+              style={{ background: "linear-gradient(135deg,#5B9CF6,#2563EB)", color: "#fff", boxShadow: "0 0 30px rgba(91,156,246,0.35)" }}>
               {isRtl ? "ثبت درخواست پروژه ←" : "Submit Project Request →"}
             </Link>
           </div>
 
-          {/* Right: decorative card */}
-          <div className="hidden md:flex flex-col gap-3 flex-shrink-0 w-64">
+          {/* Decorative chips — desktop only */}
+          <div className="hidden md:flex flex-col gap-2.5 flex-shrink-0 w-56">
             {[
               { label: isRtl ? "استراتژی رشد" : "Growth Strategy", color: "#5B9CF6" },
               { label: isRtl ? "هویت برند" : "Brand Identity", color: "#a78bfa" },
               { label: isRtl ? "بازاریابی دیجیتال" : "Digital Marketing", color: "#34d399" },
               { label: isRtl ? "هوش مصنوعی" : "AI Solutions", color: "#fb923c" },
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all"
-                style={{ background: `${item.color}0D`, border: `1px solid ${item.color}28` }}>
+              <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl"
+                style={{ background: `${item.color}0E`, border: `1px solid ${item.color}28` }}>
                 <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: item.color }} />
                 <span className="text-sm font-semibold" style={{ color: "rgba(240,240,245,0.75)" }}>{item.label}</span>
               </div>
             ))}
-            <div className="text-center text-xs mt-1 font-bold" style={{ color: "rgba(91,156,246,0.5)" }}>
-              {isRtl ? "و بیشتر..." : "and more…"}
-            </div>
           </div>
 
         </div>

@@ -627,62 +627,27 @@ function Stats() {
 }
 
 // ── Services ──────────────────────────────────────────────
-const SERVICE_META = [
-  {
-    color: "#5B9CF6",
-    bg: "rgba(91,156,246,0.06)",
-    border: "rgba(91,156,246,0.18)",
-    svgPath: "M12 2a10 10 0 0110 10c0 5.5-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2zm0 4v6l4 2",
-    // target icon
-    svg: (
-      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
-        <line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/>
-        <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/>
-      </svg>
-    ),
-    wide: true,
-  },
-  {
-    color: "#a78bfa",
-    bg: "rgba(167,139,250,0.06)",
-    border: "rgba(167,139,250,0.18)",
-    svg: (
-      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-      </svg>
-    ),
-    wide: false,
-  },
-  {
-    color: "#34d399",
-    bg: "rgba(52,211,153,0.06)",
-    border: "rgba(52,211,153,0.18)",
-    svg: (
-      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-      </svg>
-    ),
-    wide: false,
-  },
-  {
-    color: "#fb923c",
-    bg: "rgba(251,146,60,0.06)",
-    border: "rgba(251,146,60,0.18)",
-    svg: (
-      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="8" width="18" height="12" rx="2"/>
-        <path d="M12 8V4"/><circle cx="12" cy="4" r="1.5"/>
-        <line x1="8" y1="13" x2="9" y2="13"/><line x1="15" y1="13" x2="16" y2="13"/><path d="M9 17h6"/>
-      </svg>
-    ),
-    wide: true,
-  },
-];
+const SVC_COLORS = ["#5B9CF6", "#a78bfa", "#34d399", "#fb923c"];
+const SVC_TAGS = {
+  fa: [
+    ["تحلیل بازار", "نقشه‌راه", "رقبا"],
+    ["لوگو", "UI/UX", "برندینگ"],
+    ["اینستاگرام", "SEO", "تبلیغات"],
+    ["چت‌بات", "اتوماسیون", "AI"],
+  ],
+  en: [
+    ["Market Analysis", "Roadmap", "Competitors"],
+    ["Logo", "UI/UX", "Branding"],
+    ["Instagram", "SEO", "Ads"],
+    ["Chatbot", "Automation", "AI"],
+  ],
+};
 
 function Services() {
   const { lang, isRtl } = useLang();
   const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
+  const tags = (SVC_TAGS as Record<string, string[][]>)[lang] ?? SVC_TAGS.fa;
+  const [hovered, setHovered] = useState<number | null>(null);
   const ref = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -698,83 +663,100 @@ function Services() {
     <section ref={ref} id="services" className="py-28 px-6 w-full max-w-6xl mx-auto">
 
       {/* Header */}
-      <div className="mb-16 transition-all duration-700"
+      <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4 transition-all duration-700"
         style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)" }}>
-        <p className="text-xs font-extrabold tracking-[0.3em] mb-4" style={{ color: "rgba(91,156,246,0.5)" }}>
-          ✦ {isRtl ? "خدمات" : "SERVICES"}
-        </p>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-extrabold tracking-[0.3em] mb-4" style={{ color: "rgba(91,156,246,0.5)" }}>
+            ✦ {isRtl ? "خدمات" : "SERVICES"}
+          </p>
           <h2 className="font-extrabold leading-none" style={{ fontSize: "clamp(2.2rem,5vw,4rem)" }}>
             <span className="c-fg">{tx.servTitle} </span>
             <span className="text-shimmer">{tx.servBrand}</span>
           </h2>
-          <p className="max-w-xs text-sm leading-relaxed md:text-right c-fg3">{tx.servSub}</p>
         </div>
+        <p className="max-w-xs text-sm leading-relaxed c-fg3">{tx.servSub}</p>
       </div>
 
-      {/* Bento grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Service rows */}
+      <div className="flex flex-col">
         {tx.services.map((s, i) => {
-          const meta = SERVICE_META[i];
+          const color = SVC_COLORS[i];
+          const isHov = hovered === i;
           return (
-            <div key={s.title}
-              className="group relative rounded-3xl overflow-hidden cursor-default transition-all duration-500 hover:-translate-y-2"
+            <div
+              key={s.title}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+              className="relative group flex items-center gap-6 py-7 md:py-9 cursor-default transition-all duration-400"
               style={{
-                background: meta.bg,
-                border: `1px solid ${meta.border}`,
-                boxShadow: "0 4px 24px rgba(0,0,0,0.25)",
+                borderTop: "1px solid rgba(255,255,255,0.06)",
+                borderBottom: i === tx.services.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
                 opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.97)",
-                transitionDelay: `${i * 100 + 100}ms`,
-                transitionProperty: "opacity, transform, box-shadow",
-              }}>
+                transform: visible ? "translateX(0)" : isRtl ? "translateX(32px)" : "translateX(-32px)",
+                transitionDelay: `${i * 90 + 80}ms`,
+              }}
+              dir={isRtl ? "rtl" : "ltr"}>
 
-              {/* Top accent line */}
-              <div className="absolute top-0 inset-x-0 h-[2px] transition-all duration-500"
+              {/* Full-row hover bg */}
+              <div className="absolute inset-0 transition-opacity duration-400 pointer-events-none"
                 style={{
-                  background: `linear-gradient(90deg, transparent, ${meta.color}, transparent)`,
-                  opacity: 0.6,
+                  opacity: isHov ? 1 : 0,
+                  background: `radial-gradient(ellipse at ${isRtl ? "90% 50%" : "10% 50%"}, ${color}0E 0%, transparent 65%)`,
                 }} />
 
-              {/* Hover glow */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: `radial-gradient(ellipse at 30% 40%, ${meta.color}0D 0%, transparent 65%)` }} />
+              {/* Number */}
+              <span className="flex-shrink-0 font-black text-xs md:text-sm tabular-nums w-8 text-center transition-colors duration-300"
+                style={{ color: isHov ? color : "rgba(255,255,255,0.15)", fontVariantNumeric: "tabular-nums" }}>
+                0{i + 1}
+              </span>
 
-              <div className="relative p-8 md:p-10 flex flex-col h-full min-h-[220px]">
+              {/* Icon bubble */}
+              <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center text-2xl transition-all duration-400"
+                style={{
+                  background: isHov ? `${color}18` : "rgba(255,255,255,0.04)",
+                  border: `1px solid ${isHov ? color + "40" : "rgba(255,255,255,0.08)"}`,
+                  transform: isHov ? "scale(1.1) rotate(-4deg)" : "scale(1)",
+                }}>
+                {s.icon}
+              </div>
 
-                {/* Number + icon row */}
-                <div className="flex items-start justify-between mb-6">
-                  <span className="font-black text-5xl leading-none select-none transition-colors duration-300"
-                    style={{ color: `${meta.color}20` }}>
-                    0{i + 1}
-                  </span>
-                  <div className="transition-all duration-500 group-hover:scale-110 group-hover:rotate-[-6deg]"
-                    style={{ color: meta.color, opacity: 0.7 }}>
-                    {meta.svg}
-                  </div>
-                </div>
-
-                {/* Title */}
-                <h3 className="font-extrabold text-xl md:text-2xl mb-3 leading-tight transition-colors duration-300 c-fg group-hover:text-white">
+              {/* Title + desc */}
+              <div className="flex-1 min-w-0">
+                <h3 className="font-extrabold leading-tight transition-colors duration-300 mb-1"
+                  style={{
+                    fontSize: "clamp(1.1rem,2.5vw,1.5rem)",
+                    color: isHov ? "#fff" : "rgba(216,229,245,0.85)",
+                  }}>
                   {s.title}
                 </h3>
-
-                {/* Desc */}
-                <p className="text-sm leading-relaxed flex-1" style={{ color: "rgba(216,229,245,0.5)" }}>
+                <p className="text-sm leading-relaxed hidden md:block transition-colors duration-300"
+                  style={{ color: isHov ? "rgba(216,229,245,0.6)" : "rgba(216,229,245,0.35)" }}>
                   {s.desc}
                 </p>
+              </div>
 
-                {/* Bottom arrow */}
-                <div className="mt-6 flex items-center gap-2 transition-all duration-300"
-                  style={{ color: meta.color, opacity: 0 }}
-                  ref={el => { if (el) el.style.opacity = "0"; }}>
-                </div>
-                <div className="mt-5 inline-flex items-center gap-2 text-xs font-bold transition-all duration-300 opacity-0 group-hover:opacity-100"
-                  style={{ color: meta.color }}>
-                  <span className="w-6 h-px rounded-full" style={{ background: meta.color }} />
-                  {isRtl ? "بیشتر بدانید" : "Learn more"}
-                  <span>{isRtl ? "←" : "→"}</span>
-                </div>
+              {/* Tags — desktop hover */}
+              <div className="hidden md:flex items-center gap-2 flex-shrink-0 transition-all duration-400"
+                style={{ opacity: isHov ? 1 : 0, transform: isHov ? "translateY(0)" : "translateY(6px)" }}>
+                {tags[i].map(tag => (
+                  <span key={tag} className="text-xs px-3 py-1 rounded-full font-bold"
+                    style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Arrow */}
+              <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-400"
+                style={{
+                  background: isHov ? color : "transparent",
+                  border: `1px solid ${isHov ? color : "rgba(255,255,255,0.1)"}`,
+                  transform: isHov ? "scale(1.1)" : "scale(1)",
+                }}>
+                <span className="text-sm font-bold transition-colors duration-300"
+                  style={{ color: isHov ? "#fff" : "rgba(255,255,255,0.2)" }}>
+                  {isRtl ? "←" : "→"}
+                </span>
               </div>
             </div>
           );

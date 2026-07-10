@@ -322,45 +322,67 @@ function Navbar() {
           </div>
         </div>
 
-        {/* Mobile menu */}
-        <div
-          className="md:hidden overflow-hidden transition-all duration-300"
-          style={{ maxHeight: menuOpen ? "400px" : "0", borderTop: menuOpen ? "1px solid rgba(91,156,246,0.1)" : "none" }}>
-          <div className="px-5 py-4 flex flex-col gap-1" dir={isRtl ? "rtl" : "ltr"}>
-            {features.map(item => (
-              item.href.startsWith("#") ? (
-                <button key={item.label}
-                  onClick={() => { go(item.href); setMenuOpen(false); }}
-                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-medium transition-all text-start hover:text-[#5B9CF6]"
-                  style={{ color: "var(--fg2)" }}>
-                  <span>{item.icon}</span>{item.label}
+        {/* Mobile menu — full-screen overlay style */}
+        {menuOpen && (
+          <div
+            className="md:hidden fixed inset-0 top-16 z-40"
+            style={{ background: "rgba(8,14,24,0.98)", backdropFilter: "blur(20px)" }}
+            dir={isRtl ? "rtl" : "ltr"}>
+            <div className="flex flex-col h-full px-6 pt-6 pb-32 overflow-y-auto">
+
+              {/* Links */}
+              <div className="flex flex-col gap-1 mb-6">
+                {features.map((item, i) => (
+                  item.href.startsWith("#") ? (
+                    <button key={item.label}
+                      onClick={() => { go(item.href); setMenuOpen(false); }}
+                      className="flex items-center gap-4 px-4 py-4 rounded-2xl text-base font-semibold transition-all active:scale-95 text-start"
+                      style={{
+                        color: "var(--fg)",
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.06)",
+                        animationDelay: `${i * 40}ms`,
+                      }}>
+                      <span className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+                        style={{ background: "rgba(91,156,246,0.1)" }}>{item.icon}</span>
+                      {item.label}
+                    </button>
+                  ) : (
+                    <Link key={item.label} href={item.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-4 px-4 py-4 rounded-2xl text-base font-semibold transition-all active:scale-95"
+                      style={{
+                        color: "var(--fg)",
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.06)",
+                      }}>
+                      <span className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+                        style={{ background: "rgba(91,156,246,0.1)" }}>{item.icon}</span>
+                      {item.label}
+                    </Link>
+                  )
+                ))}
+              </div>
+
+              {/* Bottom actions */}
+              <div className="flex flex-col gap-3 mt-auto">
+                {!user && (
+                  <Link href="/consult" onClick={() => setMenuOpen(false)}
+                    className="w-full text-center font-extrabold py-4 rounded-2xl text-base transition-all active:scale-95"
+                    style={{ background: "linear-gradient(135deg,#5B9CF6,#3B82F6)", color: "#03080F", boxShadow: "0 0 30px rgba(91,156,246,0.3)" }}>
+                    {isRtl ? "✦ مشاوره رایگان" : "✦ Free Consult"}
+                  </Link>
+                )}
+                <button onClick={() => { cycle(); }}
+                  className="w-full flex items-center justify-center gap-2 font-bold py-3.5 rounded-2xl text-sm transition-all active:scale-95"
+                  style={{ border: "1px solid rgba(91,156,246,0.2)", color: "var(--fg2)", background: "rgba(91,156,246,0.05)" }}>
+                  <span>{lang === "fa" ? "🇬🇧" : "🇮🇷"}</span>
+                  <span>{lang === "fa" ? "Switch to English" : "تغییر به فارسی"}</span>
                 </button>
-              ) : (
-                <Link key={item.label} href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-medium transition-all hover:text-[#5B9CF6]"
-                  style={{ color: "var(--fg2)" }}>
-                  <span>{item.icon}</span>{item.label}
-                </Link>
-              )
-            ))}
-            <div className="flex items-center gap-2 mt-2 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
-              <button onClick={cycle}
-                className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-lg"
-                style={{ border: "1px solid var(--border)", color: "var(--fg3)" }}>
-                <span>{lang === "fa" ? "🇬🇧" : "🇮🇷"}</span>
-                <span>{lang === "fa" ? "English" : "فارسی"}</span>
-              </button>
-              {!user && (
-                <Link href="/consult" onClick={() => setMenuOpen(false)}
-                  className="flex-1 text-center text-xs font-extrabold px-4 py-2 rounded-xl"
-                  style={{ background: "linear-gradient(135deg,#5B9CF6,#3B82F6)", color: "#03080F" }}>
-                  {isRtl ? "مشاوره رایگان" : "Free Consult"}
-                </Link>
-              )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </nav>
     </>
   );
@@ -888,19 +910,99 @@ function ContactForm() {
 
 // ── Footer ────────────────────────────────────────────────
 function Footer() {
-  const { lang } = useLang();
+  const { lang, isRtl } = useLang();
   const tx = (t as Record<string, typeof t.fa>)[lang] ?? t.fa;
+
+  const links = isRtl
+    ? [
+        { label: "خدمات", href: "#services" },
+        { label: "نمونه‌کارها", href: "#portfolio" },
+        { label: "بلاگ", href: "/blog" },
+        { label: "قیمت‌ها", href: "/pricing" },
+        { label: "درباره ما", href: "/about" },
+        { label: "تماس", href: "#contact" },
+      ]
+    : [
+        { label: "Services", href: "#services" },
+        { label: "Portfolio", href: "#portfolio" },
+        { label: "Blog", href: "/blog" },
+        { label: "Pricing", href: "/pricing" },
+        { label: "About", href: "/about" },
+        { label: "Contact", href: "#contact" },
+      ];
+
   return (
-    <footer className="py-10 px-6 w-full max-w-6xl mx-auto"
-      style={{ borderTop: "1px solid var(--border)" }}>
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm c-fg3">
-        <span className="font-extrabold text-[#2563EB] text-lg tracking-widest">{tx.brand}</span>
-        <div className="flex gap-6">
-          <a href="mailto:hello@mahir.ir" className="hover:text-[#2563EB] transition-colors">hello@mahir.ir</a>
-          <a href="#" className="hover:text-[#2563EB] transition-colors">{tx.footerIg}</a>
-          <a href="#" className="hover:text-[#2563EB] transition-colors">{tx.footerLi}</a>
+    <footer className="w-full" dir={isRtl ? "rtl" : "ltr"}
+      style={{ borderTop: "1px solid rgba(91,156,246,0.08)", background: "rgba(8,14,24,0.6)" }}>
+
+      <div className="max-w-5xl mx-auto px-6 py-12 md:py-16">
+
+        {/* Top row */}
+        <div className="flex flex-col md:flex-row items-start justify-between gap-10 mb-10">
+
+          {/* Brand */}
+          <div className="flex-shrink-0">
+            <div className="flex items-center gap-2.5 mb-3">
+              <MahirLogo size={36} />
+              <span className="text-xl font-extrabold tracking-widest" style={{ color: "#5B9CF6" }}>{tx.brand}</span>
+            </div>
+            <p className="text-sm leading-relaxed max-w-xs" style={{ color: "var(--fg3)" }}>
+              {isRtl
+                ? "شریک هوشمند رشد کسب‌وکار شما — از استراتژی تا اجرا."
+                : "Your smart business growth partner — from strategy to execution."}
+            </p>
+          </div>
+
+          {/* Links */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-10 gap-y-3">
+            {links.map(l => (
+              l.href.startsWith("#") ? (
+                <a key={l.label} href={l.href}
+                  onClick={e => { e.preventDefault(); document.querySelector(l.href)?.scrollIntoView({ behavior: "smooth" }); }}
+                  className="text-sm transition-colors hover:text-[#5B9CF6] cursor-pointer"
+                  style={{ color: "var(--fg3)" }}>
+                  {l.label}
+                </a>
+              ) : (
+                <Link key={l.label} href={l.href}
+                  className="text-sm transition-colors hover:text-[#5B9CF6]"
+                  style={{ color: "var(--fg3)" }}>
+                  {l.label}
+                </Link>
+              )
+            ))}
+          </div>
+
+          {/* Contact */}
+          <div className="flex flex-col gap-2 text-sm flex-shrink-0">
+            <a href="mailto:hello@mahir.ir"
+              className="flex items-center gap-2 transition-colors hover:text-[#5B9CF6]"
+              style={{ color: "var(--fg3)" }}>
+              <span>✉</span> hello@mahir.ir
+            </a>
+            <a href="#"
+              className="flex items-center gap-2 transition-colors hover:text-[#5B9CF6]"
+              style={{ color: "var(--fg3)" }}>
+              <span>📸</span> {tx.footerIg}
+            </a>
+            <a href="#"
+              className="flex items-center gap-2 transition-colors hover:text-[#5B9CF6]"
+              style={{ color: "var(--fg3)" }}>
+              <span>💼</span> {tx.footerLi}
+            </a>
+          </div>
         </div>
-        <span>{tx.footerR}</span>
+
+        {/* Divider */}
+        <div className="h-px mb-6" style={{ background: "rgba(91,156,246,0.08)" }} />
+
+        {/* Bottom */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style={{ color: "var(--fg3)" }}>
+          <span>{tx.footerR}</span>
+          <span className="opacity-40">
+            {isRtl ? "ساخته شده با ❤ در ایران" : "Made with ❤ in Iran"}
+          </span>
+        </div>
       </div>
     </footer>
   );

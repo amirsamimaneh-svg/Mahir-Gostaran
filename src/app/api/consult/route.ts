@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
-import Groq from "groq-sdk";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
@@ -28,9 +27,10 @@ function checkRateLimit(ip: string) {
   e.count++; return true;
 }
 
-function getClient() {
+async function getClient() {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) throw new Error("GROQ_API_KEY not set");
+  const { default: Groq } = await import("groq-sdk");
   return new Groq({ apiKey });
 }
 
@@ -140,7 +140,7 @@ export async function POST(req: NextRequest) {
 
     const model = imageBase64 ? "meta-llama/llama-4-scout-17b-16e-instruct" : "llama-3.3-70b-versatile";
 
-    const completion = await getClient().chat.completions.create({
+    const completion = await (await getClient()).chat.completions.create({
       model,
       max_tokens: 500,
       messages: [

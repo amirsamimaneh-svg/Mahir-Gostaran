@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 import Groq from "groq-sdk";
 import fs from "fs";
@@ -26,7 +28,11 @@ function checkRateLimit(ip: string) {
   e.count++; return true;
 }
 
-function getClient() { return new Groq({ apiKey: process.env.GROQ_API_KEY }); }
+function getClient() {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error("GROQ_API_KEY not set");
+  return new Groq({ apiKey });
+}
 
 const SYS_FA = `تو مشاور ارشد رشد کسب‌وکار در شرکت ماهیر هستی با تخصص در استراتژی، برندینگ، دیجیتال مارکتینگ و هوش مصنوعی.
 بر اساس اطلاعات کسب‌وکار کاربر، یک مشاوره رشد جامع، عملی و اختصاصی ارائه بده.

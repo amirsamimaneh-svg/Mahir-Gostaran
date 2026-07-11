@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
+import { sendTelegramNotification } from "@/lib/telegram";
 
 const FILE = path.join(process.cwd(), "data", "project-requests.json");
 const ADMIN_PASS = process.env.ADMIN_PASSWORD ?? "Am-=1386";
@@ -69,6 +70,22 @@ export async function POST(req: NextRequest) {
   const items = read();
   items.push(entry);
   write(items);
+
+  const SERVICE_LABEL: Record<string, string> = {
+    branding: "برندینگ", marketing: "مارکتینگ", consulting: "مشاوره",
+    social: "شبکه‌های اجتماعی", content: "تولید محتوا", website: "طراحی سایت",
+  };
+  await sendTelegramNotification(
+    `🔔 <b>درخواست پروژه جدید</b>\n\n` +
+    `👤 <b>نام:</b> ${entry.name}\n` +
+    `📞 <b>تلفن:</b> ${entry.phone}\n` +
+    `🏢 <b>کسب‌وکار:</b> ${entry.business || "—"}\n` +
+    `🛠 <b>سرویس:</b> ${SERVICE_LABEL[entry.service] ?? entry.service}\n` +
+    `💰 <b>بودجه:</b> ${entry.budget || "—"}\n` +
+    `⏱ <b>بازه زمانی:</b> ${entry.timeline || "—"}\n` +
+    `🎯 <b>هدف:</b> ${entry.goal || "—"}\n` +
+    `📝 <b>توضیحات:</b> ${entry.description}`
+  );
 
   return NextResponse.json({ ok: true });
 }

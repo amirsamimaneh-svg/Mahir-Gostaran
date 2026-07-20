@@ -1,56 +1,47 @@
-# ماهیر — سایت رسمی
+# ماهیر — لندینگ‌پیج رسمی
 
-وب‌سایت شرکت **ماهیر** ساخته‌شده با Next.js 15، Tailwind CSS و Anthropic API.
+لندینگ‌پیج پریمیوم برند **ماهیر**؛ آژانس رشد کسب‌وکار که کسب‌وکارهای کوچک را از صفر تا صد رشد می‌دهد
+(برندینگ، طراحی، تولید محتوا، جذب کاربر و افزایش فروش).
+
+ساخته‌شده با **Next.js 16 (App Router)** · **TypeScript** · **Tailwind CSS v4** · فونت **Vazirmatn**.
+
+---
+
+## ویژگی‌ها
+
+- 🎨 طراحی مدرن، مینیمال و لوکس — مشکی عمیق + طلایی ملایم + سفید
+- 🌙 حالت تاریک به‌صورت پیش‌فرض
+- 🔁 کاملاً راست‌چین (RTL) و فارسی
+- 📱 موبایل‌اول و کاملاً ریسپانسیو
+- ✨ انیمیشن‌های نرم اسکرول با CSS + IntersectionObserver (بدون وابستگی سنگین)
+- ⚡ صفحه کاملاً استاتیک (SSG) و آماده دیپلوی
+
+---
+
+## بخش‌های صفحه
+
+Navbar چسبان · Hero · مشکل · راه‌حل ماهیر · خدمات · فرآیند کار · نتایج · چرا ماهیر؟ · فرم تماس · فوتر
 
 ---
 
 ## پیش‌نیازها
 
 - Node.js 18 یا بالاتر
-- npm یا yarn
-- کلید API آنتروپیک (رایگان از [console.anthropic.com](https://console.anthropic.com))
+- npm
 
 ---
 
-## نصب و راه‌اندازی
-
-### ۱. کلون پروژه
+## اجرا
 
 ```bash
-git clone https://github.com/amirsamimaneh-svg/Mahir-Gostaran.git
-cd Mahir-Gostaran
+npm install      # نصب وابستگی‌ها
+npm run dev      # محیط توسعه روی http://localhost:3000
+npm run build    # بیلد پروداکشن
+npm run start    # اجرای بیلد
+npm run lint     # بررسی لینت
 ```
 
-### ۲. نصب وابستگی‌ها
-
-```bash
-npm install
-```
-
-### ۳. تنظیم کلید API
-
-ابتدا فایل `.env.example` را به `.env.local` کپی کنید:
-
-```bash
-cp .env.example .env.local
-```
-
-سپس فایل `.env.local` را باز کنید و کلید خود را جایگزین کنید:
-
-```
-ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxx
-```
-
-> کلید API را از [console.anthropic.com](https://console.anthropic.com) → **API Keys** بگیرید.  
-> **هرگز** این فایل را به Git push نکنید.
-
-### ۴. اجرای محیط توسعه
-
-```bash
-npm run dev
-```
-
-سایت روی [http://localhost:3000](http://localhost:3000) در دسترس است.
+> این پروژه به هیچ متغیر محیطی یا کلید API نیازی ندارد.
 
 ---
 
@@ -59,48 +50,36 @@ npm run dev
 ```
 src/
 ├── app/
-│   ├── api/
-│   │   └── idea/
-│   │       └── route.ts      # API route امن برای تولید ایده با Claude
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx              # صفحه‌ی اصلی
+│   ├── globals.css      # تم مشکی/طلایی، متغیرها، انیمیشن‌ها
+│   ├── layout.tsx       # ریشه (RTL، فونت، متادیتا)
+│   └── page.tsx         # چیدمان بخش‌های لندینگ
 └── components/
-    └── IdeaCard.tsx          # کارت هوش مصنوعی با typewriter effect
+    ├── Navbar.tsx       ├── Hero.tsx        ├── Problem.tsx
+    ├── Solution.tsx     ├── Services.tsx    ├── Process.tsx
+    ├── Results.tsx      ├── WhyMahir.tsx    ├── ContactCTA.tsx
+    ├── Footer.tsx       ├── SectionHeader.tsx
+    ├── Reveal.tsx       # موتور انیمیشن اسکرول
+    ├── Logo.tsx         └── icons.tsx       # آیکون‌های SVG
 ```
+
+### فرم تماس
+
+فرم بخش «درخواست بررسی رایگان» در حال حاضر سمت کلاینت اعتبارسنجی می‌شود و پیام موفقیت نشان می‌دهد
+(بدون بک‌اند، تا سایت بدون تنظیمات اضافه قابل دیپلوی باشد). برای اتصال به CRM یا ارسال واقعی،
+منطق ارسال را در `src/components/ContactCTA.tsx` به یک Route Handler یا سرویس خودتان وصل کنید.
 
 ---
 
 ## دیپلوی روی Vercel
 
-### روش سریع
+1. مخزن را به [vercel.com](https://vercel.com) وصل کنید و **New Project** را بزنید.
+2. تنظیمات پیش‌فرض کافی است (نیازی به Environment Variable نیست).
+3. **Deploy** را بزنید.
 
-1. به [vercel.com](https://vercel.com) بروید و با GitHub وارد شوید.
-2. روی **New Project** کلیک کنید و ریپوزیتوری `Mahir-Gostaran` را انتخاب کنید.
-3. در بخش **Environment Variables** متغیر زیر را اضافه کنید:
-   - `ANTHROPIC_API_KEY` = کلید API آنتروپیک شما
-4. روی **Deploy** کلیک کنید.
+### اتصال دامنه mahir.ir
 
-### اتصال دامنه‌ی mahir.ir
-
-بعد از دیپلوی موفق:
-
-1. در داشبورد Vercel → **Settings** → **Domains** بروید.
-2. دامنه `mahir.ir` و `www.mahir.ir` را اضافه کنید.
-3. رکوردهای DNS زیر را در پنل مدیریت دامنه تنظیم کنید:
-
-| نوع | نام | مقدار |
-|-----|-----|-------|
-| A | @ | 76.76.21.21 |
-| CNAME | www | cname.vercel-dns.com |
-
----
-
-## ویژگی‌های امنیتی
-
-- کلید API **فقط** در سمت سرور و در متغیر محیطی نگهداری می‌شود.
-- محدودیت نرخ: حداکثر **۱۰ درخواست** per IP در هر دقیقه.
-- هیچ داده‌ای از کاربر ذخیره نمی‌شود.
+در داشبورد Vercel → **Settings → Domains**، دامنه‌های `mahir.ir` و `www.mahir.ir` را اضافه کنید و
+رکوردهای DNS پیشنهادی Vercel را در پنل دامنه‌تان ثبت کنید.
 
 ---
 

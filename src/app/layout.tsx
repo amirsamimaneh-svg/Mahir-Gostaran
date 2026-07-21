@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import "@fontsource/vazirmatn/300.css";
 import "@fontsource/vazirmatn/400.css";
 import "@fontsource/vazirmatn/500.css";
@@ -54,7 +56,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body>{children}</body>
+      <body>
+        <Navbar />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }

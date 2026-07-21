@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Reveal from "./Reveal";
 import { IconArrowDown, IconSpark } from "./icons";
 
@@ -53,9 +54,9 @@ export default function Hero() {
 
         <Reveal delay={240}>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
-            <a href="#contact" className="btn btn-gold">
+            <Link href="/submit" className="btn btn-gold">
               شروع همکاری
-            </a>
+            </Link>
             <a href="#services" className="btn btn-ghost">
               مشاهده خدمات
             </a>

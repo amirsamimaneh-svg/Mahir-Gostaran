@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
 import { IconClock } from "./icons";
@@ -57,9 +58,9 @@ export default function Results() {
                 شما یکی از اولین داستان‌های موفقیت ماهیر باشد؟
               </p>
               <div className="mt-8">
-                <a href="#contact" className="btn btn-gold">
+                <Link href="/submit" className="btn btn-gold">
                   همین حالا شروع کنید
-                </a>
+                </Link>
               </div>
             </div>
           </div>

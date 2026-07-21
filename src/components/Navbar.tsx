@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Logo from "./Logo";
 import { IconMenu, IconClose } from "./icons";
 
 const LINKS = [
-  { href: "#services", label: "خدمات" },
-  { href: "#process", label: "فرآیند کار" },
-  { href: "#results", label: "نتایج" },
-  { href: "#why", label: "درباره ما" },
-  { href: "#contact", label: "تماس" },
+  { href: "/", label: "صفحه اصلی" },
+  { href: "/#services", label: "خدمات" },
+  { href: "/#process", label: "فرآیند کار" },
+  { href: "/#why", label: "درباره ما" },
+  { href: "/#faq", label: "سوالات متداول" },
+  { href: "/#contact", label: "تماس" },
 ];
 
 export default function Navbar() {
@@ -42,36 +44,36 @@ export default function Navbar() {
       }}
     >
       <nav className="container h-full flex items-center justify-between gap-4">
-        <a href="#top" aria-label="ماهیر" className="z-50">
+        <Link href="/" aria-label="ماهیر" className="z-50 shrink-0">
           <Logo />
-        </a>
+        </Link>
 
         {/* desktop links */}
-        <ul className="hidden md:flex items-center gap-1">
+        <ul className="hidden lg:flex items-center gap-0.5">
           {LINKS.map((l) => (
             <li key={l.href}>
-              <a
+              <Link
                 href={l.href}
-                className="px-3.5 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="px-3 py-2 rounded-lg text-[13px] font-medium transition-colors block"
                 style={{ color: "var(--fg-muted)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold-bright)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "var(--fg-muted)")}
               >
                 {l.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
 
-        <div className="hidden md:block">
-          <a href="#contact" className="btn btn-gold text-sm">
-            درخواست بررسی رایگان
-          </a>
+        <div className="hidden lg:block shrink-0">
+          <Link href="/submit" className="btn btn-gold text-sm">
+            ثبت پروژه
+          </Link>
         </div>
 
         {/* mobile toggle */}
         <button
-          className="md:hidden z-50 p-2 rounded-lg"
+          className="lg:hidden z-50 p-2 rounded-lg"
           style={{ color: "var(--fg)" }}
           aria-label={open ? "بستن منو" : "باز کردن منو"}
           onClick={() => setOpen((v) => !v)}
@@ -82,42 +84,38 @@ export default function Navbar() {
 
       {/* mobile drawer */}
       <div
-        className="md:hidden fixed inset-0 top-0 z-40 transition-all duration-300"
+        className="lg:hidden fixed inset-0 top-0 z-40 transition-all duration-300 overflow-y-auto"
         style={{
-          background: "rgba(7,7,10,0.97)",
+          background: "rgba(7,7,10,0.98)",
           backdropFilter: "blur(8px)",
           WebkitBackdropFilter: "blur(8px)",
           opacity: open ? 1 : 0,
           pointerEvents: open ? "auto" : "none",
         }}
       >
-        <ul className="flex flex-col gap-2 px-8 pt-28">
+        <ul className="flex flex-col gap-1.5 px-8 pt-28 pb-10">
           {LINKS.map((l, i) => (
             <li key={l.href}>
-              <a
+              <Link
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="block py-3 text-lg font-semibold border-b transition-transform"
+                className="block py-3 text-lg font-semibold border-b"
                 style={{
                   color: "var(--fg)",
                   borderColor: "var(--border)",
                   transform: open ? "translateX(0)" : "translateX(20px)",
                   opacity: open ? 1 : 0,
-                  transition: `all 0.4s ${0.05 * i + 0.1}s`,
+                  transition: `all 0.4s ${0.04 * i + 0.1}s`,
                 }}
               >
                 {l.label}
-              </a>
+              </Link>
             </li>
           ))}
           <li className="pt-6">
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
-              className="btn btn-gold w-full"
-            >
-              درخواست بررسی رایگان
-            </a>
+            <Link href="/submit" onClick={() => setOpen(false)} className="btn btn-gold w-full">
+              ثبت پروژه
+            </Link>
           </li>
         </ul>
       </div>

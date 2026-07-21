@@ -50,23 +50,31 @@ npm run lint     # بررسی لینت
 ```
 src/
 ├── app/
-│   ├── globals.css      # تم مشکی/طلایی، متغیرها، انیمیشن‌ها
-│   ├── layout.tsx       # ریشه (RTL، فونت، متادیتا)
-│   └── page.tsx         # چیدمان بخش‌های لندینگ
+│   ├── globals.css        # تم مشکی/طلایی، متغیرها، انیمیشن‌ها
+│   ├── layout.tsx         # ریشه (RTL، فونت، متادیتا، Navbar + Footer)
+│   ├── page.tsx           # چیدمان بخش‌های لندینگ
+│   ├── submit/page.tsx    # صفحه «ثبت پروژه» + فرم کامل
+│   ├── thank-you/page.tsx # صفحه تشکر بعد از ارسال موفق
+│   └── api/submit/route.ts# دریافت و اعتبارسنجی فرم (لاگ سمت سرور)
 └── components/
     ├── Navbar.tsx       ├── Hero.tsx        ├── Problem.tsx
     ├── Solution.tsx     ├── Services.tsx    ├── Process.tsx
-    ├── Results.tsx      ├── WhyMahir.tsx    ├── ContactCTA.tsx
-    ├── Footer.tsx       ├── SectionHeader.tsx
+    ├── Results.tsx      ├── WhyMahir.tsx    ├── FAQ.tsx
+    ├── ContactCTA.tsx   ├── Footer.tsx      ├── SectionHeader.tsx
+    ├── SubmitForm.tsx   ├── FormFields.tsx  # فرم ثبت پروژه + فیلدها
     ├── Reveal.tsx       # موتور انیمیشن اسکرول
     ├── Logo.tsx         └── icons.tsx       # آیکون‌های SVG
 ```
 
-### فرم تماس
+### سیستم ثبت پروژه
 
-فرم بخش «درخواست بررسی رایگان» در حال حاضر سمت کلاینت اعتبارسنجی می‌شود و پیام موفقیت نشان می‌دهد
-(بدون بک‌اند، تا سایت بدون تنظیمات اضافه قابل دیپلوی باشد). برای اتصال به CRM یا ارسال واقعی،
-منطق ارسال را در `src/components/ContactCTA.tsx` به یک Route Handler یا سرویس خودتان وصل کنید.
+- صفحه **`/submit`** فرم کامل ثبت پروژه را نمایش می‌دهد (نام، موبایل، اینستاگرام، وب‌سایت،
+  حوزه فعالیت، وضعیت فعلی، مشکل، هدف و بودجه) با **اعتبارسنجی سمت کلاینت و سرور**.
+- بعد از ارسال موفق، کاربر به صفحه **`/thank-you`** هدایت می‌شود.
+- فرم به Route Handler **`/api/submit`** ارسال می‌شود که داده را اعتبارسنجی و **سمت سرور
+  `console.log`** می‌کند (شبیه‌سازی‌شده). برای ارسال واقعی، در `src/app/api/submit/route.ts`
+  محل مشخص‌شده با `TODO` را به تلگرام / ایمیل / CRM وصل کنید.
+- تمام دکمه‌های CTA اصلی سایت (Hero، نتایج، تماس، Navbar) به صفحه ثبت پروژه لینک شده‌اند.
 
 ---
 

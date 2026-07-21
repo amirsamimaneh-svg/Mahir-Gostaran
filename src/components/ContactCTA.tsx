@@ -1,27 +1,14 @@
-"use client";
-
-import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import Reveal from "./Reveal";
-import { IconCheck, IconArrow } from "./icons";
+import { IconArrow, IconInstagram, IconWhatsApp, IconMail } from "./icons";
 
-type Status = "idle" | "submitting" | "done";
+const CHANNELS = [
+  { Icon: IconInstagram, label: "اینستاگرام", value: "@mahir", href: "https://instagram.com" },
+  { Icon: IconWhatsApp, label: "واتساپ", value: "پیام مستقیم", href: "https://wa.me/" },
+  { Icon: IconMail, label: "ایمیل", value: "hello@mahir.ir", href: "mailto:hello@mahir.ir" },
+];
 
 export default function ContactCTA() {
-  const [status, setStatus] = useState<Status>("idle");
-  const [form, setForm] = useState({ name: "", phone: "", link: "" });
-
-  const update = (k: keyof typeof form) => (e: { target: { value: string } }) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.phone.trim()) return;
-    setStatus("submitting");
-    // No backend required to run — resolves locally so the page is deploy-ready.
-    // Wire this to an API route / CRM when you have one.
-    setTimeout(() => setStatus("done"), 700);
-  };
-
   return (
     <section id="contact" className="section">
       <div className="container">
@@ -45,127 +32,66 @@ export default function ContactCTA() {
             aria-hidden
           />
 
-          <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center">
-            <div>
-              <Reveal>
-                <span className="eyebrow">درخواست بررسی رایگان</span>
-              </Reveal>
-              <Reveal delay={80}>
-                <h2 className="mt-5 text-3xl md:text-[2.6rem] font-extrabold leading-tight tracking-tight">
-                  آماده‌ای کسب‌وکارت را{" "}
-                  <span className="gold-text">متحول کنی؟</span>
-                </h2>
-              </Reveal>
-              <Reveal delay={140}>
-                <p
-                  className="mt-4 text-base md:text-lg leading-loose"
-                  style={{ color: "var(--fg-muted)" }}
-                >
-                  اطلاعاتت را بگذار تا کارشناسان ماهیر کسب‌وکارت را رایگان بررسی کنند و مسیر
-                  رشدت را برایت مشخص کنند. بدون تعهد، بدون هزینه.
-                </p>
-              </Reveal>
-            </div>
+          <div className="relative z-10 text-center max-w-2xl mx-auto">
+            <Reveal>
+              <span className="eyebrow mx-auto">تماس با ماهیر</span>
+            </Reveal>
+            <Reveal delay={80}>
+              <h2 className="mt-5 text-3xl md:text-[2.6rem] font-extrabold leading-tight tracking-tight">
+                آماده‌ای کسب‌وکارت را{" "}
+                <span className="gold-text">متحول کنی؟</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={140}>
+              <p className="mt-4 text-base md:text-lg leading-loose" style={{ color: "var(--fg-muted)" }}>
+                همین حالا پروژه‌ات را ثبت کن تا کارشناسان ماهیر کسب‌وکارت را رایگان بررسی کنند و
+                مسیر رشدت را برایت مشخص کنند. بدون تعهد، بدون هزینه.
+              </p>
+            </Reveal>
+            <Reveal delay={200}>
+              <div className="mt-8">
+                <Link href="/submit" className="btn btn-gold text-base px-8 py-4">
+                  ثبت پروژه و دریافت مشاوره
+                  <IconArrow width={18} height={18} />
+                </Link>
+              </div>
+            </Reveal>
+          </div>
 
-            <Reveal dir="left" delay={120}>
-              {status === "done" ? (
-                <div
-                  className="rounded-2xl p-8 text-center"
-                  style={{ background: "var(--surface)", border: "1px solid var(--border-strong)" }}
+          {/* contact channels */}
+          <div className="relative z-10 mt-10 grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            {CHANNELS.map(({ Icon, label, value, href }, i) => (
+              <Reveal key={label} delay={i * 90} dir="up">
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="card flex items-center gap-3.5 !p-4"
                 >
-                  <div
-                    className="mx-auto w-14 h-14 rounded-full flex items-center justify-center"
+                  <span
+                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
                     style={{
-                      background: "linear-gradient(150deg, var(--gold-deep), var(--gold-bright))",
-                      color: "#14100A",
+                      background: "var(--gold-soft)",
+                      border: "1px solid var(--border-strong)",
+                      color: "var(--gold-bright)",
                     }}
                   >
-                    <IconCheck width={28} height={28} />
-                  </div>
-                  <h3 className="mt-4 text-xl font-bold">درخواستت ثبت شد!</h3>
-                  <p className="mt-2 text-sm leading-loose" style={{ color: "var(--fg-muted)" }}>
-                    ممنون {form.name.trim()} عزیز. تیم ماهیر به‌زودی با شماره‌ی{" "}
-                    <span style={{ color: "var(--gold-bright)" }}>{form.phone.trim()}</span> با تو
-                    تماس می‌گیرد.
-                  </p>
-                </div>
-              ) : (
-                <form
-                  onSubmit={onSubmit}
-                  className="rounded-2xl p-6 md:p-7 space-y-4"
-                  style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-                >
-                  <Field
-                    label="نام و نام خانوادگی"
-                    placeholder="مثلاً امیر رضایی"
-                    value={form.name}
-                    onChange={update("name")}
-                    required
-                  />
-                  <Field
-                    label="شماره تماس"
-                    placeholder="۰۹۱۲۰۰۰۰۰۰۰"
-                    type="tel"
-                    inputMode="numeric"
-                    value={form.phone}
-                    onChange={update("phone")}
-                    required
-                  />
-                  <Field
-                    label="لینک کسب‌وکار یا اینستاگرام"
-                    placeholder="instagram.com/yourbrand"
-                    value={form.link}
-                    onChange={update("link")}
-                  />
-                  <button
-                    type="submit"
-                    className="btn btn-gold w-full mt-2"
-                    disabled={status === "submitting"}
-                  >
-                    {status === "submitting" ? (
-                      "در حال ارسال…"
-                    ) : (
-                      <>
-                        ارسال درخواست
-                        <IconArrow width={18} height={18} />
-                      </>
-                    )}
-                  </button>
-                  <p className="text-xs text-center" style={{ color: "var(--fg-dim)" }}>
-                    اطلاعات شما نزد ماهیر محفوظ است و در اختیار کسی قرار نمی‌گیرد.
-                  </p>
-                </form>
-              )}
-            </Reveal>
+                    <Icon width={20} height={20} />
+                  </span>
+                  <span className="text-start">
+                    <span className="block text-xs" style={{ color: "var(--fg-dim)" }}>
+                      {label}
+                    </span>
+                    <span className="block text-sm font-semibold" style={{ color: "var(--fg)" }}>
+                      {value}
+                    </span>
+                  </span>
+                </a>
+              </Reveal>
+            ))}
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function Field({
-  label,
-  ...props
-}: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <label className="block">
-      <span className="block mb-1.5 text-sm font-medium" style={{ color: "var(--fg)" }}>
-        {label}
-        {props.required && <span style={{ color: "var(--gold)" }}> *</span>}
-      </span>
-      <input
-        {...props}
-        dir="auto"
-        className="w-full rounded-xl px-4 py-3 text-sm outline-none transition-colors"
-        style={{
-          background: "var(--bg)",
-          border: "1px solid var(--border)",
-          color: "var(--fg)",
-        }}
-        onFocus={(e) => (e.currentTarget.style.borderColor = "var(--gold)")}
-        onBlur={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
-      />
-    </label>
   );
 }

@@ -20,7 +20,7 @@
 
 ## بخش‌های صفحه
 
-Navbar چسبان · Hero · مشکل · راه‌حل ماهیر · خدمات · فرآیند کار · نتایج · چرا ماهیر؟ · فرم تماس · فوتر
+Navbar چسبان · Hero · مشکل · راه‌حل ماهیر · خدمات · فرآیند کار · نمونه‌کارها · چرا ماهیر؟ · سوالات متداول · تماس · فوتر
 
 ---
 
@@ -55,16 +55,29 @@ src/
 │   ├── page.tsx           # چیدمان بخش‌های لندینگ
 │   ├── submit/page.tsx    # صفحه «ثبت پروژه» + فرم کامل
 │   ├── thank-you/page.tsx # صفحه تشکر بعد از ارسال موفق
+│   ├── portfolio/[slug]/  # صفحه جزئیات هر نمونه‌کار (کیس‌استادی)
 │   └── api/submit/route.ts# دریافت و اعتبارسنجی فرم (لاگ سمت سرور)
-└── components/
-    ├── Navbar.tsx       ├── Hero.tsx        ├── Problem.tsx
-    ├── Solution.tsx     ├── Services.tsx    ├── Process.tsx
-    ├── Results.tsx      ├── WhyMahir.tsx    ├── FAQ.tsx
-    ├── ContactCTA.tsx   ├── Footer.tsx      ├── SectionHeader.tsx
-    ├── SubmitForm.tsx   ├── FormFields.tsx  # فرم ثبت پروژه + فیلدها
-    ├── Reveal.tsx       # موتور انیمیشن اسکرول
-    ├── Logo.tsx         └── icons.tsx       # آیکون‌های SVG
+├── components/
+│   ├── Navbar.tsx       ├── Hero.tsx        ├── Problem.tsx
+│   ├── Solution.tsx     ├── Services.tsx    ├── Process.tsx
+│   ├── Portfolio.tsx    ├── WhyMahir.tsx    ├── FAQ.tsx
+│   ├── ContactCTA.tsx   ├── Footer.tsx      ├── SectionHeader.tsx
+│   ├── SubmitForm.tsx   ├── FormFields.tsx  # فرم ثبت پروژه + فیلدها
+│   ├── PlaceholderImage.tsx  ├── CopyButton.tsx
+│   ├── Reveal.tsx       # موتور انیمیشن اسکرول
+│   └── Logo.tsx         └── icons.tsx       # آیکون‌های SVG
+└── data/
+    └── portfolio.ts       # داده ۳ نمونه‌کار + پرامپت تولید عکس
 ```
+
+### نمونه‌کارها (کیس‌استادی)
+
+- بخش **«پروژه‌های موفق ماهیر»** در صفحه اصلی (`#portfolio`) سه کیس‌استادی با نتایج عددی نمایش می‌دهد.
+- هر کارت دکمه **«مشاهده جزئیات»** دارد که به صفحه اختصاصی `‎/portfolio/[slug]` می‌رود
+  (چالش، راهکار، نتیجه و تصاویر).
+- چون هنوز عکس واقعی نداریم، برای هر پروژه بلوک‌های تصویر Placeholder به‌همراه **توضیح دقیق و
+  یک پرامپت آماده تولید عکس با هوش مصنوعی** قرار داده شده است. محتوای نمونه‌کارها در
+  `src/data/portfolio.ts` قابل ویرایش است.
 
 ### سیستم ثبت پروژه
 

@@ -9,6 +9,7 @@ const LINKS = [
   { href: "/", label: "صفحه اصلی" },
   { href: "/#services", label: "خدمات" },
   { href: "/#process", label: "فرآیند کار" },
+  { href: "/#portfolio", label: "نمونه‌کارها" },
   { href: "/#why", label: "درباره ما" },
   { href: "/#faq", label: "سوالات متداول" },
   { href: "/#contact", label: "تماس" },

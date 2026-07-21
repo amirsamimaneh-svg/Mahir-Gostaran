@@ -1,12 +1,14 @@
+import Link from "next/link";
 import Logo from "./Logo";
 import { IconInstagram, IconWhatsApp, IconMail } from "./icons";
 
 const NAV = [
-  { href: "#services", label: "خدمات" },
-  { href: "#process", label: "فرآیند کار" },
-  { href: "#results", label: "نتایج" },
-  { href: "#why", label: "درباره ما" },
-  { href: "#contact", label: "تماس" },
+  { href: "/#services", label: "خدمات" },
+  { href: "/#process", label: "فرآیند کار" },
+  { href: "/#portfolio", label: "نمونه‌کارها" },
+  { href: "/#why", label: "درباره ما" },
+  { href: "/submit", label: "ثبت پروژه" },
+  { href: "/#contact", label: "تماس" },
 ];
 
 const SOCIAL = [
@@ -55,13 +57,13 @@ export default function Footer() {
               <ul className="space-y-2.5">
                 {NAV.map((l) => (
                   <li key={l.href}>
-                    <a
+                    <Link
                       href={l.href}
                       className="text-sm transition-colors"
                       style={{ color: "var(--fg-muted)" }}
                     >
                       {l.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

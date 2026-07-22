@@ -3,8 +3,9 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { TextField, TextArea, SelectField } from "./FormFields";
-import { IconWhatsApp } from "./icons";
+import { IconArrow, IconWhatsApp } from "./icons";
 import { CONTACT } from "@/data/contact";
+import { FORMSPREE_ENDPOINT, isFormspreeConfigured } from "@/data/form";
 
 const BUSINESS_FIELDS = [
   "فروشگاهی",
@@ -50,10 +51,16 @@ function buildMessage(data: Record<string, string>): string {
   return lines.join("\n");
 }
 
+function whatsappUrl(data: Record<string, string>): string {
+  return `${CONTACT.whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
+}
+
 export default function SubmitForm() {
   const router = useRouter();
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
+  // لینک واتساپ برای حالت پشتیبان (اگر ارسال Formspree ناموفق بود)
+  const [waFallback, setWaFallback] = useState("");
 
   const validate = (data: Record<string, string>): Errors => {
     const e: Errors = {};
@@ -66,8 +73,9 @@ export default function SubmitForm() {
     return e;
   };
 
-  const onSubmit = (ev: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
+    setWaFallback("");
     const fd = new FormData(ev.currentTarget);
     const data = Object.fromEntries(
       Array.from(fd.entries()).map(([k, v]) => [k, String(v)])
@@ -82,12 +90,32 @@ export default function SubmitForm() {
     }
 
     setErrors({});
-    setSubmitting(true);
 
-    // ارسال بدون بک‌اند: پیام آماده در واتساپ باز می‌شود و کاربر به صفحه‌ی تشکر می‌رود.
-    const url = `${CONTACT.whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-    router.push("/thank-you");
+    // اگر Formspree هنوز تنظیم نشده، مستقیماً از واتساپ استفاده کن
+    // (در همان کلیک کاربر تا پاپ‌آپ مسدود نشود).
+    if (!isFormspreeConfigured()) {
+      setSubmitting(true);
+      window.open(whatsappUrl(data), "_blank", "noopener,noreferrer");
+      router.push("/thank-you");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ ...data, _subject: "درخواست پروژه‌ی جدید — ماهیر" }),
+      });
+      if (res.ok) {
+        router.push("/thank-you");
+        return;
+      }
+      setWaFallback(whatsappUrl(data));
+    } catch {
+      setWaFallback(whatsappUrl(data));
+    }
+    setSubmitting(false);
   };
 
   return (
@@ -170,19 +198,49 @@ export default function SubmitForm() {
         options={BUDGETS}
       />
 
+      {/* honeypot ضدّاسپم — کاربر واقعی آن را نمی‌بیند */}
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+      />
+
+      {waFallback && (
+        <div
+          className="rounded-xl px-4 py-3 text-sm text-center space-y-2"
+          style={{ background: "rgba(240,120,120,0.08)", border: "1px solid rgba(240,120,120,0.3)" }}
+        >
+          <p style={{ color: "#F0A6A6" }}>
+            ارسال با مشکل مواجه شد. می‌توانید همین درخواست را مستقیماً در واتساپ برای ما بفرستید:
+          </p>
+          <a
+            href={waFallback}
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-ghost w-full"
+            onClick={() => router.push("/thank-you")}
+          >
+            ارسال در واتساپ
+            <IconWhatsApp width={18} height={18} />
+          </a>
+        </div>
+      )}
+
       <button type="submit" className="btn btn-gold w-full text-base py-4" disabled={submitting}>
         {submitting ? (
           "در حال ارسال…"
         ) : (
           <>
-            ثبت درخواست و ارسال در واتساپ
-            <IconWhatsApp width={19} height={19} />
+            ثبت درخواست و دریافت مشاوره
+            <IconArrow width={18} height={18} />
           </>
         )}
       </button>
       <p className="text-xs text-center leading-relaxed" style={{ color: "var(--fg-dim)" }}>
-        با کلیک روی دکمه، اطلاعات شما به‌صورت یک پیام آماده در واتساپ ماهیر باز می‌شود؛ فقط کافی است
-        ارسال را بزنید. اطلاعات شما محفوظ است.
+        اطلاعات شما نزد ماهیر محفوظ است و فقط برای بررسی پروژه استفاده می‌شود.
       </p>
     </form>
   );

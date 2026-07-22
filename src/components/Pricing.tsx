@@ -56,7 +56,7 @@ const PLANS: Plan[] = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="section" style={{ background: "var(--bg-2)" }}>
+    <section id="pricing" className="section">
       <div className="container">
         <SectionHeader
           eyebrow="مدل همکاری با ماهیر"

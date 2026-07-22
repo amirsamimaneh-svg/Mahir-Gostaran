@@ -1,12 +1,6 @@
 import Link from "next/link";
 import Reveal from "./Reveal";
-import { IconArrowDown, IconSpark } from "./icons";
-
-const STATS = [
-  { value: "۰ تا ۱۰۰", label: "مسیر رشد کامل" },
-  { value: "۵", label: "سرویس یکپارچه" },
-  { value: "۱۰۰٪", label: "تمرکز روی نتیجه" },
-];
+import { IconArrowDown, IconSpark, IconPlay } from "./icons";
 
 export default function Hero() {
   return (
@@ -63,24 +57,40 @@ export default function Hero() {
           </div>
         </Reveal>
 
-        {/* stats strip */}
-        <Reveal delay={320}>
-          <div className="mt-16 mx-auto max-w-2xl grid grid-cols-3 gap-4">
-            {STATS.map((s) => (
-              <div
-                key={s.label}
-                className="py-5 px-2 rounded-2xl"
-                style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-              >
-                <div className="text-xl md:text-3xl font-extrabold gold-text">{s.value}</div>
-                <div
-                  className="mt-1.5 text-xs md:text-sm"
-                  style={{ color: "var(--fg-muted)" }}
+        {/* intro video placeholder */}
+        <Reveal delay={300} dir="scale">
+          <div className="mt-14 mx-auto max-w-3xl">
+            <button
+              type="button"
+              className="group relative w-full overflow-hidden rounded-3xl block"
+              style={{
+                aspectRatio: "16 / 9",
+                background:
+                  "radial-gradient(120% 120% at 50% 0%, rgba(214,178,94,0.16), transparent 55%), linear-gradient(160deg, var(--surface-2), var(--bg))",
+                border: "1px solid var(--border-strong)",
+              }}
+              aria-label="پخش ویدیو معرفی ماهیر"
+            >
+              <span className="absolute inset-0 grid-lines opacity-40" aria-hidden />
+              <span className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+                <span
+                  className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                  style={{
+                    background: "linear-gradient(140deg, var(--gold-deep), var(--gold-bright))",
+                    color: "#14100A",
+                    boxShadow: "0 12px 40px -8px var(--gold-glow)",
+                  }}
                 >
-                  {s.label}
-                </div>
-              </div>
-            ))}
+                  <IconPlay width={34} height={34} />
+                </span>
+                <span className="text-sm md:text-base font-semibold" style={{ color: "var(--fg)" }}>
+                  ویدیو معرفی ماهیر
+                </span>
+                <span className="text-xs" style={{ color: "var(--fg-dim)" }}>
+                  به‌زودی
+                </span>
+              </span>
+            </button>
           </div>
         </Reveal>
       </div>

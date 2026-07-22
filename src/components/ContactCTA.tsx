@@ -1,11 +1,13 @@
 import Link from "next/link";
 import Reveal from "./Reveal";
-import { IconArrow, IconInstagram, IconWhatsApp, IconMail } from "./icons";
+import { CONTACT } from "@/data/contact";
+import { IconArrow, IconPhone, IconWhatsApp, IconTelegram, IconMail } from "./icons";
 
 const CHANNELS = [
-  { Icon: IconInstagram, label: "اینستاگرام", value: "@mahir", href: "https://instagram.com" },
-  { Icon: IconWhatsApp, label: "واتساپ", value: "پیام مستقیم", href: "https://wa.me/" },
-  { Icon: IconMail, label: "ایمیل", value: "hello@mahir.ir", href: "mailto:hello@mahir.ir" },
+  { Icon: IconPhone, label: "تماس تلفنی", value: CONTACT.phoneDisplay, href: CONTACT.phoneHref, external: false },
+  { Icon: IconWhatsApp, label: "واتساپ", value: "پیام مستقیم", href: CONTACT.whatsapp, external: true },
+  { Icon: IconTelegram, label: "تلگرام", value: CONTACT.telegramId, href: CONTACT.telegram, external: true },
+  { Icon: IconMail, label: "ایمیل", value: CONTACT.email, href: CONTACT.emailHref, external: false },
 ];
 
 export default function ContactCTA() {
@@ -59,13 +61,13 @@ export default function ContactCTA() {
           </div>
 
           {/* contact channels */}
-          <div className="relative z-10 mt-10 grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {CHANNELS.map(({ Icon, label, value, href }, i) => (
+          <div className="relative z-10 mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            {CHANNELS.map(({ Icon, label, value, href, external }, i) => (
               <Reveal key={label} delay={i * 90} dir="up">
                 <a
                   href={href}
-                  target="_blank"
-                  rel="noreferrer"
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noreferrer" : undefined}
                   className="card flex items-center gap-3.5 !p-4"
                 >
                   <span

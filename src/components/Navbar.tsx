@@ -11,7 +11,7 @@ const LINKS = [
   { href: "/#process", label: "فرآیند کار" },
   { href: "/#portfolio", label: "نمونه‌کارها" },
   { href: "/#pricing", label: "قیمت‌ها" },
-  { href: "/#why", label: "درباره ما" },
+  { href: "/about", label: "درباره ما" },
   { href: "/#faq", label: "سوالات متداول" },
   { href: "/#contact", label: "تماس" },
 ];

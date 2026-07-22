@@ -153,3 +153,50 @@ export const IconMail = (p: IconProps) => (
     <path d="m4 7 8 5 8-5" />
   </svg>
 );
+
+export const IconPhone = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M4 4h4l2 5-2.5 1.5a12 12 0 0 0 6 6L15 14l5 2v4a2 2 0 0 1-2.2 2A16 16 0 0 1 2 6.2 2 2 0 0 1 4 4Z" />
+  </svg>
+);
+
+export const IconTelegram = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M21 5 3 12l5 2 2 5 3-3.5 4 3 4-13Z" />
+    <path d="m8 14 9-6-6 7" />
+  </svg>
+);
+
+export const IconChat = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 3v-3H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
+    <path d="M8 10h8M8 13h5" />
+  </svg>
+);
+
+export const IconPlay = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="12" r="9.5" />
+    <path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+export const IconStar = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path
+      d="M12 3.5 14.6 9l6 .8-4.4 4.2 1.1 6-5.3-2.9L6.7 20l1.1-6L3.4 9.8l6-.8L12 3.5Z"
+      fill="currentColor"
+      stroke="none"
+    />
+  </svg>
+);
+
+export const IconQuote = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path
+      d="M9 7c-2.5 0-4 2-4 4.5 0 2 1.3 3.5 3 3.5s2.8-1.2 2.8-3S9.5 9 8 9c.2-1 1-1.6 2-1.8L9 7Zm9 0c-2.5 0-4 2-4 4.5 0 2 1.3 3.5 3 3.5s2.8-1.2 2.8-3S18.5 9 17 9c.2-1 1-1.6 2-1.8L18 7Z"
+      fill="currentColor"
+      stroke="none"
+    />
+  </svg>
+);

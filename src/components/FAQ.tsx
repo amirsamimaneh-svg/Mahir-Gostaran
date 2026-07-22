@@ -1,0 +1,111 @@
+"use client";
+
+import { useState } from "react";
+import Reveal from "./Reveal";
+import SectionHeader from "./SectionHeader";
+
+const ITEMS = [
+  {
+    q: "ماهیر دقیقاً چه کاری انجام می‌دهد؟",
+    a: "ماهیر کسب‌وکارهای کوچک و نوپا را از صفر تا صد رشد می‌دهد؛ یعنی برندینگ و هویت بصری، تولید محتوا و ویدیو، جذب کاربر و مشتری واقعی و بهینه‌سازی فروش را به‌صورت یکپارچه و در قالب یک تیم انجام می‌دهیم.",
+  },
+  {
+    q: "چقدر طول می‌کشد تا نتیجه ببینیم؟",
+    a: "رشد پایدار یک فرآیند است، نه یک اتفاق یک‌شبه. معمولاً از همان هفته‌های اول بهبود در برند و حضور آنلاین دیده می‌شود و بسته به پکیج انتخابی، مسیر رشد در بازه ۶۰ تا ۱۲۰ روزه طراحی می‌شود. نتایج نهایی به مقیاس و میزان همکاری شما هم بستگی دارد.",
+  },
+  {
+    q: "اگر نتیجه نگیریم چه می‌شود؟",
+    a: "ماهیر نتیجه‌محور کار می‌کند و ریسک را با شما تقسیم می‌کند. اگر به نتایج توافق‌شده نرسیم، بخش باقی‌مانده‌ی هزینه را دریافت نمی‌کنیم. تعهد ما به رشد واقعی کسب‌وکار شماست، نه فقط انجام یک سری کار.",
+  },
+  {
+    q: "هزینه به چه صورت پرداخت می‌شود؟",
+    a: "بخشی از هزینه به‌عنوان پیش‌پرداخت (بین ۳۰ تا ۴۰٪ بسته به پکیج) دریافت می‌شود و باقی‌مانده به‌صورت مرحله‌ای و پس از رسیدن به اهداف توافق‌شده پرداخت می‌گردد. همه‌ی شرایط از ابتدا شفاف و مکتوب مشخص می‌شود.",
+  },
+  {
+    q: "آیا با کسب‌وکارهای کوچک هم کار می‌کنید؟",
+    a: "بله، دقیقاً تخصص ماهیر همین است. ما برای کسب‌وکارهایی ساخته شده‌ایم که مشتری کم، فروش ضعیف یا نبود تبلیغات دارند و می‌خواهند از نقطه‌ی صفر شروع به رشد کنند. مقیاس کوچک، مانع رشد بزرگ نیست.",
+  },
+  {
+    q: "آیا نیاز به حضور فیزیکی هست؟",
+    a: "خیر. تمام مراحل همکاری، از مشاوره و بررسی تا اجرا و گزارش‌دهی، به‌صورت آنلاین و از راه دور انجام می‌شود. شما از هر نقطه‌ی ایران می‌توانید با ماهیر همکاری کنید؛ فقط در صورت نیاز به عکاسی یا ویدیوی محصول، هماهنگی‌های لازم انجام می‌شود.",
+  },
+  {
+    q: "بعد از پایان پروژه پشتیبانی دارید؟",
+    a: "بله. در پکیج‌های پیشرفته، بهینه‌سازی بلندمدت و آموزش تیم شما برای ادامه‌ی مسیر بخشی از همکاری است. علاوه بر این، پس از پایان پروژه هم در کنار شما هستیم تا با خیال راحت مسیر رشد را ادامه دهید.",
+  },
+  {
+    q: "چطور می‌توانم شروع کنم؟",
+    a: "کافی است فرم «ثبت پروژه» را پر کنید. کارشناسان ماهیر حداکثر تا ۲۴ ساعت با شما تماس می‌گیرند، کسب‌وکارتان را رایگان بررسی می‌کنند و یک پیشنهاد اختصاصی و شفاف ارائه می‌دهند. بدون تعهد و بدون هزینه‌ی اولیه.",
+  },
+];
+
+function Item({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      className="rounded-2xl overflow-hidden transition-colors"
+      style={{
+        background: "var(--surface)",
+        border: `1px solid ${open ? "var(--border-strong)" : "var(--border)"}`,
+      }}
+    >
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="w-full flex items-center justify-between gap-4 text-start px-5 py-4"
+      >
+        <span className="font-bold text-sm md:text-base" style={{ color: "var(--fg)" }}>
+          {q}
+        </span>
+        <span
+          className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-lg leading-none transition-transform duration-300"
+          style={{
+            background: "var(--gold-soft)",
+            border: "1px solid var(--border-strong)",
+            color: "var(--gold-bright)",
+            transform: open ? "rotate(45deg)" : "none",
+          }}
+        >
+          +
+        </span>
+      </button>
+      <div
+        className="grid transition-all duration-300 ease-out"
+        style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+      >
+        <div className="overflow-hidden">
+          <p className="px-5 pb-5 text-sm leading-loose" style={{ color: "var(--fg-muted)" }}>
+            {a}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function FAQ() {
+  return (
+    <section id="faq" className="section" style={{ background: "var(--bg-2)" }}>
+      <div className="container">
+        <SectionHeader
+          eyebrow="سوالات متداول"
+          title={
+            <>
+              پاسخ به <span className="gold-text">سوال‌های شما</span>
+            </>
+          }
+          subtitle="اگر باز هم سوالی داشتید، از طریق فرم ثبت پروژه یا راه‌های ارتباطی با ما در تماس باشید."
+        />
+
+        <div className="mt-12 max-w-3xl mx-auto space-y-3.5">
+          {ITEMS.map((item, i) => (
+            <Reveal key={item.q} delay={i * 60}>
+              <Item {...item} />
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

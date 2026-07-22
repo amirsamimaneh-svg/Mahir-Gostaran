@@ -1,142 +1,205 @@
-"use client";
-
+import type { Metadata } from "next";
 import Link from "next/link";
-import MahirLogo from "@/components/MahirLogo";
-import PageNav from "@/components/PageNav";
-import { useLang } from "@/context/LangContext";
+import Reveal from "@/components/Reveal";
+import { IconArrow, IconRocket, IconTarget, IconShield, IconHandshake, IconSpark } from "@/components/icons";
+
+export const metadata: Metadata = {
+  title: "درباره ماهیر | داستان، مأموریت و ارزش‌ها",
+  description:
+    "ماهیر چگونه شکل گرفت، مأموریت و چشم‌انداز ما چیست و به چه ارزش‌هایی پایبندیم. آشنا شوید با تیمی که برای رشد کسب‌وکارهای کوچک ساخته شده است.",
+  alternates: { canonical: "/about" },
+};
 
 const VALUES = [
-  { icon: "🎯", fa: "نتیجه‌محور", en: "Results-Driven", descFa: "هر تصمیم را با یک سوال می‌سنجیم: آیا به رشد کسب‌وکار کمک می‌کند؟", descEn: "We measure every decision with one question: does it help the business grow?" },
-  { icon: "🤝", fa: "شراکت واقعی", en: "Real Partnership", descFa: "ما کنسولتانت نیستیم — شریک رشد شما هستیم و موفقیت شما موفقیت ماست.", descEn: "We're not consultants — we're your growth partners, and your success is ours." },
-  { icon: "🔬", fa: "داده‌محور", en: "Data-Informed", descFa: "شهود مهم است، اما تصمیم‌های بزرگ را با داده می‌سنجیم.", descEn: "Intuition matters, but we validate big decisions with data." },
-  { icon: "⚡", fa: "سرعت اجرا", en: "Speed of Execution", descFa: "بهترین استراتژی بی‌اجرا بی‌ارزش است. ما سریع حرکت می‌کنیم.", descEn: "The best strategy without execution is worthless. We move fast." },
-];
-
-const TIMELINE = [
-  { year: "۱۴۰۱", enYear: "2022", fa: "تأسیس ماهیر با تمرکز روی استارت‌آپ‌های ایرانی", en: "Mahir founded with focus on Iranian startups" },
-  { year: "۱۴۰۱", enYear: "2022", fa: "اولین ۱۰ مشتری — همه از راه معرفی", en: "First 10 clients — all through referrals" },
-  { year: "۱۴۰۲", enYear: "2023", fa: "گسترش تیم به ۶ متخصص تمام‌وقت", en: "Team expanded to 6 full-time specialists" },
-  { year: "۱۴۰۳", enYear: "2024", fa: "پیاده‌سازی ابزارهای هوش مصنوعی برای مشتریان", en: "AI tools implementation for clients launched" },
-  { year: "۱۴۰۴", enYear: "2025", fa: "بیش از ۵۰ کسب‌وکار — ۸۰٪ رشد میانگین", en: "50+ businesses served — 80% average growth" },
+  {
+    icon: IconTarget,
+    title: "نتیجه، نه حرف",
+    text: "معیار موفقیت ما، رشد واقعی فروش و مشتری شماست؛ نه گزارش‌های پرزرق‌وبرق. اگر شما رشد نکنید، ما موفق نبوده‌ایم.",
+  },
+  {
+    icon: IconShield,
+    title: "صداقت و شفافیت",
+    text: "از هزینه تا فرآیند، همه‌چیز را شفاف و بدون ابهام می‌گوییم. اعتماد شما با صداقت ساخته می‌شود، نه با وعده‌های غیرواقعی.",
+  },
+  {
+    icon: IconHandshake,
+    title: "شریک، نه پیمانکار",
+    text: "ما خودمان را بخشی از تیم شما می‌دانیم و مثل صاحب کسب‌وکار به رشد آن فکر می‌کنیم، نه مثل یک ارائه‌دهنده‌ی بیرونی.",
+  },
+  {
+    icon: IconSpark,
+    title: "کیفیت بی‌قید و شرط",
+    text: "کیفیت کار ما برای یک کسب‌وکار کوچک، هیچ فرقی با یک برند بزرگ ندارد. هر پروژه برای ما یک اثر است.",
+  },
 ];
 
 export default function AboutPage() {
-  const { isRtl } = useLang();
-
   return (
-    <div dir={isRtl ? "rtl" : "ltr"} style={{ background: "var(--bg)", minHeight: "100vh", color: "var(--fg)" }}>
+    <main className="pt-28 pb-20 md:pt-32 relative overflow-hidden">
+      <div className="absolute inset-0 grid-lines opacity-40" aria-hidden />
+      <div
+        className="glow-orb anim-pulse"
+        style={{
+          width: 520,
+          height: 520,
+          top: -180,
+          insetInlineStart: "50%",
+          transform: "translateX(-50%)",
+          background: "radial-gradient(circle, var(--gold-glow), transparent 70%)",
+        }}
+        aria-hidden
+      />
 
-      <PageNav />
-
-      <div className="max-w-4xl mx-auto px-6 pt-20 md:pt-32 pb-24">
-
-        {/* Hero */}
-        <div className="text-center mb-20">
-          <div className="flex justify-center mb-6">
-            <MahirLogo size={72} />
-          </div>
-          <h1 className="font-extrabold mb-4" style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}>
-            <span style={{ color: "var(--fg)" }}>{isRtl ? "درباره " : "About "}</span>
-            <span className="text-shimmer">{isRtl ? "ماهیر" : "Mahir"}</span>
-          </h1>
-          <p className="max-w-2xl mx-auto text-base leading-relaxed" style={{ color: "var(--fg2)" }}>
-            {isRtl
-              ? "ماهیر در سال ۱۴۰۱ با یک باور ساده شروع کرد: کسب‌وکارهای ایرانی لایق مشاوره‌ای هستند که واقعاً نتیجه بدهد — نه فقط توصیه‌های کلی و پاورپوینت‌های زیبا."
-              : "Mahir started in 2022 with a simple belief: Iranian businesses deserve consulting that actually delivers results — not just generic advice and pretty PowerPoints."}
-          </p>
+      <div className="container relative z-10">
+        {/* hero */}
+        <div className="text-center max-w-3xl mx-auto">
+          <Reveal dir="scale">
+            <span className="eyebrow mx-auto">درباره ماهیر</span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 className="mt-6 text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
+              ما برای رشد کسب‌وکارهایی ساخته شدیم که{" "}
+              <span className="gold-text">لیاقت دیده‌شدن دارند</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={140}>
+            <p className="mt-5 text-base md:text-lg leading-loose" style={{ color: "var(--fg-muted)" }}>
+              ماهیر یک آژانس رشد است؛ اما بیش از آن، یک باور است. باور به اینکه هر کسب‌وکار کوچکی،
+              با هدایت درست، می‌تواند به یک برند فروشنده تبدیل شود.
+            </p>
+          </Reveal>
         </div>
 
-        {/* Mission */}
-        <div className="rounded-3xl p-10 mb-16 text-center relative overflow-hidden"
-          style={{ background: "rgba(91,156,246,0.07)", border: "1px solid rgba(91,156,246,0.15)" }}>
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: "radial-gradient(ellipse at center, rgba(91,156,246,0.06) 0%, transparent 70%)" }} />
-          <p className="text-xs font-bold tracking-widest mb-4 text-[#5B9CF6]">
-            {isRtl ? "✦ مأموریت ما" : "✦ OUR MISSION"}
-          </p>
-          <p className="font-extrabold leading-relaxed" style={{ fontSize: "clamp(1.1rem,2.5vw,1.5rem)", color: "var(--fg)" }}>
-            {isRtl
-              ? "کمک به کسب‌وکارهای ایرانی تا با استراتژی هوشمند، هویت قوی و اجرای سریع، در بازار رقابتی امروز متمایز شوند."
-              : "Helping Iranian businesses stand out in today's competitive market with smart strategy, strong identity, and fast execution."}
-          </p>
+        {/* story */}
+        <div className="mt-16 max-w-3xl mx-auto space-y-12">
+          <Story title="داستان شکل‌گیری ماهیر">
+            <p>
+              ماهیر از یک مشاهده‌ی ساده متولد شد: کسب‌وکارهای کوچک زیادی را دیدیم که محصول یا خدمت
+              فوق‌العاده‌ای داشتند، اما چون در دیده‌شدن، برندینگ و بازاریابی ضعیف بودند، در سکوت باقی
+              می‌ماندند. صاحبان این کسب‌وکارها تلاش می‌کردند، اما نمی‌دانستند از کجا شروع کنند و به چه
+              کسی اعتماد کنند.
+            </p>
+            <p>
+              تصمیم گرفتیم تیمی بسازیم که این مسیر را کامل و یکپارچه طی کند؛ از اولین تحلیل تا تحویل
+              نهایی. جایی که صاحب کسب‌وکار مجبور نباشد چند تیم مختلف را هماهنگ کند و نگران کیفیت و
+              هزینه باشد. این‌گونه ماهیر شکل گرفت.
+            </p>
+          </Story>
+
+          <Story title="چرا ماهیر به وجود آمد">
+            <p>
+              چون بازار پر بود از تبلیغاتی که فقط هزینه می‌گرفتند و نتیجه‌ای نمی‌دادند. ما خواستیم
+              مدلی بسازیم که در آن ریسک رشد بر دوش ما باشد، نه فقط مشتری. به همین دلیل نتیجه‌محور کار
+              می‌کنیم و بخش قابل‌توجهی از هزینه را تنها پس از دیدن نتیجه‌ی واقعی دریافت می‌کنیم.
+            </p>
+          </Story>
         </div>
 
-        {/* Values */}
-        <div className="mb-16">
-          <h2 className="font-extrabold text-2xl mb-8 text-center">
-            <span style={{ color: "var(--fg)" }}>{isRtl ? "ارزش‌های " : "Our "}</span>
-            <span className="text-shimmer">{isRtl ? "ما" : "Values"}</span>
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {VALUES.map(v => (
-              <div key={v.fa} className="rounded-2xl p-6"
-                style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-                <div className="text-3xl mb-3">{v.icon}</div>
-                <h3 className="font-extrabold text-base mb-2" style={{ color: "var(--fg)" }}>
-                  {isRtl ? v.fa : v.en}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--fg2)" }}>
-                  {isRtl ? v.descFa : v.descEn}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Timeline */}
-        <div className="mb-16">
-          <h2 className="font-extrabold text-2xl mb-8 text-center">
-            <span style={{ color: "var(--fg)" }}>{isRtl ? "مسیر " : "Our "}</span>
-            <span className="text-shimmer">{isRtl ? "رشد" : "Journey"}</span>
-          </h2>
-          <div className="relative flex flex-col gap-0">
-            {TIMELINE.map((item, i) => (
-              <div key={i} className="flex items-start gap-5 pb-8 relative">
-                {/* Line */}
-                {i < TIMELINE.length - 1 && (
-                  <div className="absolute top-8 bottom-0 w-px"
-                    style={{ background: "var(--border)", [isRtl ? "right" : "left"]: "39px" }} />
-                )}
-                {/* Year badge */}
-                <div className="flex-shrink-0 w-20 h-8 rounded-full flex items-center justify-center text-xs font-extrabold relative z-10"
-                  style={{ background: i === TIMELINE.length - 1 ? "#5B9CF6" : "var(--surface)", color: i === TIMELINE.length - 1 ? "#03080F" : "var(--fg2)", border: "1px solid var(--border)" }}>
-                  {isRtl ? item.year : item.enYear}
-                </div>
-                <p className="text-sm leading-relaxed pt-1" style={{ color: "var(--fg2)" }}>
-                  {isRtl ? item.fa : item.en}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Stats strip */}
-        <div className="grid grid-cols-3 gap-4 mb-16">
-          {[
-            { num: "۵۰+", enNum: "50+", fa: "کسب‌وکار موفق", en: "Successful Businesses" },
-            { num: "۸۰٪", enNum: "80%", fa: "رشد میانگین", en: "Average Growth" },
-            { num: "۳+", enNum: "3+", fa: "سال تجربه", en: "Years Experience" },
-          ].map(s => (
-            <div key={s.fa} className="text-center rounded-2xl p-5"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-              <p className="font-extrabold text-2xl text-[#5B9CF6] mb-1">{isRtl ? s.num : s.enNum}</p>
-              <p className="text-xs" style={{ color: "var(--fg3)" }}>{isRtl ? s.fa : s.en}</p>
+        {/* mission / vision */}
+        <div className="mt-16 grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <Reveal dir="right">
+            <div
+              className="h-full rounded-3xl p-7"
+              style={{ background: "var(--surface)", border: "1px solid var(--border-strong)" }}
+            >
+              <span style={{ color: "var(--gold-bright)" }}>
+                <IconRocket width={30} height={30} />
+              </span>
+              <h3 className="mt-4 text-xl font-extrabold">مأموریت ما</h3>
+              <p className="mt-3 leading-loose" style={{ color: "var(--fg-muted)" }}>
+                کمک به کسب‌وکارهای کوچک و نوپا برای رشد واقعی؛ با ساختن برندی قوی، جذب مشتری واقعی و
+                افزایش فروش، به‌شکلی که برایشان قابل‌اتکا و پایدار باشد.
+              </p>
             </div>
-          ))}
+          </Reveal>
+          <Reveal dir="left" delay={80}>
+            <div
+              className="h-full rounded-3xl p-7"
+              style={{ background: "var(--surface)", border: "1px solid var(--border-strong)" }}
+            >
+              <span style={{ color: "var(--gold-bright)" }}>
+                <IconTarget width={30} height={30} />
+              </span>
+              <h3 className="mt-4 text-xl font-extrabold">چشم‌انداز ما</h3>
+              <p className="mt-3 leading-loose" style={{ color: "var(--fg-muted)" }}>
+                تبدیل‌شدن به معتمدترین شریک رشد کسب‌وکارهای کوچک ایران؛ جایی که هر صاحب کسب‌وکاری با
+                خیال راحت، آینده‌ی برندش را به آن می‌سپارد.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* values */}
+        <div className="mt-16 max-w-4xl mx-auto">
+          <Reveal>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-center">
+              ارزش‌هایی که به آن‌ها <span className="gold-text">پایبندیم</span>
+            </h2>
+          </Reveal>
+          <div className="mt-8 grid sm:grid-cols-2 gap-5">
+            {VALUES.map((v, i) => {
+              const Icon = v.icon;
+              return (
+                <Reveal key={v.title} delay={i * 90} dir="up">
+                  <article className="card h-full">
+                    <span style={{ color: "var(--gold-bright)" }}>
+                      <Icon width={26} height={26} />
+                    </span>
+                    <h3 className="mt-4 text-base font-bold">{v.title}</h3>
+                    <p className="mt-2 text-sm leading-loose" style={{ color: "var(--fg-muted)" }}>
+                      {v.text}
+                    </p>
+                  </article>
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
 
         {/* CTA */}
-        <div className="text-center">
-          <p className="text-sm mb-6" style={{ color: "var(--fg2)" }}>
-            {isRtl ? "آماده شروع هستی؟" : "Ready to get started?"}
-          </p>
-          <Link href="/consult"
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-extrabold text-sm hover:scale-105 transition-all"
-            style={{ background: "#5B9CF6", color: "#03080F", boxShadow: "0 0 40px rgba(91,156,246,0.25)" }}>
-            {isRtl ? "مشاوره رایگان ←" : "Free Consultation →"}
-          </Link>
-        </div>
+        <Reveal>
+          <div
+            className="mt-16 rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden"
+            style={{
+              background: "linear-gradient(160deg, rgba(214,178,94,0.12), var(--surface))",
+              border: "1px solid var(--border-strong)",
+            }}
+          >
+            <h3 className="text-2xl md:text-3xl font-extrabold leading-tight">
+              بیایید کسب‌وکار شما را با هم{" "}
+              <span className="gold-text">بزرگ کنیم</span>
+            </h3>
+            <p className="mt-3 leading-loose" style={{ color: "var(--fg-muted)" }}>
+              اولین قدم، یک بررسی رایگان است. بدون تعهد، بدون هزینه.
+            </p>
+            <div className="mt-7">
+              <Link href="/submit" className="btn btn-gold">
+                ثبت پروژه و دریافت مشاوره
+                <IconArrow width={18} height={18} />
+              </Link>
+            </div>
+          </div>
+        </Reveal>
       </div>
-    </div>
+    </main>
+  );
+}
+
+function Story({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <Reveal>
+      <section>
+        <h2 className="text-xl md:text-2xl font-extrabold mb-4 flex items-center gap-3">
+          <span
+            className="inline-block w-1.5 h-6 rounded-full"
+            style={{ background: "linear-gradient(var(--gold-bright), var(--gold-deep))" }}
+          />
+          {title}
+        </h2>
+        <div className="space-y-4 leading-loose" style={{ color: "var(--fg-muted)" }}>
+          {children}
+        </div>
+      </section>
+    </Reveal>
   );
 }

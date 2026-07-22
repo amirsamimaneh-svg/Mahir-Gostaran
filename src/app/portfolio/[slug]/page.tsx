@@ -1,176 +1,271 @@
-"use client";
-
-import { use, useState, Suspense } from "react";
-import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
-import PageNav from "@/components/PageNav";
-import { projects } from "@/data/projects";
-import { useLang } from "@/context/LangContext";
+import { notFound } from "next/navigation";
+import Reveal from "@/components/Reveal";
+import PlaceholderImage from "@/components/PlaceholderImage";
+import CopyButton from "@/components/CopyButton";
+import { IconArrow, IconCheck } from "@/components/icons";
+import { CASES, getCase } from "@/data/portfolio";
 
-function ProjectPageInner({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params);
-  const { lang, isRtl } = useLang();
-  const [lightbox, setLightbox] = useState<number | null>(null);
+export function generateStaticParams() {
+  return CASES.map((c) => ({ slug: c.slug }));
+}
 
-  const project = projects.find(p => p.slug === slug);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const c = getCase(slug);
+  if (!c) return { title: "نمونه‌کار پیدا نشد | ماهیر" };
+  return {
+    title: `${c.name} | نمونه‌کار ماهیر`,
+    description: c.shortDesc,
+    alternates: { canonical: `/portfolio/${c.slug}` },
+  };
+}
 
-  if (!project) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "#05050f", color: "#f0f0f5" }}>
-      <div className="text-center">
-        <p className="text-6xl mb-4">404</p>
-        <p className="mb-6 text-lg" style={{ color: "rgba(240,240,245,0.5)" }}>پروژه پیدا نشد</p>
-        <Link href="/portfolio" className="px-6 py-3 rounded-xl font-bold text-sm" style={{ background: "#2563EB", color: "#111" }}>
-          بازگشت
-        </Link>
-      </div>
-    </div>
-  );
+export default async function CaseStudyPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const c = getCase(slug);
+  if (!c) notFound();
 
   return (
-    <div dir={isRtl ? "rtl" : "ltr"} lang={lang}
-      style={{ background: "#05050f", minHeight: "100vh", color: "#f0f0f5" }}>
+    <main className="pt-28 pb-20 md:pt-32 relative overflow-hidden">
+      <div className="absolute inset-0 grid-lines opacity-40" aria-hidden />
+      <div
+        className="glow-orb anim-pulse"
+        style={{
+          width: 460,
+          height: 460,
+          top: -180,
+          insetInlineEnd: -120,
+          background: `radial-gradient(circle, ${c.tint}33, transparent 70%)`,
+        }}
+        aria-hidden
+      />
 
-      <PageNav backHref="/portfolio" backLabel={isRtl ? "← نمونه‌کارها" : "← Portfolio"} />
+      <article className="container relative z-10 max-w-4xl">
+        <Reveal>
+          <Link
+            href="/#portfolio"
+            className="inline-flex items-center gap-2 text-sm font-medium mb-8"
+            style={{ color: "var(--fg-muted)" }}
+          >
+            <IconArrow width={16} height={16} />
+            بازگشت به نمونه‌کارها
+          </Link>
+        </Reveal>
 
-      <div className="max-w-3xl mx-auto px-6 pt-20 md:pt-32 pb-20">
-
-        {/* Category badge */}
-        <div className="mb-6">
-          <span className="text-xs px-3 py-1.5 rounded-full font-bold"
-            style={{ background: `${project.color}18`, color: project.color, border: `1px solid ${project.color}35` }}>
-            {isRtl ? project.category_fa : project.category_en}
-          </span>
-        </div>
-
-        {/* Title */}
-        <div className="flex items-center gap-4 mb-4">
-          <span className="text-5xl">{project.emoji}</span>
-          <h1 className="font-extrabold" style={{ fontSize: "clamp(1.8rem,5vw,3rem)" }}>
-            {isRtl ? project.title_fa : project.title_en}
+        {/* header */}
+        <Reveal delay={60}>
+          <span className="eyebrow">{c.category}</span>
+        </Reveal>
+        <Reveal delay={120}>
+          <h1 className="mt-5 text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
+            {c.name}
           </h1>
-        </div>
+        </Reveal>
+        <Reveal delay={180}>
+          <p className="mt-3 text-lg md:text-xl gold-text font-bold">{c.tagline}</p>
+        </Reveal>
+        <Reveal delay={220}>
+          <p className="mt-4 text-base md:text-lg leading-loose" style={{ color: "var(--fg-muted)" }}>
+            {c.shortDesc}
+          </p>
+        </Reveal>
 
-        <p className="text-base leading-relaxed mb-8" style={{ color: "rgba(240,240,245,0.55)" }}>
-          {isRtl ? project.desc_fa : project.desc_en}
-        </p>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-10">
-          {project.tags.map(tag => (
-            <span key={tag} className="text-xs px-3 py-1.5 rounded-lg font-medium"
-              style={{ background: "rgba(255,255,255,0.06)", color: "rgba(240,240,245,0.45)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Gallery */}
-        {project.images?.length > 0 && (
-          <div className="mb-10">
-            <h2 className="font-bold text-lg mb-4 text-[#2563EB]">
-              {isRtl ? "تصاویر پروژه" : "Project Gallery"}
-            </h2>
-            <div className="grid grid-cols-3 gap-2">
-              {project.images.map((src, i) => (
-                <button key={i} onClick={() => setLightbox(i)}
-                  className="relative overflow-hidden rounded-xl aspect-video transition-all hover:scale-[1.03] hover:brightness-110"
-                  style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
-                  <Image src={src} alt={`${project.title_fa} - ${i + 1}`}
-                    fill className="object-cover" unoptimized />
-                </button>
-              ))}
-            </div>
+        {/* big stats */}
+        <Reveal delay={260} dir="scale">
+          <div className="mt-9 grid sm:grid-cols-3 gap-4">
+            {c.stats.map((s) => (
+              <div
+                key={s.label}
+                className="rounded-2xl p-5 text-center"
+                style={{ background: "var(--surface)", border: "1px solid var(--border-strong)" }}
+              >
+                <div className="text-2xl md:text-3xl font-extrabold gold-text leading-tight">
+                  {s.big}
+                </div>
+                <div className="mt-1.5 text-sm font-medium" style={{ color: "var(--fg)" }}>
+                  {s.label}
+                </div>
+                {s.note && (
+                  <div className="mt-0.5 text-xs" style={{ color: "var(--fg-dim)" }}>
+                    {s.note}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        )}
+        </Reveal>
 
-        {/* Divider */}
-        <div className="h-px mb-10" style={{ background: "rgba(255,255,255,0.08)" }} />
+        {/* main visual */}
+        <Reveal delay={120}>
+          <div className="mt-10 flex items-center gap-3 text-sm" style={{ color: "var(--fg-dim)" }}>
+            <span
+              className="px-3 py-1 rounded-full"
+              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+            >
+              مدت پروژه: {c.duration}
+            </span>
+          </div>
+          <div className="mt-4">
+            <PlaceholderImage emoji={c.emoji} tint={c.tint} label="تصویر شاخص پروژه" ratio="16 / 8" />
+          </div>
+        </Reveal>
 
-        {/* What we did */}
-        <div className="mb-10">
-          <h2 className="font-bold text-lg mb-5 text-[#2563EB]">
-            {isRtl ? "چه کاری انجام دادیم؟" : "What We Did"}
-          </h2>
-          <ul className="flex flex-col gap-3">
-            {(isRtl ? project.details_fa : project.details_en).map((d, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm leading-relaxed"
-                style={{ color: "rgba(240,240,245,0.65)" }}>
-                <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold"
-                  style={{ background: `${project.color}20`, color: project.color }}>
-                  {i + 1}
+        {/* challenge */}
+        <Section title="چالش">
+          <p className="leading-loose" style={{ color: "var(--fg-muted)" }}>
+            {c.challenge}
+          </p>
+        </Section>
+
+        {/* approach */}
+        <Section title="راهکار ماهیر">
+          <ul className="space-y-3">
+            {c.approach.map((step, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span
+                  className="mt-1 w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs font-bold"
+                  style={{
+                    background: "var(--gold-soft)",
+                    border: "1px solid var(--border-strong)",
+                    color: "var(--gold-bright)",
+                  }}
+                >
+                  <IconCheck width={13} height={13} />
                 </span>
-                {d}
+                <span className="leading-loose" style={{ color: "var(--fg)" }}>
+                  {step}
+                </span>
               </li>
             ))}
           </ul>
-        </div>
+        </Section>
 
-        {/* Result */}
-        <div className="rounded-2xl p-6 mb-12"
-          style={{ background: `${project.color}10`, border: `1px solid ${project.color}30` }}>
-          <p className="text-xs font-bold tracking-widest mb-2" style={{ color: project.color }}>
-            {isRtl ? "✦ نتیجه" : "✦ RESULT"}
+        {/* outcome */}
+        <Section title="نتیجه">
+          <p
+            className="leading-loose text-lg rounded-2xl p-6"
+            style={{
+              background: "var(--bg-2)",
+              border: "1px solid var(--border)",
+              color: "var(--fg)",
+            }}
+          >
+            {c.outcome}
           </p>
-          <p className="font-bold text-lg" style={{ color: "#f0f0f5" }}>
-            {isRtl ? project.result_fa : project.result_en}
+        </Section>
+
+        {/* image placeholders + AI prompts */}
+        <Section title="تصاویر پروژه">
+          <p className="text-sm leading-loose mb-6" style={{ color: "var(--fg-dim)" }}>
+            تصاویر واقعی این پروژه به‌زودی جایگزین می‌شوند. برای هر تصویر، توضیح دقیق و یک
+            پرامپت آماده تولید با هوش مصنوعی قرار داده‌ایم (پرامپت‌ها به انگلیسی هستند تا بهترین
+            کیفیت را از مدل‌های تصویرساز بگیرید).
           </p>
-        </div>
+          <div className="space-y-5">
+            {c.images.map((img, i) => (
+              <Reveal key={i} delay={i * 80}>
+                <div
+                  className="rounded-2xl overflow-hidden"
+                  style={{ border: "1px solid var(--border)" }}
+                >
+                  <div className="grid md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
+                    <PlaceholderImage
+                      emoji={c.emoji}
+                      tint={c.tint}
+                      label={`تصویر ${i + 1}`}
+                      ratio="4 / 3"
+                      className="!rounded-none border-0"
+                    />
+                    <div className="p-5" style={{ background: "var(--surface)" }}>
+                      <h4 className="font-bold text-base">{img.title}</h4>
+                      <p
+                        className="mt-2 text-sm leading-loose"
+                        style={{ color: "var(--fg-muted)" }}
+                      >
+                        {img.description}
+                      </p>
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between gap-3 mb-2">
+                          <span
+                            className="text-xs font-semibold"
+                            style={{ color: "var(--gold)" }}
+                          >
+                            پرامپت تولید عکس
+                          </span>
+                          <CopyButton text={img.prompt} />
+                        </div>
+                        <pre
+                          className="text-xs leading-relaxed rounded-xl p-3 overflow-x-auto whitespace-pre-wrap"
+                          dir="ltr"
+                          style={{
+                            background: "var(--bg)",
+                            border: "1px solid var(--border)",
+                            color: "var(--fg-muted)",
+                          }}
+                        >
+                          {img.prompt}
+                        </pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Section>
 
         {/* CTA */}
-        <div className="text-center">
-          <p className="text-sm mb-5" style={{ color: "rgba(240,240,245,0.4)" }}>
-            {isRtl ? "می‌خواهید نتیجه‌ای مشابه برای کسب‌وکار شما؟" : "Want similar results for your business?"}
-          </p>
-          <Link href="/consult"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
-            style={{ background: "#2563EB", color: "#111", boxShadow: "0 0 40px rgba(79,110,255,0.3)" }}>
-            {isRtl ? "مشاوره رایگان ←" : "Get Free Consultation →"}
-          </Link>
-        </div>
-
-      </div>
-
-      {/* Lightbox */}
-      {lightbox !== null && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          style={{ background: "rgba(0,0,0,0.92)", backdropFilter: "blur(8px)" }}
-          onClick={() => setLightbox(null)}>
-          <button className="absolute top-5 right-5 w-10 h-10 rounded-full flex items-center justify-center text-xl"
-            style={{ background: "rgba(255,255,255,0.1)", color: "#f0f0f5" }}
-            onClick={() => setLightbox(null)}>✕</button>
-
-          {/* prev */}
-          {lightbox > 0 && (
-            <button className="absolute left-5 w-11 h-11 rounded-full flex items-center justify-center text-xl"
-              style={{ background: "rgba(255,255,255,0.1)", color: "#f0f0f5" }}
-              onClick={e => { e.stopPropagation(); setLightbox(lightbox - 1); }}>‹</button>
-          )}
-
-          <div className="relative w-full max-w-3xl rounded-2xl overflow-hidden" style={{ aspectRatio: "16/10" }}
-            onClick={e => e.stopPropagation()}>
-            <Image src={project.images[lightbox]} alt="" fill className="object-cover" unoptimized />
+        <Reveal>
+          <div
+            className="mt-14 rounded-3xl p-8 md:p-10 text-center relative overflow-hidden"
+            style={{
+              background: "linear-gradient(160deg, var(--surface), var(--bg-2))",
+              border: "1px solid var(--border-strong)",
+            }}
+          >
+            <h3 className="text-2xl md:text-3xl font-extrabold leading-tight">
+              می‌خواهید کسب‌وکار شما{" "}
+              <span className="gold-text">پروژه بعدی ما</span> باشد؟
+            </h3>
+            <p className="mt-3 text-base leading-loose" style={{ color: "var(--fg-muted)" }}>
+              همین حالا پروژه‌تان را ثبت کنید تا مسیر رشد شما را رایگان بررسی کنیم.
+            </p>
+            <div className="mt-7">
+              <Link href="/submit" className="btn btn-gold">
+                ثبت پروژه و دریافت مشاوره
+                <IconArrow width={18} height={18} />
+              </Link>
+            </div>
           </div>
-
-          {/* next */}
-          {lightbox < project.images.length - 1 && (
-            <button className="absolute right-5 w-11 h-11 rounded-full flex items-center justify-center text-xl"
-              style={{ background: "rgba(255,255,255,0.1)", color: "#f0f0f5" }}
-              onClick={e => { e.stopPropagation(); setLightbox(lightbox + 1); }}>›</button>
-          )}
-
-          <p className="absolute bottom-6 text-xs" style={{ color: "rgba(240,240,245,0.4)" }}>
-            {lightbox + 1} / {project.images.length}
-          </p>
-        </div>
-      )}
-    </div>
+        </Reveal>
+      </article>
+    </main>
   );
 }
 
-export default function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <Suspense fallback={<div style={{ background: "#07080F", minHeight: "100vh" }} />}>
-      <ProjectPageInner params={params} />
-    </Suspense>
+    <Reveal>
+      <section className="mt-12">
+        <h2 className="text-xl md:text-2xl font-extrabold mb-4 flex items-center gap-3">
+          <span
+            className="inline-block w-1.5 h-6 rounded-full"
+            style={{ background: "linear-gradient(var(--gold-bright), var(--gold-deep))" }}
+          />
+          {title}
+        </h2>
+        {children}
+      </section>
+    </Reveal>
   );
 }

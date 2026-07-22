@@ -1,15 +1,16 @@
 /**
- * اطلاعات تماس ماهیر — مقادیر فعلی نمونه (placeholder) هستند.
- * شماره و آیدی‌های واقعی را همینجا جایگزین کنید تا در کل سایت اعمال شود.
+ * اطلاعات تماس ماهیر.
+ * برای تغییر، فقط مقادیر همین فایل را ویرایش کنید تا در کل سایت اعمال شود.
  */
 export const CONTACT = {
-  phoneDisplay: "۰۹۱۲ ۳۴۵ ۶۷۸۹",
-  phoneHref: "tel:+989123456789",
-  whatsapp: "https://wa.me/989123456789",
-  telegramId: "@mahir",
-  telegram: "https://t.me/mahir",
+  phoneDisplay: "۰۹۹۲ ۰۴۳ ۹۳۱۰",
+  phoneHref: "tel:+989920439310",
+  whatsapp: "https://wa.me/989920439310",
+  telegramId: "@Mahirofficalll",
+  telegram: "https://t.me/Mahirofficalll",
   instagramId: "@mahir",
   instagram: "https://instagram.com/mahir",
+  // TODO: ایمیل واقعی را جایگزین کنید (فعلاً نمونه است)
   email: "hello@mahir.ir",
   emailHref: "mailto:hello@mahir.ir",
 } as const;

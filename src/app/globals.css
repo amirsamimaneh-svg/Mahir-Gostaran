@@ -48,6 +48,8 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--nav-h) + 12px);
   -webkit-text-size-adjust: 100%;
+  /* contain transient transform/decoration overflow without breaking sticky */
+  overflow-x: clip;
 }
 
 body {
@@ -256,6 +258,13 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal,
+  .reveal[data-dir="right"],
+  .reveal[data-dir="left"],
+  .reveal[data-dir="scale"] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
   .anim-float, .anim-pulse, .anim-spin-slow, .marquee-track, .shimmer-line { animation: none; }
 }

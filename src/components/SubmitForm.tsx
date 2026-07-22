@@ -3,7 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { TextField, TextArea, SelectField } from "./FormFields";
-import { IconArrow } from "./icons";
+import { IconWhatsApp } from "./icons";
+import { CONTACT } from "@/data/contact";
 
 const BUSINESS_FIELDS = [
   "فروشگاهی",
@@ -27,11 +28,32 @@ const IR_MOBILE = /^0?9\d{9}$/;
 
 type Errors = Partial<Record<string, string>>;
 
+const FIELD_LABELS: Record<string, string> = {
+  fullName: "نام و نام خانوادگی",
+  mobile: "شماره موبایل",
+  instagram: "اینستاگرام / پیج",
+  website: "وب‌سایت",
+  businessField: "حوزه فعالیت",
+  currentStatus: "وضعیت فعلی",
+  biggestProblem: "بزرگ‌ترین مشکل",
+  goal: "هدف از همکاری",
+  budget: "بودجه ماهانه",
+};
+
+/** پیام آماده برای ارسال از طریق واتساپ می‌سازد. */
+function buildMessage(data: Record<string, string>): string {
+  const lines = ["📌 درخواست پروژه‌ی جدید از سایت ماهیر", ""];
+  for (const key of Object.keys(FIELD_LABELS)) {
+    const v = data[key]?.trim();
+    if (v) lines.push(`${FIELD_LABELS[key]}: ${v}`);
+  }
+  return lines.join("\n");
+}
+
 export default function SubmitForm() {
   const router = useRouter();
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
-  const [serverError, setServerError] = useState("");
 
   const validate = (data: Record<string, string>): Errors => {
     const e: Errors = {};
@@ -44,9 +66,8 @@ export default function SubmitForm() {
     return e;
   };
 
-  const onSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    setServerError("");
     const fd = new FormData(ev.currentTarget);
     const data = Object.fromEntries(
       Array.from(fd.entries()).map(([k, v]) => [k, String(v)])
@@ -62,24 +83,11 @@ export default function SubmitForm() {
 
     setErrors({});
     setSubmitting(true);
-    try {
-      const res = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        router.push("/thank-you");
-        return;
-      }
-      const json = await res.json().catch(() => ({}));
-      if (json?.errors) setErrors(json.errors);
-      else setServerError("ارسال با خطا مواجه شد. لطفاً دوباره تلاش کنید.");
-      setSubmitting(false);
-    } catch {
-      setServerError("ارتباط با سرور برقرار نشد. اتصال اینترنت را بررسی کنید.");
-      setSubmitting(false);
-    }
+
+    // ارسال بدون بک‌اند: پیام آماده در واتساپ باز می‌شود و کاربر به صفحه‌ی تشکر می‌رود.
+    const url = `${CONTACT.whatsapp}?text=${encodeURIComponent(buildMessage(data))}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+    router.push("/thank-you");
   };
 
   return (
@@ -162,27 +170,19 @@ export default function SubmitForm() {
         options={BUDGETS}
       />
 
-      {serverError && (
-        <p
-          className="text-sm rounded-xl px-4 py-3"
-          style={{ background: "rgba(240,120,120,0.08)", border: "1px solid rgba(240,120,120,0.3)", color: "#F0A6A6" }}
-        >
-          {serverError}
-        </p>
-      )}
-
       <button type="submit" className="btn btn-gold w-full text-base py-4" disabled={submitting}>
         {submitting ? (
           "در حال ارسال…"
         ) : (
           <>
-            ثبت درخواست و دریافت مشاوره
-            <IconArrow width={18} height={18} />
+            ثبت درخواست و ارسال در واتساپ
+            <IconWhatsApp width={19} height={19} />
           </>
         )}
       </button>
-      <p className="text-xs text-center" style={{ color: "var(--fg-dim)" }}>
-        اطلاعات شما نزد ماهیر محفوظ است و فقط برای بررسی پروژه استفاده می‌شود.
+      <p className="text-xs text-center leading-relaxed" style={{ color: "var(--fg-dim)" }}>
+        با کلیک روی دکمه، اطلاعات شما به‌صورت یک پیام آماده در واتساپ ماهیر باز می‌شود؛ فقط کافی است
+        ارسال را بزنید. اطلاعات شما محفوظ است.
       </p>
     </form>
   );

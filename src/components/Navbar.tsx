@@ -10,6 +10,7 @@ const LINKS = [
   { href: "/#services", label: "خدمات" },
   { href: "/#process", label: "فرآیند کار" },
   { href: "/#portfolio", label: "نمونه‌کارها" },
+  { href: "/#pricing", label: "قیمت‌ها" },
   { href: "/#why", label: "درباره ما" },
   { href: "/#faq", label: "سوالات متداول" },
   { href: "/#contact", label: "تماس" },
@@ -55,7 +56,7 @@ export default function Navbar() {
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="px-3 py-2 rounded-lg text-[13px] font-medium transition-colors block"
+                className="px-2.5 py-2 rounded-lg text-[13px] font-medium transition-colors block whitespace-nowrap"
                 style={{ color: "var(--fg-muted)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold-bright)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "var(--fg-muted)")}

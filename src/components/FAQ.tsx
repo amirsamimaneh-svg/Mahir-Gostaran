@@ -78,7 +78,7 @@ function Item({ q, a }: { q: string; a: string }) {
 
 export default function FAQ() {
   return (
-    <section id="faq" className="section">
+    <section id="faq" className="section" style={{ background: "var(--bg-2)" }}>
       <div className="container">
         <SectionHeader
           eyebrow="سوالات متداول"

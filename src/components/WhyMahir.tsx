@@ -27,7 +27,7 @@ const REASONS = [
 
 export default function WhyMahir() {
   return (
-    <section id="why" className="section" style={{ background: "var(--bg-2)" }}>
+    <section id="why" className="section">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>

@@ -6,7 +6,7 @@ const NAV = [
   { href: "/#services", label: "خدمات" },
   { href: "/#process", label: "فرآیند کار" },
   { href: "/#portfolio", label: "نمونه‌کارها" },
-  { href: "/#why", label: "درباره ما" },
+  { href: "/#pricing", label: "قیمت‌ها" },
   { href: "/submit", label: "ثبت پروژه" },
   { href: "/#contact", label: "تماس" },
 ];

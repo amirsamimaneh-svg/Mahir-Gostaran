@@ -13,8 +13,10 @@ export const CONTACT = {
   // TODO: ایمیل واقعی را جایگزین کنید (فعلاً نمونه است)
   email: "hello@mahir.ir",
   emailHref: "mailto:hello@mahir.ir",
-  // پیام‌رسان‌های ایرانی برای فرم ثبت پروژه (لینک چت با آیدی @Mahirofficalll)
-  rubika: "https://rubika.ir/Mahirofficalll",
-  bale: "https://ble.ir/Mahirofficalll",
-  soroush: "https://splus.ir/Mahirofficalll",
+  // پیام‌رسان‌های ایرانی برای فرم ثبت پروژه و دکمه شناور (لینک چت با شماره ۰۹۹۲۰۴۳۹۳۱۰)
+  // توجه: این پیام‌رسان‌ها لینک استاندارد مبتنی بر شماره (مثل واتساپ) ندارند؛
+  // حتماً هر لینک را روی موبایل تست کنید. اگر چت باز نشد، از آیدی (username) استفاده کنید.
+  rubika: "https://rubika.ir/09920439310",
+  bale: "https://ble.ir/09920439310",
+  soroush: "https://splus.ir/09920439310",
 } as const;

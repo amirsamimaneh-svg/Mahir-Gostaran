@@ -13,4 +13,8 @@ export const CONTACT = {
   // TODO: ایمیل واقعی را جایگزین کنید (فعلاً نمونه است)
   email: "hello@mahir.ir",
   emailHref: "mailto:hello@mahir.ir",
+  // پیام‌رسان‌های ایرانی برای فرم ثبت پروژه — «YourID» را با آیدی واقعی خود جایگزین کنید
+  rubika: "https://rubika.ir/YourID",
+  bale: "https://ble.ir/YourID",
+  soroush: "https://splus.ir/YourID",
 } as const;

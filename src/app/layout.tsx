@@ -51,6 +51,18 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "ماهیر",
+  alternateName: "Mahir",
+  url: SITE_URL,
+  description: DESCRIPTION,
+  slogan: "رشد کسب‌وکار از صفر تا صد",
+  areaServed: "IR",
+  knowsLanguage: "fa-IR",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -61,6 +73,10 @@ export default function RootLayout({
         {children}
         <Footer />
         <FloatingContact />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+        />
       </body>
     </html>
   );

@@ -6,9 +6,11 @@ import Services from "@/components/Services";
 import Process from "@/components/Process";
 import Portfolio from "@/components/Portfolio";
 import Testimonials from "@/components/Testimonials";
+import Urgency from "@/components/Urgency";
 import Pricing from "@/components/Pricing";
 import Guarantee from "@/components/Guarantee";
 import WhyMahir from "@/components/WhyMahir";
+import Blog from "@/components/Blog";
 import FAQ from "@/components/FAQ";
 import ContactCTA from "@/components/ContactCTA";
 
@@ -23,9 +25,11 @@ export default function Home() {
       <Process />
       <Portfolio />
       <Testimonials />
+      <Urgency />
       <Pricing />
       <Guarantee />
       <WhyMahir />
+      <Blog />
       <FAQ />
       <ContactCTA />
     </main>

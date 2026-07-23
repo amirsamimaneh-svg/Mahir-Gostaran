@@ -12,7 +12,7 @@ const CHANNELS = [
 
 export default function ContactCTA() {
   return (
-    <section id="contact" className="section">
+    <section id="contact" className="section" style={{ background: "var(--bg-2)" }}>
       <div className="container">
         <div
           className="relative rounded-[28px] overflow-hidden p-8 md:p-14"

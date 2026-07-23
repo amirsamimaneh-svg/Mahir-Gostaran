@@ -14,6 +14,7 @@ const NAV = [
   { href: "/#process", label: "فرآیند کار" },
   { href: "/#portfolio", label: "نمونه‌کارها" },
   { href: "/#pricing", label: "قیمت‌ها" },
+  { href: "/#blog", label: "مقالات" },
   { href: "/about", label: "درباره ما" },
   { href: "/submit", label: "ثبت پروژه" },
 ];

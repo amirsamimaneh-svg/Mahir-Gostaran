@@ -8,9 +8,9 @@ import { IconMenu, IconClose } from "./icons";
 const LINKS = [
   { href: "/", label: "صفحه اصلی" },
   { href: "/#services", label: "خدمات" },
-  { href: "/#process", label: "فرآیند کار" },
   { href: "/#portfolio", label: "نمونه‌کارها" },
   { href: "/#pricing", label: "قیمت‌ها" },
+  { href: "/#blog", label: "مقالات" },
   { href: "/about", label: "درباره ما" },
   { href: "/#faq", label: "سوالات متداول" },
   { href: "/#contact", label: "تماس" },

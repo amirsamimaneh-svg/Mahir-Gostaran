@@ -19,6 +19,8 @@ export default function PlaceholderImage({
 }: Props) {
   return (
     <div
+      role="img"
+      aria-label={label}
       className={`relative overflow-hidden rounded-2xl ${className}`}
       style={{
         aspectRatio: ratio,

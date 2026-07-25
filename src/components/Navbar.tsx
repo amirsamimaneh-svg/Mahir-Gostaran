@@ -38,7 +38,7 @@ export default function Navbar() {
     <header
       className="fixed top-0 inset-x-0 z-50 transition-all duration-300"
       style={{
-        background: scrolled ? "rgba(7,7,10,0.82)" : "transparent",
+        background: scrolled ? "rgba(15,23,42,0.82)" : "transparent",
         backdropFilter: scrolled ? "blur(14px)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
         borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
@@ -88,7 +88,7 @@ export default function Navbar() {
       <div
         className="lg:hidden fixed inset-0 top-0 z-40 transition-all duration-300 overflow-y-auto"
         style={{
-          background: "rgba(7,7,10,0.98)",
+          background: "rgba(15,23,42,0.98)",
           backdropFilter: "blur(8px)",
           WebkitBackdropFilter: "blur(8px)",
           opacity: open ? 1 : 0,

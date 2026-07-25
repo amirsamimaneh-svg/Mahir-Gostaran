@@ -1,36 +1,37 @@
 @import "tailwindcss";
 
 /* ============================================================
-   ماهیر — Luxury Tech Theme
-   Matte Black · Classic Gold · Neutral White · RTL
+   ماهیر — Navy Gold Theme
+   Deep Navy · Classic Gold · Cool White · RTL
    ============================================================ */
 
 :root {
-  /* Base — matte black */
-  --bg: #0B0B0D;
-  --bg-2: #101013;
-  --surface: #15161B;
-  --surface-2: #1C1D24;
+  /* Base — deep navy */
+  --bg: #0F172A;
+  --bg-2: #16213A;
+  --surface: #1E293B;
+  --surface-2: #27364D;
 
-  /* Foreground — neutral */
-  --fg: #F5F5F5;
-  --fg-muted: #9B9EA8;
-  --fg-dim: #6B6E78;
+  /* Foreground — cool neutral */
+  --fg: #F8FAFC;
+  --fg-muted: #94A3B8;
+  --fg-dim: #64748B;
 
-  /* Gold accent (classic, single accent) */
+  /* Gold accent (primary) */
   --gold: #D4AF37;
   --gold-bright: #F2D675;
   --gold-deep: #B0892E;
-  --gold-glow: rgba(212, 175, 55, 0.20);
-  --gold-soft: rgba(212, 175, 55, 0.09);
+  --gold-glow: rgba(212, 175, 55, 0.22);
+  --gold-soft: rgba(212, 175, 55, 0.10);
 
-  /* Success */
+  /* Secondary accent (used sparingly) & success */
+  --accent: #3B82F6;
   --success: #3CB371;
 
-  /* Structure — neutral & faint (gold reserved as accent) */
-  --grid-line: rgba(255, 255, 255, 0.035);
-  --border: rgba(255, 255, 255, 0.07);
-  --border-strong: rgba(212, 175, 55, 0.24);
+  /* Structure — cool & faint (gold reserved as accent) */
+  --grid-line: rgba(148, 163, 184, 0.06);
+  --border: rgba(148, 163, 184, 0.14);
+  --border-strong: rgba(212, 175, 55, 0.26);
 
   /* Layout */
   --nav-h: 72px;

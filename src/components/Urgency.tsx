@@ -10,7 +10,7 @@ export default function Urgency() {
           <div
             className="relative overflow-hidden rounded-[24px] p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-8"
             style={{
-              background: "linear-gradient(120deg, rgba(212, 175, 55,0.14), var(--surface))",
+              background: "linear-gradient(120deg, rgba(0, 200, 150,0.14), var(--surface))",
               border: "1px solid var(--gold)",
               boxShadow: "0 24px 60px -32px var(--gold-glow)",
             }}

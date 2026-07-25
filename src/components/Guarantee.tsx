@@ -10,7 +10,7 @@ export default function Guarantee() {
           <div
             className="relative overflow-hidden rounded-[28px] p-8 md:p-14 text-center max-w-4xl mx-auto"
             style={{
-              background: "linear-gradient(160deg, rgba(212, 175, 55,0.12), var(--surface))",
+              background: "linear-gradient(160deg, rgba(0, 200, 150,0.12), var(--surface))",
               border: "1px solid var(--gold)",
               boxShadow: "0 30px 70px -34px var(--gold-glow)",
             }}

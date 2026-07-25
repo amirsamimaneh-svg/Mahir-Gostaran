@@ -161,7 +161,7 @@ export default function AboutPage() {
           <div
             className="mt-16 rounded-3xl p-8 md:p-12 text-center max-w-3xl mx-auto relative overflow-hidden"
             style={{
-              background: "linear-gradient(160deg, rgba(0, 200, 150,0.12), var(--surface))",
+              background: "linear-gradient(160deg, rgba(212, 175, 55,0.12), var(--surface))",
               border: "1px solid var(--border-strong)",
             }}
           >

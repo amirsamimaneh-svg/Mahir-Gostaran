@@ -15,7 +15,7 @@ export default function Hero() {
           top: -180,
           insetInlineStart: "50%",
           transform: "translateX(-50%)",
-          background: "radial-gradient(circle, rgba(0, 200, 150,0.20), transparent 70%)",
+          background: "radial-gradient(circle, rgba(212, 175, 55,0.20), transparent 70%)",
         }}
         aria-hidden
       />
@@ -66,7 +66,7 @@ export default function Hero() {
               style={{
                 aspectRatio: "16 / 9",
                 background:
-                  "radial-gradient(120% 120% at 50% 0%, rgba(0, 200, 150,0.16), transparent 55%), linear-gradient(160deg, var(--surface-2), var(--bg))",
+                  "radial-gradient(120% 120% at 50% 0%, rgba(212, 175, 55,0.16), transparent 55%), linear-gradient(160deg, var(--surface-2), var(--bg))",
                 border: "1px solid var(--border-strong)",
               }}
               aria-label="پخش ویدیو معرفی ماهیر"

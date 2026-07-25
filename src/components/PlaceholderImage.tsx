@@ -38,7 +38,7 @@ export default function PlaceholderImage({
       <span
         className="absolute top-3 end-3 text-[11px] font-medium px-2.5 py-1 rounded-full"
         style={{
-          background: "rgba(13, 13, 13,0.55)",
+          background: "rgba(15,23,42,0.55)",
           border: "1px solid var(--border)",
           color: "var(--fg-muted)",
         }}

@@ -1,38 +1,37 @@
 @import "tailwindcss";
 
 /* ============================================================
-   ماهیر — Black & Emerald Theme
-   Matte Black · Emerald Accent · White · RTL
-   (the --gold* variables now carry emerald tones so the whole
-    system re-skins from one place)
+   ماهیر — Navy Gold Theme
+   Deep Navy · Classic Gold · Cool White · RTL
    ============================================================ */
 
 :root {
-  /* Base — matte black */
-  --bg: #0D0D0D;
-  --bg-2: #131313;
-  --surface: #181818;
-  --surface-2: #202020;
+  /* Base — deep navy */
+  --bg: #0F172A;
+  --bg-2: #16213A;
+  --surface: #1E293B;
+  --surface-2: #27364D;
 
-  /* Foreground — neutral */
-  --fg: #FFFFFF;
-  --fg-muted: #A1A1AA;
-  --fg-dim: #71717A;
+  /* Foreground — cool neutral */
+  --fg: #F8FAFC;
+  --fg-muted: #94A3B8;
+  --fg-dim: #64748B;
 
-  /* Accent — emerald (carried by the --gold* names) */
-  --gold: #00C896;
-  --gold-bright: #2DE0AF;
-  --gold-deep: #00A57E;
-  --gold-glow: rgba(0, 200, 150, 0.22);
-  --gold-soft: rgba(0, 200, 150, 0.10);
+  /* Gold accent (primary) */
+  --gold: #D4AF37;
+  --gold-bright: #F2D675;
+  --gold-deep: #B0892E;
+  --gold-glow: rgba(212, 175, 55, 0.22);
+  --gold-soft: rgba(212, 175, 55, 0.10);
 
-  /* Success */
-  --success: #2DE0AF;
+  /* Secondary accent (used sparingly) & success */
+  --accent: #3B82F6;
+  --success: #3CB371;
 
-  /* Structure — neutral & faint (emerald reserved as accent) */
-  --grid-line: rgba(255, 255, 255, 0.03);
-  --border: #2A2A2A;
-  --border-strong: rgba(0, 200, 150, 0.26);
+  /* Structure — cool & faint (gold reserved as accent) */
+  --grid-line: rgba(148, 163, 184, 0.06);
+  --border: rgba(148, 163, 184, 0.14);
+  --border-strong: rgba(212, 175, 55, 0.26);
 
   /* Layout */
   --nav-h: 72px;
@@ -77,10 +76,10 @@ body {
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 200, 150, 0.28);
+  background: rgba(212, 175, 55, 0.28);
   border-radius: 99px;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(0, 200, 150, 0.5); }
+::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.5); }
 
 /* ── Layout helpers ── */
 .container {
@@ -145,7 +144,7 @@ body {
 }
 .btn-gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 40px -10px rgba(0, 200, 150, 0.5);
+  box-shadow: 0 14px 40px -10px rgba(212, 175, 55, 0.5);
 }
 
 .btn-ghost {

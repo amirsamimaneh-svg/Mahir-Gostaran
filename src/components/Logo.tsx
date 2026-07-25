@@ -19,9 +19,9 @@ export default function Logo({ className = "", withWordmark = true }: LogoProps)
       >
         <defs>
           <linearGradient id="mahirGold" x1="0" y1="0" x2="40" y2="40">
-            <stop offset="0" stopColor="#A9812F" />
-            <stop offset="0.55" stopColor="#D6B25E" />
-            <stop offset="1" stopColor="#F2D68C" />
+            <stop offset="0" stopColor="#B0892E" />
+            <stop offset="0.55" stopColor="#D4AF37" />
+            <stop offset="1" stopColor="#F2D675" />
           </linearGradient>
         </defs>
         <rect

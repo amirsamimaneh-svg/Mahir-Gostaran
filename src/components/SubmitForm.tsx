@@ -255,7 +255,7 @@ export default function SubmitForm() {
                 className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
                 style={{
                   border: "1px solid var(--border-strong)",
-                  color: copied ? "#8FD9A8" : "var(--gold-bright)",
+                  color: copied ? "#3CB371" : "var(--gold-bright)",
                   background: "var(--gold-soft)",
                 }}
               >

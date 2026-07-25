@@ -77,7 +77,7 @@ export default function Pricing() {
                   className="relative h-full flex flex-col rounded-3xl p-7 transition-transform"
                   style={{
                     background: featured
-                      ? "linear-gradient(170deg, rgba(214,178,94,0.12), var(--surface))"
+                      ? "linear-gradient(170deg, rgba(212, 175, 55,0.12), var(--surface))"
                       : "linear-gradient(180deg, var(--surface), var(--bg-2))",
                     border: `1px solid ${featured ? "var(--gold)" : "var(--border)"}`,
                     boxShadow: featured ? "0 24px 60px -28px var(--gold-glow)" : "none",

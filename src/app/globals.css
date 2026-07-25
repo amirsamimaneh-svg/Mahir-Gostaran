@@ -1,32 +1,36 @@
 @import "tailwindcss";
 
 /* ============================================================
-   ماهیر — Premium Dark + Gold Theme
-   Black · Soft Gold · Warm White · RTL
+   ماهیر — Luxury Tech Theme
+   Matte Black · Classic Gold · Neutral White · RTL
    ============================================================ */
 
 :root {
-  /* Base — deep black */
-  --bg: #07070A;
-  --bg-2: #0B0B10;
-  --surface: #101017;
-  --surface-2: #16161F;
+  /* Base — matte black */
+  --bg: #0B0B0D;
+  --bg-2: #101013;
+  --surface: #15161B;
+  --surface-2: #1C1D24;
 
-  /* Foreground — warm white */
-  --fg: #F4F1EA;
-  --fg-muted: #9C978C;
-  --fg-dim: #635F58;
+  /* Foreground — neutral */
+  --fg: #F5F5F5;
+  --fg-muted: #9B9EA8;
+  --fg-dim: #6B6E78;
 
-  /* Gold accent (soft, luxurious) */
-  --gold: #D6B25E;
-  --gold-bright: #F2D68C;
-  --gold-deep: #A9812F;
-  --gold-glow: rgba(214, 178, 94, 0.22);
-  --gold-soft: rgba(214, 178, 94, 0.10);
+  /* Gold accent (classic, single accent) */
+  --gold: #D4AF37;
+  --gold-bright: #F2D675;
+  --gold-deep: #B0892E;
+  --gold-glow: rgba(212, 175, 55, 0.20);
+  --gold-soft: rgba(212, 175, 55, 0.09);
 
-  /* Lines */
-  --border: rgba(214, 178, 94, 0.12);
-  --border-strong: rgba(214, 178, 94, 0.28);
+  /* Success */
+  --success: #3CB371;
+
+  /* Structure — neutral & faint (gold reserved as accent) */
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(212, 175, 55, 0.24);
 
   /* Layout */
   --nav-h: 72px;
@@ -71,10 +75,10 @@ body {
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb {
-  background: rgba(214, 178, 94, 0.30);
+  background: rgba(212, 175, 55, 0.28);
   border-radius: 99px;
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(214, 178, 94, 0.5); }
+::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.5); }
 
 /* ── Layout helpers ── */
 .container {
@@ -93,7 +97,7 @@ body {
 
 /* ── Typography accents ── */
 .gold-text {
-  background: linear-gradient(105deg, var(--gold-deep), var(--gold-bright) 45%, var(--gold));
+  background: linear-gradient(100deg, var(--gold), var(--gold-bright) 55%, var(--gold));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -133,13 +137,13 @@ body {
 .btn:active { transform: scale(0.97); }
 
 .btn-gold {
-  background: linear-gradient(120deg, var(--gold-deep), var(--gold) 55%, var(--gold-bright));
+  background: linear-gradient(120deg, var(--gold), var(--gold-bright));
   color: #14100A;
   box-shadow: 0 8px 30px -8px var(--gold-glow);
 }
 .btn-gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 40px -10px rgba(214, 178, 94, 0.5);
+  box-shadow: 0 14px 40px -10px rgba(212, 175, 55, 0.5);
 }
 
 .btn-ghost {
@@ -183,8 +187,8 @@ body {
 /* ── Decorative ── */
 .grid-lines {
   background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 64px 64px;
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);

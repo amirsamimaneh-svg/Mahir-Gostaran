@@ -262,13 +262,18 @@ export default function SubmitForm() {
                 {copied ? "کپی شد ✓" : "کپی متن"}
               </button>
             </div>
-            <pre
+            <div
               dir="rtl"
-              className="text-xs leading-relaxed rounded-xl p-3 max-h-40 overflow-y-auto whitespace-pre-wrap"
-              style={{ background: "var(--bg)", border: "1px solid var(--border)", color: "var(--fg-muted)" }}
+              className="text-[13px] leading-loose rounded-xl p-4 max-h-44 overflow-y-auto whitespace-pre-wrap break-words text-start"
+              style={{
+                background: "var(--bg)",
+                border: "1px solid var(--border)",
+                color: "var(--fg-muted)",
+                fontFamily: "inherit",
+              }}
             >
               {message}
-            </pre>
+            </div>
           </div>
 
           {/* دکمه‌های پیام‌رسان */}

@@ -96,7 +96,10 @@ export default function SubmitPage() {
                 style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
               >
                 <p className="text-sm font-bold" style={{ color: "var(--fg)" }}>
-                  ترجیح می‌دهید مستقیم صحبت کنید؟
+                  سوال سریع دارید یا مشاوره می‌خواهید؟
+                </p>
+                <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--fg-muted)" }}>
+                  بدون پر کردن فرم هم می‌توانید مستقیم تماس بگیرید یا پیام بدهید.
                 </p>
                 <a
                   href={CONTACT.phoneHref}

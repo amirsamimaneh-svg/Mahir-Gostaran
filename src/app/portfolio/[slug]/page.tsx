@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Reveal from "@/components/Reveal";
 import PlaceholderImage from "@/components/PlaceholderImage";
 import CopyButton from "@/components/CopyButton";
-import { IconArrow, IconCheck } from "@/components/icons";
+import { IconArrow, IconCheck, IconInstagram, IconPlay, IconVideo } from "@/components/icons";
 import { CASES, getCase } from "@/data/portfolio";
 
 export function generateStaticParams() {
@@ -107,13 +107,40 @@ export default async function CaseStudyPage({
 
         {/* main visual */}
         <Reveal delay={120}>
-          <div className="mt-10 flex items-center gap-3 text-sm" style={{ color: "var(--fg-dim)" }}>
+          <div className="mt-10 flex flex-wrap items-center gap-3 text-sm">
             <span
               className="px-3 py-1 rounded-full"
-              style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+              style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--fg-dim)" }}
             >
               مدت پروژه: {c.duration}
             </span>
+
+            {/* پیج اینستاگرام واقعی مشتری */}
+            {c.instagram ? (
+              <a
+                href={c.instagram}
+                target="_blank"
+                rel="noreferrer"
+                dir="ltr"
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full font-semibold transition-transform hover:-translate-y-0.5"
+                style={{
+                  background: "var(--gold-soft)",
+                  border: "1px solid var(--border-strong)",
+                  color: "var(--gold-bright)",
+                }}
+              >
+                <IconInstagram width={15} height={15} />
+                {c.instagramId || "پیج اینستاگرام"}
+              </a>
+            ) : (
+              <span
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full"
+                style={{ background: "var(--surface)", border: "1px dashed var(--border-strong)", color: "var(--fg-dim)" }}
+              >
+                <IconInstagram width={15} height={15} />
+                پیج اینستاگرام مشتری (به‌زودی)
+              </span>
+            )}
           </div>
           <div className="mt-4">
             <PlaceholderImage emoji={c.emoji} tint={c.tint} label="تصویر شاخص پروژه" ratio="16 / 8" />
@@ -162,6 +189,98 @@ export default async function CaseStudyPage({
           >
             {c.outcome}
           </p>
+        </Section>
+
+        {/* before / after */}
+        <Section title="قبل و بعد">
+          <div className="grid sm:grid-cols-2 gap-4">
+            {[
+              { tag: "قبل", note: "پیج پراکنده و بدون هویت بصری منسجم", muted: true },
+              { tag: "بعد", note: "برند منسجم، حرفه‌ای و آماده‌ی فروش", muted: false },
+            ].map((b) => (
+              <div key={b.tag} className="relative">
+                <span
+                  className="absolute top-3 start-3 z-10 text-xs font-bold px-3 py-1 rounded-full"
+                  style={{
+                    background: b.muted ? "rgba(15,23,42,0.7)" : "linear-gradient(120deg, var(--gold-deep), var(--gold-bright))",
+                    color: b.muted ? "var(--fg-muted)" : "#14100A",
+                    border: b.muted ? "1px solid var(--border)" : "none",
+                  }}
+                >
+                  {b.tag}
+                </span>
+                <PlaceholderImage
+                  emoji={c.emoji}
+                  tint={b.muted ? "#64748B" : c.tint}
+                  label=""
+                  ratio="4 / 3"
+                />
+                <p className="mt-2.5 text-sm text-center leading-relaxed" style={{ color: "var(--fg-muted)" }}>
+                  {b.note}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* short client / case-study video */}
+        <Section title="ویدیوی کوتاه پروژه">
+          <div
+            className="relative overflow-hidden rounded-3xl"
+            style={{
+              aspectRatio: "16 / 9",
+              background:
+                "radial-gradient(120% 120% at 50% 0%, rgba(212, 175, 55,0.14), transparent 55%), linear-gradient(160deg, var(--surface-2), var(--bg))",
+              border: "1px solid var(--border-strong)",
+            }}
+          >
+            {c.clientVideo ? (
+              <video
+                src={c.clientVideo}
+                controls
+                playsInline
+                className="absolute inset-0 w-full h-full"
+                style={{ objectFit: "cover" }}
+              />
+            ) : (
+              <div className="absolute inset-0">
+                <span className="absolute inset-0 grid-lines opacity-40" aria-hidden />
+                <span
+                  className="absolute top-4 end-4 inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-full"
+                  style={{
+                    background: "rgba(15,23,42,0.6)",
+                    border: "1px solid var(--border-strong)",
+                    color: "var(--gold-bright)",
+                  }}
+                >
+                  <IconVideo width={14} height={14} />
+                  ویدیوی مشتری
+                </span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-6">
+                  <span
+                    className="w-16 h-16 rounded-full flex items-center justify-center"
+                    style={{
+                      background: "linear-gradient(140deg, var(--gold-deep), var(--gold-bright))",
+                      color: "#14100A",
+                      boxShadow: "0 12px 40px -8px var(--gold-glow)",
+                    }}
+                  >
+                    <IconPlay width={30} height={30} />
+                  </span>
+                  <span
+                    className="text-xs font-semibold px-3 py-1 rounded-full"
+                    style={{
+                      background: "var(--gold-soft)",
+                      border: "1px solid var(--border-strong)",
+                      color: "var(--gold-bright)",
+                    }}
+                  >
+                    ویدیوی رضایت مشتری به‌زودی
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
         </Section>
 
         {/* image placeholders + AI prompts */}

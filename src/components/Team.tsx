@@ -42,9 +42,20 @@ export default function Team() {
 function MemberCard({ member }: { member: Member }) {
   return (
     <article
-      className="h-full flex flex-col items-center text-center rounded-3xl p-7 transition-transform hover:-translate-y-1"
-      style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+      className="group relative h-full flex flex-col items-center text-center rounded-3xl p-7 overflow-hidden transition-transform hover:-translate-y-1.5"
+      style={{ background: "linear-gradient(180deg, var(--surface), var(--bg-2))", border: "1px solid var(--border)" }}
     >
+      {/* top accent glow */}
+      <span
+        className="pointer-events-none absolute -top-16 start-1/2 -translate-x-1/2 w-40 h-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ background: `radial-gradient(circle, ${member.tint}33, transparent 70%)` }}
+        aria-hidden
+      />
+      <span
+        className="absolute inset-x-0 top-0 h-1"
+        style={{ background: `linear-gradient(90deg, transparent, ${member.tint}, transparent)` }}
+        aria-hidden
+      />
       <Avatar member={member} />
       <h3 className="mt-5 text-lg font-extrabold">{member.name}</h3>
       <p
@@ -76,28 +87,30 @@ function Avatar({ member }: { member: Member }) {
       </span>
     );
   }
-  // آواتار پیش‌فرض حرفه‌ای تا وقتی عکس واقعی آماده شود
+  // آواتار پیش‌فرض حرفه‌ای تا وقتی عکس واقعی آماده شود — با حلقه‌ی گرادیانی
   return (
     <span
-      className="relative flex items-center justify-center rounded-full shrink-0 overflow-hidden"
+      className="relative flex items-center justify-center rounded-full shrink-0 p-[3px] transition-transform duration-300 group-hover:scale-105"
       style={{
         width: size,
         height: size,
-        background: `radial-gradient(120% 120% at 30% 0%, ${member.tint}2e, transparent 60%), linear-gradient(160deg, var(--surface-2), var(--bg))`,
-        border: "2px solid var(--border-strong)",
+        background: `linear-gradient(150deg, ${member.tint}, var(--gold-bright))`,
       }}
       role="img"
       aria-label={member.name}
     >
-      <span className="absolute -bottom-2 text-5xl opacity-20 select-none" aria-hidden>
-        {member.emoji}
-      </span>
       <span
-        className="relative text-3xl font-extrabold"
-        style={{ color: "var(--gold-bright)" }}
-        aria-hidden
+        className="relative flex items-center justify-center w-full h-full rounded-full overflow-hidden"
+        style={{
+          background: `radial-gradient(120% 120% at 30% 0%, ${member.tint}2e, transparent 60%), linear-gradient(160deg, var(--surface-2), var(--bg))`,
+        }}
       >
-        {member.name.trim().charAt(0)}
+        <span className="absolute -bottom-2 text-5xl opacity-20 select-none" aria-hidden>
+          {member.emoji}
+        </span>
+        <span className="relative text-3xl font-extrabold" style={{ color: "var(--gold-bright)" }} aria-hidden>
+          {member.name.trim().charAt(0)}
+        </span>
       </span>
     </span>
   );

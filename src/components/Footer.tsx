@@ -13,13 +13,13 @@ import {
 } from "./icons";
 
 const NAV = [
-  { href: "/#services", label: "خدمات" },
+  { href: "/about", label: "درباره ما" },
   { href: "/#portfolio", label: "نمونه‌کارها" },
   { href: "/#pricing", label: "قیمت‌ها" },
   { href: "/why-mahir", label: "چرا ماهیر؟" },
-  { href: "/blog", label: "مقالات" },
-  { href: "/about", label: "درباره ما" },
+  { href: "/blog", label: "بلاگ" },
   { href: "/submit", label: "ثبت پروژه" },
+  { href: "/#contact", label: "تماس با ما" },
 ];
 
 const CONTACTS = [

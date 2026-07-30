@@ -20,7 +20,7 @@ export default function PlaceholderImage({
   return (
     <div
       role="img"
-      aria-label={label}
+      aria-label={label || "تصویر نمونه"}
       className={`relative overflow-hidden rounded-2xl ${className}`}
       style={{
         aspectRatio: ratio,
@@ -35,16 +35,18 @@ export default function PlaceholderImage({
       >
         {emoji}
       </span>
-      <span
-        className="absolute top-3 end-3 text-[11px] font-medium px-2.5 py-1 rounded-full"
-        style={{
-          background: "rgba(15,23,42,0.55)",
-          border: "1px solid var(--border)",
-          color: "var(--fg-muted)",
-        }}
-      >
-        {label}
-      </span>
+      {label && (
+        <span
+          className="absolute top-3 end-3 text-[11px] font-medium px-2.5 py-1 rounded-full"
+          style={{
+            background: "rgba(15,23,42,0.55)",
+            border: "1px solid var(--border)",
+            color: "var(--fg-muted)",
+          }}
+        >
+          {label}
+        </span>
+      )}
     </div>
   );
 }

@@ -24,6 +24,15 @@ const BUDGETS = [
   "هنوز مشخص نیست",
 ];
 
+const GOALS = [
+  "جذب مشتری واقعی",
+  "افزایش فروش",
+  "برندینگ و هویت بصری",
+  "راه‌اندازی از صفر",
+  "افزایش فالوور و دیده‌شدن",
+  "همه‌ی موارد",
+];
+
 const IR_MOBILE = /^0?9\d{9}$/;
 
 type Errors = Partial<Record<string, string>>;
@@ -33,11 +42,13 @@ const FIELD_LABELS: Record<string, string> = {
   mobile: "شماره موبایل",
   instagram: "اینستاگرام / پیج",
   website: "وب‌سایت",
-  businessField: "حوزه فعالیت",
+  businessField: "نوع کسب‌وکار",
+  mainGoal: "هدف اصلی",
+  budget: "بودجه تقریبی",
   currentStatus: "وضعیت فعلی",
   biggestProblem: "بزرگ‌ترین مشکل",
-  goal: "هدف از همکاری",
-  budget: "بودجه ماهانه",
+  goal: "توضیح بیشتر",
+  consultation: "جلسه‌ی مشاوره‌ی کوتاه",
 };
 
 /** اطلاعات فرم را به یک متن مرتب و خوانا تبدیل می‌کند. */
@@ -173,14 +184,31 @@ export default function SubmitForm() {
           />
         </div>
 
+        <div className="grid sm:grid-cols-2 gap-5">
+          <SelectField
+            id="businessField"
+            name="businessField"
+            label="نوع کسب‌وکار"
+            placeholder="یک گزینه را انتخاب کنید"
+            options={BUSINESS_FIELDS}
+            required
+            error={errors.businessField}
+          />
+          <SelectField
+            id="mainGoal"
+            name="mainGoal"
+            label="هدف اصلی شما"
+            placeholder="مهم‌ترین هدفتان را انتخاب کنید"
+            options={GOALS}
+          />
+        </div>
+
         <SelectField
-          id="businessField"
-          name="businessField"
-          label="حوزه فعالیت کسب‌وکار"
-          placeholder="یک گزینه را انتخاب کنید"
-          options={BUSINESS_FIELDS}
-          required
-          error={errors.businessField}
+          id="budget"
+          name="budget"
+          label="بودجه تقریبی ماهانه برای رشد (اختیاری)"
+          placeholder="یک بازه را انتخاب کنید"
+          options={BUDGETS}
         />
 
         <TextArea
@@ -198,17 +226,33 @@ export default function SubmitForm() {
         <TextArea
           id="goal"
           name="goal"
-          label="هدف شما از همکاری با ماهیر چیست؟"
-          placeholder="به کجا می‌خواهید برسید؟"
+          label="توضیح بیشتر (اختیاری)"
+          placeholder="اگر نکته‌ای هست که دوست دارید بدانیم، این‌جا بنویسید…"
         />
 
-        <SelectField
-          id="budget"
-          name="budget"
-          label="بودجه تقریبی ماهانه برای رشد (اختیاری)"
-          placeholder="یک بازه را انتخاب کنید"
-          options={BUDGETS}
-        />
+        {/* رزرو جلسه مشاوره کوتاه */}
+        <label
+          htmlFor="consultation"
+          className="flex items-start gap-3 rounded-2xl p-4 cursor-pointer transition-colors"
+          style={{ background: "var(--gold-soft)", border: "1px solid var(--border-strong)" }}
+        >
+          <input
+            type="checkbox"
+            id="consultation"
+            name="consultation"
+            value="بله، مایلم یک جلسه‌ی مشاوره‌ی کوتاه رزرو کنم"
+            className="mt-1 w-5 h-5 shrink-0 accent-[color:var(--gold)]"
+          />
+          <span>
+            <span className="block text-sm font-bold" style={{ color: "var(--fg)" }}>
+              رزرو جلسه‌ی مشاوره‌ی کوتاه (رایگان)
+            </span>
+            <span className="block mt-1 text-xs leading-relaxed" style={{ color: "var(--fg-muted)" }}>
+              اگر این گزینه را انتخاب کنید، برای یک گفت‌وگوی کوتاه ۱۵ دقیقه‌ای درباره‌ی مسیر رشد
+              کسب‌وکارتان با شما هماهنگ می‌کنیم.
+            </span>
+          </span>
+        </label>
 
         <button type="submit" className="btn btn-gold w-full text-base py-4">
           ثبت درخواست و انتخاب پیام‌رسان

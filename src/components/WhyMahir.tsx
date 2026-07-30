@@ -1,7 +1,13 @@
 import Link from "next/link";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
-import { IconRocket, IconShield, IconHandshake, IconSpark, IconArrow } from "./icons";
+import { IconRocket, IconShield, IconHandshake, IconSpark, IconArrow, IconCheck, IconClose } from "./icons";
+
+const MINI_COMPARE = [
+  { label: "مسئولیت نتیجه", mahir: "متعهد به رشد واقعی", agency: "فقط تحویل کار" },
+  { label: "دامنه‌ی خدمات", mahir: "یکپارچه: برندینگ تا فروش", agency: "اغلب فقط یک بخش" },
+  { label: "مدل پرداخت", mahir: "بخشی پس از نتیجه", agency: "پرداخت کامل بدون تضمین" },
+];
 
 const REASONS = [
   {
@@ -89,6 +95,72 @@ export default function WhyMahir() {
             })}
           </div>
         </div>
+
+        {/* compact ماهیر vs آژانس معمولی */}
+        <Reveal dir="scale" delay={80}>
+          <div
+            className="mt-14 rounded-3xl overflow-hidden max-w-4xl mx-auto"
+            style={{ border: "1px solid var(--border)" }}
+          >
+            <div className="grid grid-cols-[1.2fr_1fr_1fr]">
+              {/* header row */}
+              <div className="p-4 text-sm font-bold" style={{ background: "var(--bg-2)", color: "var(--fg-muted)" }}>
+                تفاوت در یک نگاه
+              </div>
+              <div
+                className="p-4 text-center text-sm font-extrabold"
+                style={{
+                  background: "linear-gradient(180deg, rgba(212, 175, 55,0.14), var(--bg-2))",
+                  color: "var(--gold-bright)",
+                  borderInline: "1px solid var(--border-strong)",
+                }}
+              >
+                ماهیر
+              </div>
+              <div className="p-4 text-center text-sm font-bold" style={{ background: "var(--bg-2)", color: "var(--fg-muted)" }}>
+                آژانس معمولی
+              </div>
+
+              {/* rows */}
+              {MINI_COMPARE.map((row, i) => (
+                <div key={row.label} className="contents">
+                  <div
+                    className="p-4 text-sm font-medium"
+                    style={{ background: i % 2 ? "var(--surface)" : "var(--bg)", borderTop: "1px solid var(--border)", color: "var(--fg)" }}
+                  >
+                    {row.label}
+                  </div>
+                  <div
+                    className="p-4 text-center"
+                    style={{
+                      background: "var(--gold-soft)",
+                      borderTop: "1px solid var(--border)",
+                      borderInline: "1px solid var(--border-strong)",
+                    }}
+                  >
+                    <span className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold" style={{ color: "var(--fg)" }}>
+                      <span style={{ color: "var(--gold-bright)" }}>
+                        <IconCheck width={14} height={14} />
+                      </span>
+                      {row.mahir}
+                    </span>
+                  </div>
+                  <div
+                    className="p-4 text-center text-xs md:text-sm"
+                    style={{ background: i % 2 ? "var(--surface)" : "var(--bg)", borderTop: "1px solid var(--border)", color: "var(--fg-muted)" }}
+                  >
+                    <span className="inline-flex items-center gap-1.5">
+                      <span style={{ color: "var(--fg-dim)" }}>
+                        <IconClose width={14} height={14} />
+                      </span>
+                      {row.agency}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Reveal from "./Reveal";
-import { IconArrowDown, IconSpark, IconPlay } from "./icons";
+import VideoIntro from "./VideoIntro";
+import { IconArrowDown, IconSpark } from "./icons";
 
 export default function Hero() {
   return (
@@ -57,41 +58,9 @@ export default function Hero() {
           </div>
         </Reveal>
 
-        {/* intro video placeholder */}
+        {/* intro video */}
         <Reveal delay={300} dir="scale">
-          <div className="mt-14 mx-auto max-w-3xl">
-            <button
-              type="button"
-              className="group relative w-full overflow-hidden rounded-3xl block"
-              style={{
-                aspectRatio: "16 / 9",
-                background:
-                  "radial-gradient(120% 120% at 50% 0%, rgba(212, 175, 55,0.16), transparent 55%), linear-gradient(160deg, var(--surface-2), var(--bg))",
-                border: "1px solid var(--border-strong)",
-              }}
-              aria-label="پخش ویدیو معرفی ماهیر"
-            >
-              <span className="absolute inset-0 grid-lines opacity-40" aria-hidden />
-              <span className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                <span
-                  className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-                  style={{
-                    background: "linear-gradient(140deg, var(--gold-deep), var(--gold-bright))",
-                    color: "#14100A",
-                    boxShadow: "0 12px 40px -8px var(--gold-glow)",
-                  }}
-                >
-                  <IconPlay width={34} height={34} />
-                </span>
-                <span className="text-sm md:text-base font-semibold" style={{ color: "var(--fg)" }}>
-                  ویدیو معرفی ماهیر
-                </span>
-                <span className="text-xs" style={{ color: "var(--fg-dim)" }}>
-                  به‌زودی
-                </span>
-              </span>
-            </button>
-          </div>
+          <VideoIntro className="mt-14" />
         </Reveal>
       </div>
 

@@ -3,7 +3,15 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "./Logo";
-import { IconMenu, IconClose } from "./icons";
+import { CONTACT } from "@/data/contact";
+import {
+  IconMenu,
+  IconClose,
+  IconPhone,
+  IconInstagram,
+  IconTelegram,
+  IconRubika,
+} from "./icons";
 
 const LINKS = [
   { href: "/", label: "صفحه اصلی" },
@@ -14,6 +22,12 @@ const LINKS = [
   { href: "/about", label: "درباره ما" },
   { href: "/#faq", label: "سوالات متداول" },
   { href: "/#contact", label: "تماس" },
+];
+
+const SOCIAL = [
+  { href: CONTACT.instagram, label: "اینستاگرام", Icon: IconInstagram },
+  { href: CONTACT.telegram, label: "تلگرام", Icon: IconTelegram },
+  { href: CONTACT.rubika, label: "روبیکا", Icon: IconRubika },
 ];
 
 export default function Navbar() {
@@ -67,7 +81,39 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden lg:block shrink-0">
+        {/* desktop right cluster: social + direct call + CTA */}
+        <div className="hidden lg:flex items-center gap-2 shrink-0">
+          {/* social icons (wider screens) */}
+          <div className="hidden xl:flex items-center gap-1">
+            {SOCIAL.map(({ href, label, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                target="_blank"
+                rel="noreferrer"
+                className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors"
+                style={{ color: "var(--fg-muted)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--gold-bright)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--fg-muted)")}
+              >
+                <Icon width={18} height={18} />
+              </a>
+            ))}
+            <span className="w-px h-5 mx-1" style={{ background: "var(--border)" }} aria-hidden />
+          </div>
+
+          {/* direct call — shows the phone number */}
+          <a
+            href={CONTACT.phoneHref}
+            dir="ltr"
+            aria-label="تماس مستقیم با ماهیر"
+            className="btn btn-ghost text-sm gap-2"
+          >
+            <IconPhone width={16} height={16} />
+            {CONTACT.phoneDisplay}
+          </a>
+
           <Link href="/submit" className="btn btn-gold text-sm">
             ثبت پروژه
           </Link>
@@ -114,10 +160,40 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
-          <li className="pt-6">
+          <li className="pt-6 space-y-3">
+            <a
+              href={CONTACT.phoneHref}
+              dir="ltr"
+              className="btn btn-ghost w-full gap-2.5"
+              aria-label="تماس مستقیم با ماهیر"
+            >
+              <IconPhone width={18} height={18} />
+              {CONTACT.phoneDisplay}
+            </a>
             <Link href="/submit" onClick={() => setOpen(false)} className="btn btn-gold w-full">
               ثبت پروژه
             </Link>
+          </li>
+
+          {/* social icons */}
+          <li className="pt-6 flex items-center justify-center gap-3">
+            {SOCIAL.map(({ href, label, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                target="_blank"
+                rel="noreferrer"
+                className="w-11 h-11 rounded-xl flex items-center justify-center"
+                style={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  color: "var(--fg-muted)",
+                }}
+              >
+                <Icon width={20} height={20} />
+              </a>
+            ))}
           </li>
         </ul>
       </div>

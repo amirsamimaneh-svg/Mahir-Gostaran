@@ -7,6 +7,8 @@ import {
   IconMail,
   IconPhone,
   IconTelegram,
+  IconRubika,
+  IconChat,
 } from "./icons";
 
 const NAV = [
@@ -23,14 +25,16 @@ const CONTACTS = [
   { Icon: IconPhone, label: CONTACT.phoneDisplay, href: CONTACT.phoneHref, external: false },
   { Icon: IconWhatsApp, label: "واتساپ", href: CONTACT.whatsapp, external: true },
   { Icon: IconTelegram, label: CONTACT.telegramId, href: CONTACT.telegram, external: true },
+  { Icon: IconRubika, label: "روبیکا", href: CONTACT.rubika, external: true },
+  { Icon: IconChat, label: "بله", href: CONTACT.bale, external: true },
   { Icon: IconMail, label: CONTACT.email, href: CONTACT.emailHref, external: false },
 ];
 
 const SOCIAL = [
   { href: CONTACT.instagram, label: "اینستاگرام", Icon: IconInstagram },
-  { href: CONTACT.whatsapp, label: "واتساپ", Icon: IconWhatsApp },
   { href: CONTACT.telegram, label: "تلگرام", Icon: IconTelegram },
-  { href: CONTACT.emailHref, label: "ایمیل", Icon: IconMail },
+  { href: CONTACT.rubika, label: "روبیکا", Icon: IconRubika },
+  { href: CONTACT.whatsapp, label: "واتساپ", Icon: IconWhatsApp },
 ];
 
 export default function Footer() {

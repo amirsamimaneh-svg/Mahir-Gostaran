@@ -167,6 +167,13 @@ export const IconTelegram = (p: IconProps) => (
   </svg>
 );
 
+export const IconRubika = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <path d="M12 2.6 20 7v10l-8 4.4L4 17V7l8-4.4Z" />
+    <path d="M9 15V9.8c0-1 .8-1.8 1.8-1.8h1.4A2 2 0 0 1 14.2 10c0 1.1-.9 2-2 2H9m3.2 0 2.3 3" />
+  </svg>
+);
+
 export const IconChat = (p: IconProps) => (
   <svg {...base} {...p}>
     <path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 3v-3H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />

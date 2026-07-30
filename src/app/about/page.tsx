@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
+import Team from "@/components/Team";
 import { IconArrow, IconRocket, IconTarget, IconShield, IconHandshake, IconSpark } from "@/components/icons";
 
 export const metadata: Metadata = {
@@ -155,6 +156,9 @@ export default function AboutPage() {
             })}
           </div>
         </div>
+
+        {/* team */}
+        <Team />
 
         {/* CTA */}
         <Reveal>

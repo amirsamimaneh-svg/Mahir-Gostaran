@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import SubmitForm from "@/components/SubmitForm";
 import Reveal from "@/components/Reveal";
-import { IconCheck } from "@/components/icons";
+import { CONTACT } from "@/data/contact";
+import {
+  IconCheck,
+  IconPhone,
+  IconWhatsApp,
+  IconTelegram,
+  IconRubika,
+  IconChat,
+} from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "ثبت پروژه | ماهیر",
@@ -14,6 +22,13 @@ const PROMISES = [
   "بررسی رایگان و بدون تعهد",
   "پاسخ حداکثر تا ۲۴ ساعت",
   "مسیر رشد اختصاصی برای کسب‌وکار شما",
+];
+
+const DIRECT = [
+  { label: "واتساپ", href: CONTACT.whatsapp, Icon: IconWhatsApp, color: "#22B573" },
+  { label: "تلگرام", href: CONTACT.telegram, Icon: IconTelegram, color: "#2AABEE" },
+  { label: "روبیکا", href: CONTACT.rubika, Icon: IconRubika, color: "#7C4DFF" },
+  { label: "بله", href: CONTACT.bale, Icon: IconChat, color: "#22B573" },
 ];
 
 export default function SubmitPage() {
@@ -72,6 +87,53 @@ export default function SubmitPage() {
                   </li>
                 ))}
               </ul>
+            </Reveal>
+
+            {/* تماس مستقیم — برای کسانی که ترجیح می‌دهند فرم پر نکنند */}
+            <Reveal delay={260}>
+              <div
+                className="mt-8 rounded-2xl p-5"
+                style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+              >
+                <p className="text-sm font-bold" style={{ color: "var(--fg)" }}>
+                  ترجیح می‌دهید مستقیم صحبت کنید؟
+                </p>
+                <a
+                  href={CONTACT.phoneHref}
+                  dir="ltr"
+                  className="mt-3 flex items-center justify-center gap-2.5 rounded-xl py-3 font-extrabold text-lg transition-transform hover:-translate-y-0.5"
+                  style={{
+                    background: "var(--gold-soft)",
+                    border: "1px solid var(--border-strong)",
+                    color: "var(--gold-bright)",
+                  }}
+                >
+                  <IconPhone width={20} height={20} />
+                  {CONTACT.phoneDisplay}
+                </a>
+                <div className="mt-3 grid grid-cols-2 gap-2.5">
+                  {DIRECT.map(({ label, href, Icon, color }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 transition-transform hover:-translate-y-0.5"
+                      style={{ background: "var(--bg)", border: "1px solid var(--border)" }}
+                    >
+                      <span
+                        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        style={{ background: `${color}22`, color }}
+                      >
+                        <Icon width={17} height={17} />
+                      </span>
+                      <span className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
+                        {label}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
             </Reveal>
           </div>
 

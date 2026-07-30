@@ -73,7 +73,7 @@ export default async function ArticlePage({
       <article className="container relative z-10 max-w-3xl">
         <Reveal>
           <Link
-            href="/#blog"
+            href="/blog"
             className="inline-flex items-center gap-2 text-sm font-medium mb-8"
             style={{ color: "var(--fg-muted)" }}
           >

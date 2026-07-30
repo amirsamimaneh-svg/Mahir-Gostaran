@@ -1,6 +1,7 @@
+import Link from "next/link";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
-import { IconRocket, IconShield, IconHandshake, IconSpark } from "./icons";
+import { IconRocket, IconShield, IconHandshake, IconSpark, IconArrow } from "./icons";
 
 const REASONS = [
   {
@@ -57,6 +58,12 @@ export default function WhyMahir() {
                   </span>
                 ))}
               </div>
+            </Reveal>
+            <Reveal delay={260}>
+              <Link href="/why-mahir" className="btn btn-ghost mt-8">
+                مقایسه‌ی کامل ماهیر با آژانس معمولی
+                <IconArrow width={18} height={18} />
+              </Link>
             </Reveal>
           </div>
 

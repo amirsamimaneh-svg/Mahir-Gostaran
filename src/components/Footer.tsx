@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Logo from "./Logo";
 import { CONTACT } from "@/data/contact";
+import { BADGES } from "@/data/trust";
 import {
   IconInstagram,
   IconWhatsApp,
@@ -13,10 +14,10 @@ import {
 
 const NAV = [
   { href: "/#services", label: "خدمات" },
-  { href: "/#process", label: "فرآیند کار" },
   { href: "/#portfolio", label: "نمونه‌کارها" },
   { href: "/#pricing", label: "قیمت‌ها" },
-  { href: "/#blog", label: "مقالات" },
+  { href: "/why-mahir", label: "چرا ماهیر؟" },
+  { href: "/blog", label: "مقالات" },
   { href: "/about", label: "درباره ما" },
   { href: "/submit", label: "ثبت پروژه" },
 ];
@@ -114,6 +115,42 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+
+        {/* نمادهای اعتماد / مجوزها */}
+        <div className="mt-10">
+          <h4 className="text-xs font-bold mb-3" style={{ color: "var(--fg-muted)" }}>
+            نمادها و مجوزها
+          </h4>
+          <div className="flex flex-wrap items-center gap-3">
+            {BADGES.map((b) => {
+              const chip = (
+                <span
+                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold"
+                  style={{
+                    background: "var(--surface)",
+                    border: `1px solid ${b.active ? "var(--border-strong)" : "var(--border)"}`,
+                    color: b.active ? "var(--fg)" : "var(--fg-dim)",
+                  }}
+                >
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{ background: b.active ? "var(--gold-bright)" : "var(--fg-dim)" }}
+                    aria-hidden
+                  />
+                  {b.subtitle}
+                  {!b.active && <span style={{ color: "var(--fg-dim)" }}>(به‌زودی)</span>}
+                </span>
+              );
+              return b.active && b.href ? (
+                <a key={b.title} href={b.href} target="_blank" rel="noreferrer" referrerPolicy="origin">
+                  {chip}
+                </a>
+              ) : (
+                <span key={b.title}>{chip}</span>
+              );
+            })}
           </div>
         </div>
 

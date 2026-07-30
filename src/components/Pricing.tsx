@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
+import PricingCompare from "./PricingCompare";
 import { IconCheck, IconArrow, IconShield } from "./icons";
 
 type Plan = {
@@ -166,6 +167,9 @@ export default function Pricing() {
             );
           })}
         </div>
+
+        {/* comparison table */}
+        <PricingCompare />
 
         {/* trust box */}
         <Reveal dir="scale" delay={120}>

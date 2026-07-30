@@ -18,7 +18,7 @@ const LINKS = [
   { href: "/#services", label: "خدمات" },
   { href: "/#portfolio", label: "نمونه‌کارها" },
   { href: "/#pricing", label: "قیمت‌ها" },
-  { href: "/#blog", label: "مقالات" },
+  { href: "/blog", label: "مقالات" },
   { href: "/about", label: "درباره ما" },
   { href: "/#faq", label: "سوالات متداول" },
   { href: "/#contact", label: "تماس" },

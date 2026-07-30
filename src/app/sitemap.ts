@@ -9,7 +9,7 @@ const SITE = "https://mahir.ir";
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const staticPages = ["", "/about", "/submit", "/privacy", "/terms"].map((path) => ({
+  const staticPages = ["", "/about", "/why-mahir", "/blog", "/submit", "/privacy", "/terms"].map((path) => ({
     url: `${SITE}${path}`,
     lastModified: now,
     changeFrequency: "monthly" as const,

@@ -147,6 +147,14 @@ export const IconInstagram = (p: IconProps) => (
   </svg>
 );
 
+export const IconLinkedIn = (p: IconProps) => (
+  <svg {...base} {...p}>
+    <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+    <path d="M7 10v6.5M7 7.2v.1" />
+    <path d="M11 16.5V10m0 2.2c.4-1.4 1.6-2.2 3-2.2 1.7 0 3 1.2 3 3.2v3.3" />
+  </svg>
+);
+
 export const IconMail = (p: IconProps) => (
   <svg {...base} {...p}>
     <rect x="3" y="5" width="18" height="14" rx="2.5" />

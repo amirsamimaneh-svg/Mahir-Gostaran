@@ -119,15 +119,31 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* mobile toggle */}
-        <button
-          className="lg:hidden z-50 p-2 rounded-lg"
-          style={{ color: "var(--fg)" }}
-          aria-label={open ? "بستن منو" : "باز کردن منو"}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <IconClose /> : <IconMenu />}
-        </button>
+        {/* mobile controls: quick call + menu */}
+        <div className="lg:hidden flex items-center gap-2">
+          {!open && (
+            <a
+              href={CONTACT.phoneHref}
+              aria-label="تماس مستقیم با ماهیر"
+              className="z-50 w-10 h-10 rounded-lg flex items-center justify-center"
+              style={{
+                background: "var(--gold-soft)",
+                border: "1px solid var(--border-strong)",
+                color: "var(--gold-bright)",
+              }}
+            >
+              <IconPhone width={19} height={19} />
+            </a>
+          )}
+          <button
+            className="z-50 p-2 rounded-lg"
+            style={{ color: "var(--fg)" }}
+            aria-label={open ? "بستن منو" : "باز کردن منو"}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <IconClose /> : <IconMenu />}
+          </button>
+        </div>
       </nav>
 
       {/* mobile drawer */}

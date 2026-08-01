@@ -26,13 +26,15 @@ export const CLIENTS: Client[] = [
 export type TrustBadge = {
   title: string;
   subtitle: string;
-  /** لینک رسمی نماد؛ تا وقتی خالی/غیرفعال باشد، حالت «به‌زودی» نشان داده می‌شود. */
+  /** ایموجی/نماد ساده تا وقتی لوگوی رسمی جایگزین شود. */
+  icon: string;
+  /** لینک رسمی نماد؛ وقتی مجوز را گرفتید href و active را پر کنید. */
   href?: string;
   active: boolean;
 };
 
 export const BADGES: TrustBadge[] = [
-  { title: "نماد اعتماد الکترونیکی", subtitle: "اینماد", active: false },
-  { title: "ساماندهی", subtitle: "وزارت فرهنگ و ارشاد", active: false },
-  { title: "پرداخت امن", subtitle: "درگاه معتبر", active: false },
+  { title: "نماد اعتماد الکترونیکی", subtitle: "اینماد", icon: "🛡️", active: false },
+  { title: "ساماندهی رسانه‌های دیجیتال", subtitle: "ساماندهی", icon: "📜", active: false },
+  { title: "پرداخت امن از درگاه معتبر", subtitle: "درگاه معتبر", icon: "🔒", active: false },
 ];

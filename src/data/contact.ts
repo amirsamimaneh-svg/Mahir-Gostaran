@@ -17,6 +17,9 @@ export const CONTACT = {
   instagramId: "@mahirgostaran",
   instagram: "https://instagram.com/mahirgostaran",
 
+  // لینکدین — لینک واقعی صفحه را جایگزین کنید (فعلاً placeholder)
+  linkedin: "https://linkedin.com/company/mahirgostaran",
+
   // ایمیل
   email: "info@mahirgostaran.com",
   emailHref: "mailto:info@mahirgostaran.com",

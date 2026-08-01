@@ -10,6 +10,7 @@ import {
   IconTelegram,
   IconRubika,
   IconChat,
+  IconLinkedIn,
 } from "./icons";
 
 const NAV = [
@@ -31,44 +32,54 @@ const CONTACTS = [
   { Icon: IconMail, label: CONTACT.email, href: CONTACT.emailHref, external: false },
 ];
 
+// اگر لینک واقعی ندارید، همین‌ها را نگه دارید تا بعداً جایگزین شود.
 const SOCIAL = [
   { href: CONTACT.instagram, label: "اینستاگرام", Icon: IconInstagram },
   { href: CONTACT.telegram, label: "تلگرام", Icon: IconTelegram },
+  { href: CONTACT.linkedin, label: "لینکدین", Icon: IconLinkedIn },
   { href: CONTACT.rubika, label: "روبیکا", Icon: IconRubika },
-  { href: CONTACT.whatsapp, label: "واتساپ", Icon: IconWhatsApp },
 ];
 
 export default function Footer() {
   return (
     <footer style={{ borderTop: "1px solid var(--border)", background: "var(--bg-2)" }}>
       <div className="container py-14">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1.2fr]">
-          {/* brand */}
+        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr_1.3fr]">
+          {/* brand + prominent direct contact */}
           <div className="max-w-sm">
             <Logo />
             <p className="mt-4 text-sm leading-loose" style={{ color: "var(--fg-muted)" }}>
               ماهیر، شریک رشد کسب‌وکارهای کوچک. از صفر تا صد، برندت را می‌سازیم و
               فروشت را بالا می‌بریم.
             </p>
-            <div className="mt-5 flex items-center gap-3">
-              {SOCIAL.map(({ href, label, Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors"
-                  style={{
-                    background: "var(--surface)",
-                    border: "1px solid var(--border)",
-                    color: "var(--fg-muted)",
-                  }}
-                >
-                  <Icon width={19} height={19} />
-                </a>
-              ))}
-            </div>
+
+            {/* phone — برجسته */}
+            <a
+              href={CONTACT.phoneHref}
+              dir="ltr"
+              className="mt-5 flex items-center justify-center gap-2.5 rounded-xl py-3 font-extrabold text-lg transition-transform hover:-translate-y-0.5"
+              style={{
+                background: "var(--gold-soft)",
+                border: "1px solid var(--border-strong)",
+                color: "var(--gold-bright)",
+              }}
+            >
+              <IconPhone width={20} height={20} />
+              {CONTACT.phoneDisplay}
+            </a>
+            {/* whatsapp */}
+            <a
+              href={CONTACT.whatsapp}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 flex items-center justify-center gap-2.5 rounded-xl py-2.5 text-sm font-bold transition-transform hover:-translate-y-0.5"
+              style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--fg)" }}
+            >
+              <span style={{ color: "#22B573" }}>
+                <IconWhatsApp width={18} height={18} />
+              </span>
+              گفت‌وگو در واتساپ
+            </a>
           </div>
 
           {/* quick links */}
@@ -79,19 +90,25 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {NAV.map((l) => (
                 <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="text-sm transition-colors"
-                    style={{ color: "var(--fg-muted)" }}
-                  >
+                  <Link href={l.href} className="text-sm transition-colors" style={{ color: "var(--fg-muted)" }}>
                     {l.label}
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link href="/privacy" className="text-sm transition-colors" style={{ color: "var(--fg-muted)" }}>
+                  حریم خصوصی
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-sm transition-colors" style={{ color: "var(--fg-muted)" }}>
+                  قوانین و شرایط
+                </Link>
+              </li>
             </ul>
           </nav>
 
-          {/* direct contact */}
+          {/* direct contact + social */}
           <div>
             <h4 className="text-sm font-bold mb-4" style={{ color: "var(--fg)" }}>
               ارتباط مستقیم
@@ -115,10 +132,30 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+
+            {/* follow us */}
+            <h4 className="text-sm font-bold mt-7 mb-3" style={{ color: "var(--fg)" }}>
+              ما را در شبکه‌های اجتماعی دنبال کنید
+            </h4>
+            <div className="flex items-center gap-3">
+              {SOCIAL.map(({ href, label, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors"
+                  style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--fg-muted)" }}
+                >
+                  <Icon width={19} height={19} />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* نمادهای اعتماد / مجوزها */}
+        {/* نمادها و مجوزها */}
         <div className="mt-10">
           <h4 className="text-xs font-bold mb-3" style={{ color: "var(--fg-muted)" }}>
             نمادها و مجوزها
@@ -131,16 +168,11 @@ export default function Footer() {
                   style={{
                     background: "var(--surface)",
                     border: `1px solid ${b.active ? "var(--border-strong)" : "var(--border)"}`,
-                    color: b.active ? "var(--fg)" : "var(--fg-dim)",
+                    color: b.active ? "var(--fg)" : "var(--fg-muted)",
                   }}
                 >
-                  <span
-                    className="w-2 h-2 rounded-full"
-                    style={{ background: b.active ? "var(--gold-bright)" : "var(--fg-dim)" }}
-                    aria-hidden
-                  />
+                  <span aria-hidden>{b.icon}</span>
                   {b.subtitle}
-                  {!b.active && <span style={{ color: "var(--fg-dim)" }}>(به‌زودی)</span>}
                 </span>
               );
               return b.active && b.href ? (

@@ -55,8 +55,21 @@ export default function VideoIntro({ className = "" }: { className?: string }) {
 
 function Placeholder() {
   return (
-    <div className="absolute inset-0">
+    <button
+      type="button"
+      className="group absolute inset-0 w-full h-full cursor-pointer text-center"
+      aria-label="ویدیو معرفی ماهیر — به‌زودی"
+    >
       <span className="absolute inset-0 grid-lines opacity-40" aria-hidden />
+
+      {/* لوگوی کم‌رنگ به‌عنوان واترمارک تصویر شاخص */}
+      <span
+        className="absolute -bottom-6 -start-4 text-[9rem] leading-none font-extrabold select-none opacity-[0.06]"
+        style={{ color: "var(--gold-bright)" }}
+        aria-hidden
+      >
+        م
+      </span>
 
       {/* برچسب بالا */}
       <span
@@ -71,8 +84,17 @@ function Placeholder() {
         ویدیو معرفی
       </span>
 
+      {/* برچسب مدت‌زمان — حس تصویر شاخص ویدیو */}
+      <span
+        className="absolute bottom-4 start-4 text-[11px] font-bold px-2 py-1 rounded-md"
+        style={{ background: "rgba(15,23,42,0.7)", color: "var(--fg-muted)" }}
+        dir="ltr"
+      >
+        ● HD
+      </span>
+
       {/* مرکز */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center">
+      <span className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6">
         <span className="relative flex items-center justify-center">
           {/* حلقه‌ی نبض */}
           <span
@@ -81,7 +103,7 @@ function Placeholder() {
             aria-hidden
           />
           <span
-            className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center"
+            className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
             style={{
               background: "linear-gradient(140deg, var(--gold-deep), var(--gold-bright))",
               color: "#14100A",
@@ -92,10 +114,10 @@ function Placeholder() {
           </span>
         </span>
 
-        <div>
-          <p className="text-base md:text-lg font-extrabold" style={{ color: "var(--fg)" }}>
-            ویدیو معرفی ماهیر
-          </p>
+        <span className="block">
+          <span className="block text-base md:text-lg font-extrabold" style={{ color: "var(--fg)" }}>
+            ویدیو معرفی ماهیر به‌زودی
+          </span>
           <span
             className="mt-2 inline-block text-xs font-semibold px-3 py-1 rounded-full"
             style={{
@@ -104,10 +126,10 @@ function Placeholder() {
               color: "var(--gold-bright)",
             }}
           >
-            به‌زودی منتشر می‌شود
+            منتشر می‌شود
           </span>
-        </div>
-      </div>
-    </div>
+        </span>
+      </span>
+    </button>
   );
 }

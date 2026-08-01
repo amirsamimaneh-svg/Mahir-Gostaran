@@ -71,6 +71,12 @@ function MemberCard({ member }: { member: Member }) {
       <p className="mt-4 text-sm leading-loose" style={{ color: "var(--fg-muted)" }}>
         {member.bio}
       </p>
+      <p
+        className="mt-4 pt-4 text-sm leading-loose italic"
+        style={{ color: "var(--gold-bright)", borderTop: "1px solid var(--border)" }}
+      >
+        {member.personal}
+      </p>
     </article>
   );
 }
